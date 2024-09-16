@@ -10,6 +10,34 @@
             background-size: 90%; /* Ajusta el tamaño de la imagen al 90% */
             background-repeat: no-repeat; /* Evita que la imagen se repita */
             background-position: center center; /* Centra la imagen */
+            margin: 0; /* Elimina los márgenes por defecto */
+            font-family: Arial, sans-serif; /* Fuente de la página */
+        }
+
+        /* Barra de navegación */
+        .navbar {
+            display: flex;
+            justify-content: center; /* Centra la barra de navegación */
+            background-color: rgba(0, 0, 0, 0.7); /* Color de fondo con opacidad */
+            padding: 10px 0; /* Espaciado de la barra */
+        }
+
+        /* Estilos para los elementos de la barra de navegación */
+        .navbar ul {
+            list-style: none; /* Elimina los puntos de lista */
+            margin: 0;
+            padding: 0;
+            display: flex; /* Hace que los elementos de la lista se dispongan en fila */
+        }
+
+        .navbar li {
+            margin: 0 15px; /* Espaciado entre pestañas */
+        }
+
+        .navbar a {
+            text-decoration: none; /* Elimina el subrayado de los enlaces */
+            color: white; /* Color del texto */
+            font-size: 1.2em; /* Tamaño del texto */
         }
 
         h1 {
@@ -21,8 +49,18 @@
     </style>
 </head>
 <body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="#home">Inicio</a></li>
+            <li><a href="#about">Acerca de</a></li>
+            <li><a href="#services">Servicios</a></li>
+            <li><a href="#contact">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- Título principal -->
     <h1>Antonio J. Torres</h1>
-    <p>Este es un ejemplo de una imagen de fondo y un título centrado en HTML.</p>
 </body>
 </html>
 
