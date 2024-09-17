@@ -1,11 +1,10 @@
-<!-- about.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Me</title>
-    <style><li><a href="about.html">About Me</a></li>
+    <style>
         body {
             margin: 0; /* Elimina márgenes por defecto */
             font-family: Arial, sans-serif; /* Fuente de la página */
@@ -66,23 +65,36 @@
             text-align: center; /* Centra el texto de las pestañas */
         }
 
-        /* Estilo del contenido principal */
-        .main-content {
+        /* Contenedor principal de About Me con flexbox */
+        .about-container {
             margin-left: 200px; /* Desplaza el contenido hacia la derecha para que no quede debajo de la barra lateral */
             padding: 20px;
-            text-align: center; /* Centra el texto */
-            max-width: 800px; /* Anchura máxima del contenido */
-            margin: 50px auto; /* Centra el contenido horizontalmente */
+            display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
+            justify-content: space-between; /* Distribuye el espacio entre los elementos */
+            align-items: flex-start; /* Alinea los elementos al inicio */
+        }
+
+        /* Estilo del texto */
+        .about-text {
+            flex: 1; /* Permite que el texto ocupe más espacio */
+            max-width: 60%; /* Limita el ancho máximo del texto */
+            padding: 20px;
+            border: 1px solid #ccc; /* Borde del marco */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
+            text-align: justify; /* Justifica el texto */
+            margin-right: 20px; /* Espacio entre el texto y la imagen */
+        }
+
+        /* Estilo de la imagen */
+        .about-image {
+            width: 300px; /* Ancho de la imagen */
+            height: auto; /* Altura automática para mantener la proporción */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Sombra de la imagen */
         }
 
         .main-content h2 {
             font-size: 2.5em; /* Tamaño del título "About Me" */
             margin-bottom: 20px; /* Espacio inferior */
-        }
-
-        .main-content p {
-            font-size: 1.2em; /* Tamaño del texto */
-            line-height: 1.6; /* Espaciado entre líneas */
         }
     </style>
 </head>
@@ -104,11 +116,17 @@
         <h1>Antonio J. Torres</h1>
     </div>
 
-    <!-- Contenido principal de About Me -->
-    <div class="main-content">
-        <h2>About Me</h2>
-        <p>I am originally from Querétaro, Mexico. I studied my bachelor's degree at UAQ, my master's degree at UASLP and my Ph.D. at UNAM. Currently, I have a postdoctoral position in the Department of Mathematics at the University of California, Davis.</p>
-        <p>I really enjoy math, reading, hiking, swimming, and going out into nature with my dogs.</p>
+    <!-- Contenedor principal de About Me -->
+    <div class="about-container">
+        <!-- Texto justificado en un marco -->
+        <div class="about-text">
+            <h2>About Me</h2>
+            <p>I am originally from Querétaro, Mexico. I studied my bachelor's degree at UAQ, my master's degree at UASLP and my Ph.D. at UNAM. Currently, I have a postdoctoral position in the Department of Mathematics at the University of California, Davis.</p>
+            <p>I really enjoy math, reading, hiking, swimming, and going out into nature with my dogs.</p>
+        </div>
+        
+        <!-- Imagen a la derecha con sombra -->
+        <img src="yo.jpg" alt="Antonio J. Torres" class="about-image">
     </div>
 </body>
 </html>
