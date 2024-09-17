@@ -95,6 +95,29 @@
             margin-top: 0cm; /* Mueve la imagen 1 cm más abajo */
         }
 
+        /* Nuevo contenedor para "About Me" */
+        .about-me-container {
+            max-width: 1300px; /* Ancho máximo del contenedor */
+            margin: 2.5cm auto 0 auto; /* Centra el contenedor horizontalmente */
+            padding: 20px;
+            display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
+            justify-content: center; /* Centra el contenido horizontalmente */
+            align-items: flex-start; /* Alinea los elementos al inicio */
+            border: 1px solid #ccc; /* Borde del recuadro */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del recuadro */
+            background-color: #f9f9f9; /* Fondo claro para el recuadro */
+        }
+
+        .about-me-container .about-me-text {
+            flex: 1; /* Permite que el texto ocupe más espacio */
+            padding: 20px;
+            font-size: 1.3em; /* Aumenta el tamaño de la fuente */
+        }
+
+        .about-me-container h2 {
+            text-decoration: underline; /* Subraya el título "About Me" */
+        }
+
         /* Estilos responsivos */
         @media (max-width: 768px) {
             /* Ajustes para la cabecera */
@@ -127,12 +150,14 @@
             }
 
             /* Ajustes para el contenedor principal */
-            .about-container {
+            .about-container,
+            .about-me-container {
                 flex-direction: column; /* Coloca el texto y la imagen en columnas */
                 align-items: center; /* Centra los elementos */
             }
 
-            .about-text {
+            .about-text,
+            .about-me-container .about-me-text {
                 max-width: 100%; /* Ancho completo */
                 margin-right: 0; /* Elimina el margen derecho */
                 margin-bottom: 20px; /* Espacio inferior entre el texto y la imagen */
@@ -151,10 +176,9 @@
         <ul>
             <li><a href="index.html">Home</a></li> <!-- Agrega un enlace de vuelta a la página principal -->
             <li><a href="about.html">About Me</a></li>
-            <li><a href="publications">Publications  & CV</a></li>
+            <li><a href="publications">Publications & CV</a></li>
             <li><a href="#teaching">Teaching & Advicing</a></li>
             <li><a href="#cosas">Cosas en Español</a></li>
-            <!-- Puedes añadir más elementos a la barra lateral aquí -->
         </ul>
     </div>
 
@@ -173,6 +197,18 @@
         
         <!-- Imagen a la derecha con sombra -->
         <img src="quere.jpg" alt="About Me" class="about-image">
+    </div>
+
+    <!-- Nuevo Contenedor de About Me con Imagen a la Izquierda -->
+    <div class="about-me-container">
+        <!-- Imagen a la izquierda -->
+        <img src="quere.jpg" alt="About Me" class="about-image">
+        
+        <!-- Texto de About Me -->
+        <div class="about-me-text">
+            <h2>About Me</h2>
+            <p>I am originally from the city of Querétaro, though I've also lived in San Luis and now in Davis, both cities that I hold dear. I enjoy reading, playing with my dogs, traveling, and exploring new cultures, especially new cuisines. I appreciate many forms of artistic expression, although I wouldn't consider myself an expert. I value a good conversation, perhaps accompanied by a beer or a bit of mezcal.</p>
+        </div>
     </div>
 </body>
 </html>
