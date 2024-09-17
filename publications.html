@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Publications & CV</title>
-    <!-- Enlace a Font Awesome para los íconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -20,7 +19,7 @@
             background-position: bottom; /* Ajusta la posición para subir la imagen */
             height: 300px; /* Ajusta la altura de la sección superior */
             display: flex; /* Utiliza flexbox */
-            justify-content: left; /* Centra el contenido horizontalmente */
+            justify-content: left; /* Alinea el contenido a la izquierda */
             align-items: center; /* Centra verticalmente */
             margin-left: 200px; /* Espacio a la izquierda para la barra lateral */
             padding-left: 3cm; /* Añade espacio a la izquierda */
@@ -66,60 +65,33 @@
             text-align: center; /* Centra el texto de las pestañas */
         }
 
-        /* Estilo del contenedor de la imagen y el texto */
-        .image-text-container {
-            display: flex; /* Utiliza flexbox para alinear la imagen y el texto */
-            align-items: flex-start; /* Alinea los elementos al inicio */
-            margin-left: 200px; /* Alinea el contenedor con el contenido principal */
-            padding: 20px;
-            margin-top: 3cm; /* Añade un margen superior de 3 cm */
+        /* Contenedor de publicaciones */
+        .publications-container {
+            margin-left: 200px; /* Espacio para la barra lateral */
+            padding: 2cm 3cm; /* Añade espaciado alrededor */
         }
 
-        .image-text-container img {
-            width: 300px; /* Ancho de la imagen */
-            height: auto; /* Altura automática para mantener la proporción */
-            margin-right: 2.5cm; /* Separa la imagen del texto a su derecha por 2.5 cm */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Da más sombra a la imagen */
+        .publications-list {
+            list-style: none; /* Elimina los puntos de lista */
+            padding: 0;
         }
 
-        .image-text-container .text-content {
-            font-size: 1.2em; /* Tamaño del texto */
-            color: #333; /* Color del texto */
-            margin-top: 1cm; /* Baja el texto 1 cm */
+        .publications-item {
+            display: flex; /* Utiliza flexbox para alinear imagen y texto */
+            align-items: center; /* Centra los elementos verticalmente */
+            margin-bottom: 20px; /* Espaciado entre publicaciones */
         }
 
-        .image-text-container .text-content h2 {
-            font-size: 1.5em; /* Tamaño del título */
-            margin: 0; /* Elimina el margen */
-            margin-bottom: 0.5cm; /* Añade margen inferior de medio centímetro */
-            text-decoration: underline; /* Subraya el texto */
+        .publications-item img {
+            width: 50px; /* Tamaño de la imagen pequeña */
+            height: 50px; /* Tamaño de la imagen pequeña */
+            margin-right: 15px; /* Espaciado entre la imagen y el texto */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para la imagen */
         }
 
-        .image-text-container .text-content p {
-            margin: 0.5em 0; /* Margen superior e inferior */
-        }
-
-        /* Añadir espacio entre el primer y segundo bloque de texto */
-        .image-text-container .text-content .section-spacer {
-            margin-top: 1cm; /* Añade un margen superior de 1 cm */
-        }
-
-        /* Estilo del contenido principal */
-        .main-content {
-            margin-left: 200px; /* Desplaza el contenido hacia la derecha para que no quede debajo de la barra lateral */
-            padding: 20px;
-        }
-
-        /* Estilo para el ícono de correo */
-        .email-icon {
-            text-align: center; /* Centra el contenido */
-            margin: 2cm 0; /* Margen superior e inferior */
-        }
-
-        .email-icon a {
-            text-decoration: none; /* Elimina el subrayado */
-            color: black; /* Color del ícono */
-            font-size: 2em; /* Tamaño del ícono */
+        .publications-item p {
+            margin: 0;
+            font-size: 1.2em; /* Tamaño de la fuente */
         }
 
         /* Estilos responsivos */
@@ -159,24 +131,10 @@
                 margin: 0; /* Elimina el margen */
             }
 
-            /* Ajustes para el contenedor de imagen y texto */
-            .image-text-container {
-                flex-direction: column; /* Coloca la imagen y el texto en una columna */
-                align-items: center; /* Centra los elementos */
-                margin-left: 0; /* Elimina el margen izquierdo */
-                margin-top: 2cm; /* Ajusta el margen superior */
-            }
-
-            .image-text-container img {
-                width: 80%; /* Ancho adaptativo */
-                margin: 0; /* Elimina márgenes */
-                margin-bottom: 20px; /* Añade espacio inferior */
-            }
-
-            .image-text-container .text-content {
-                font-size: 1em; /* Reduce el tamaño del texto */
-                margin-top: 0; /* Elimina el margen superior */
-                text-align: center; /* Centra el texto */
+            /* Ajustes para el contenedor de publicaciones */
+            .publications-container {
+                margin-left: 0; /* Elimina margen izquierdo */
+                padding: 2cm 1cm; /* Ajusta el espaciado */
             }
         }
     </style>
@@ -185,12 +143,11 @@
     <!-- Barra lateral -->
     <div class="sidebar">
         <ul>
-            <li><a href="index.html">Home</a></li> <!-- Agrega un enlace de vuelta a la página principal -->
+            <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About Me</a></li>
-            <li><a href="publications">Publications  & CV</a></li>
+            <li><a href="publications">Publications & CV</a></li>
             <li><a href="#teaching">Teaching & Advicing</a></li>
             <li><a href="#cosas">Cosas en Español</a></li>
-            <!-- Puedes añadir más elementos a la barra lateral aquí -->
         </ul>
     </div>
 
@@ -199,29 +156,26 @@
         <h1>Publications & CV</h1>
     </div>
 
-    <!-- Contenedor de la imagen y el texto -->
-    <div class="image-text-container">
-        <img src="foto.jpg" alt="Descripción de la imagen">
-        <div class="text-content">
-            <h2>Antonio J. Torres</h2>
-            <p>Postdoctoral Position<br>
-            Department of Mathematics<br>
-            U.C. Davis CA.</p>
-
-            <!-- Espacio entre el primer y segundo bloque -->
-            <div class="section-spacer"></div>
-
-            <h2>Research Interest</h2>
-            <p>I'm interested in areas such as<br>
-            combinatorics, discrete geometry,<br>
-            probability, and data analysis.</p>
-        </div>
-    </div>
-
-    <!-- Sección del ícono de correo -->
-    <div class="email-icon">
-        <a href="mailto:antor@ucdavis.edu"><i class="fas fa-envelope"></i> antor@ucdavis.edu</a>
+    <!-- Contenedor de publicaciones -->
+    <div class="publications-container">
+        <ul class="publications-list">
+            <li class="publications-item">
+                <img src="image1.jpg" alt="Imagen 1">
+                <p>1. Título de la Publicación 1. Autor(es). Año. Detalles.</p>
+            </li>
+            <li class="publications-item">
+                <img src="image2.jpg" alt="Imagen 2">
+                <p>2. Título de la Publicación 2. Autor(es). Año. Detalles.</p>
+            </li>
+            <li class="publications-item">
+                <img src="image3.jpg" alt="Imagen 3">
+                <p>3. Título de la Publicación 3. Autor(es). Año. Detalles.</p>
+            </li>
+            <li class="publications-item">
+                <img src="image4.jpg" alt="Imagen 4">
+                <p>4. Título de la Publicación 4. Autor(es). Año. Detalles.</p>
+            </li>
+        </ul>
     </div>
 </body>
 </html>
-
