@@ -67,8 +67,9 @@
 
         /* Contenedor de publicaciones */
         .publications-container {
-            margin-left: 200px; /* Espacio para la barra lateral */
+            margin: 2cm auto; /* Centrado horizontal */
             padding: 2cm 3cm; /* Añade espaciado alrededor */
+            max-width: 800px; /* Ancho máximo del contenedor */
         }
 
         .publications-list {
@@ -82,10 +83,19 @@
             margin-bottom: 20px; /* Espaciado entre publicaciones */
         }
 
+        /* Alternar imagen izquierda o derecha */
+        .publications-item:nth-child(odd) {
+            flex-direction: row; /* Imagen a la izquierda */
+        }
+
+        .publications-item:nth-child(even) {
+            flex-direction: row-reverse; /* Imagen a la derecha */
+        }
+
         .publications-item img {
             width: 50px; /* Tamaño de la imagen pequeña */
             height: 50px; /* Tamaño de la imagen pequeña */
-            margin-right: 15px; /* Espaciado entre la imagen y el texto */
+            margin: 0 15px; /* Espaciado entre la imagen y el texto */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para la imagen */
         }
 
@@ -135,6 +145,17 @@
             .publications-container {
                 margin-left: 0; /* Elimina margen izquierdo */
                 padding: 2cm 1cm; /* Ajusta el espaciado */
+            }
+
+            /* Publicaciones en columna en pantallas pequeñas */
+            .publications-item {
+                flex-direction: column; /* Coloca imagen y texto en columna */
+                align-items: center; /* Centra los elementos */
+                text-align: center; /* Centra el texto */
+            }
+
+            .publications-item img {
+                margin: 0 0 10px 0; /* Ajusta el margen para la vista móvil */
             }
         }
     </style>
