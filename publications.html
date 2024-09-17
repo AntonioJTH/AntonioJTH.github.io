@@ -104,6 +104,25 @@
             font-size: 1.2em; /* Tamaño de la fuente */
         }
 
+        /* Estilo del recuadro centrado */
+        .curriculum-box {
+            border: 2px solid #333; /* Borde del recuadro */
+            padding: 20px; /* Espaciado interno */
+            border-radius: 10px; /* Bordes redondeados */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para darle un poco de profundidad */
+            text-align: center; /* Centra el texto */
+            max-width: 300px; /* Ancho máximo del recuadro */
+            margin: 2cm auto; /* Centrado horizontal */
+            background-color: #f9f9f9; /* Fondo del recuadro */
+        }
+
+        .curriculum-box a {
+            text-decoration: none; /* Elimina el subrayado */
+            color: #333; /* Color del texto */
+            font-size: 1.5em; /* Tamaño de la fuente */
+            font-weight: bold; /* Negrita */
+        }
+
         /* Estilos responsivos */
         @media (max-width: 768px) {
             /* Ajustes para la cabecera */
@@ -157,6 +176,12 @@
             .publications-item img {
                 margin: 0 0 10px 0; /* Ajusta el margen para la vista móvil */
             }
+
+            /* Ajustes para el recuadro centrado */
+            .curriculum-box {
+                max-width: 80%; /* Ancho máximo del recuadro en pantallas pequeñas */
+                padding: 10px; /* Ajusta el espaciado interno */
+            }
         }
     </style>
 </head>
@@ -197,6 +222,11 @@
                 <p><a href="link_to_publication4.pdf" target="_blank">4. Título de la Publicación 4. Autor(es). Año. Detalles.</a></p>
             </li>
         </ul>
+    </div>
+
+    <!-- Recuadro de Curriculum -->
+    <div class="curriculum-box">
+        <a href="Curriculum.pdf" target="_blank">Curriculum</a>
     </div>
 </body>
 </html>
