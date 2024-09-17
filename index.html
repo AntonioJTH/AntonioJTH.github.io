@@ -25,11 +25,11 @@
         }
 
         .header h1 {
-            font-family: 'Times New Roman', serif; /* Cambia la fuente a Times New Roman */
+            font-family: 'Garamont', serif; /* Cambia la fuente a Times New Roman */
             font-size: 6em; /* Ajusta el tamaño del título */
             color: white; /* Color del texto */
             margin: 0; /* Elimina el margen del título */
-            text-indent: 16cm; /* Mueve el texto 2 cm a la derecha */
+            text-indent: 16cm; /* Mueve el texto a la derecha */
         }
 
         /* Estilos para la barra lateral */
@@ -64,11 +64,29 @@
             text-align: center; /* Centra el texto de las pestañas */
         }
 
+        /* Estilo del contenedor de la imagen y el texto */
+        .image-text-container {
+            display: flex; /* Utiliza flexbox para alinear la imagen y el texto */
+            align-items: center; /* Centra verticalmente los elementos */
+            margin-left: 200px; /* Alinea el contenedor con el contenido principal */
+            padding: 20px;
+        }
+
+        .image-text-container img {
+            width: 300px; /* Ancho de la imagen */
+            height: 400px; /* Altura de la imagen */
+            margin-right: 20px; /* Espacio entre la imagen y el texto */
+        }
+
+        .image-text-container p {
+            font-size: 1.2em; /* Tamaño del texto */
+            color: #333; /* Color del texto */
+        }
+
         /* Estilo del contenido principal */
         .main-content {
             margin-left: 200px; /* Desplaza el contenido hacia la derecha para que no quede debajo de la barra lateral */
             padding: 20px;
-            margin-top: 270px; /* Añade margen superior para dejar espacio al header */
         }
     </style>
 </head>
@@ -86,6 +104,12 @@
     <!-- Sección superior con la imagen de fondo y el título -->
     <div class="header">
         <h1>Antonio J. Torres</h1>
+    </div>
+
+    <!-- Contenedor de la imagen y el texto -->
+    <div class="image-text-container">
+        <img src="ruta/de/tu/imagen.jpg" alt="Descripción de la imagen">
+        <p>Este es un texto que se muestra a la derecha de la imagen.</p>
     </div>
 
     <!-- Contenido principal -->
