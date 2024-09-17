@@ -114,23 +114,32 @@
 
         /* Estilo de la sección de contacto */
         .contact-section {
-            text-align: center; /* Centra el contenido */
-            margin: 2cm auto; /* Margen superior e inferior y centrado horizontal */
-            max-width: 600px; /* Ancho máximo de la sección */
-        }
+    text-align: center; /* Centra el contenido */
+    margin: 2cm auto; /* Margen superior e inferior y centrado horizontal */
+    max-width: 600px; /* Ancho máximo de la sección */
+}
 
-        .contact-section h2 {
-            font-size: 2em; /* Tamaño de la leyenda de contacto */
-            margin-bottom: 10px; /* Espacio debajo de "Contacto" */
-        }
+.contact-box {
+    border: 2px solid #333; /* Borde alrededor del recuadro */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para darle un poco de profundidad */
+    background-color: #f9f9f9; /* Color de fondo */
+}
 
-        .contact-section a {
-            text-decoration: none; /* Elimina el subrayado */
-            color: black; /* Color del texto */
-            font-size: 1.2em; /* Tamaño de la fuente para el correo y teléfono */
-            display: block; /* Hace que cada enlace esté en una línea separada */
-            margin: 5px 0; /* Añade un poco de margen entre las líneas */
-        }
+.contact-section h2 {
+    font-size: 2em; /* Tamaño de la leyenda de contacto */
+    margin-bottom: 10px; /* Espacio debajo de "Contacto" */
+}
+
+.contact-section a {
+    text-decoration: none; /* Elimina el subrayado */
+    color: black; /* Color del texto */
+    font-size: 1.2em; /* Tamaño de la fuente para el correo y teléfono */
+    display: block; /* Hace que cada enlace esté en una línea separada */
+    margin: 5px 0; /* Añade un poco de margen entre las líneas */
+}
+
 
         /* Estilos responsivos */
         @media (max-width: 768px) {
@@ -235,6 +244,7 @@
 
     <!-- Sección de contacto -->
     <div class="contact-section">
+    <div class="contact-box">
         <h2>Contacto</h2>
         <!-- Correo electrónico -->
         <a href="mailto:antor@ucdavis.edu"><i class="fas fa-envelope"></i> antor@ucdavis.edu</a>
@@ -243,5 +253,6 @@
         <!-- Número de teléfono -->
         <a href="tel:+123456789"><i class="fas fa-phone"></i> +1 (234) 567-890</a>
     </div>
+</div>
 </body>
 </html>
