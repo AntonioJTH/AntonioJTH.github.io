@@ -103,18 +103,19 @@
             display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
             justify-content: center; /* Centra el contenido horizontalmente */
             align-items: flex-start; /* Alinea los elementos al inicio */
-            border: 1px solid #ccc; /* Borde del recuadro */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del recuadro */
-            background-color: #f9f9f9; /* Fondo claro para el recuadro */
         }
 
-        .about-me-container .about-me-text {
+        .about-me-text {
             flex: 1; /* Permite que el texto ocupe más espacio */
             padding: 20px;
+            border: 1px solid #ccc; /* Borde del marco */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
+            margin-left: 1cm; /* Añade espacio entre el recuadro y la imagen */
+            background-color: #f9f9f9; /* Fondo claro para el recuadro */
             font-size: 1.3em; /* Aumenta el tamaño de la fuente */
         }
 
-        .about-me-container h2 {
+        .about-me-text h2 {
             text-decoration: underline; /* Subraya el título "About Me" */
         }
 
@@ -157,7 +158,7 @@
             }
 
             .about-text,
-            .about-me-container .about-me-text {
+            .about-me-text {
                 max-width: 100%; /* Ancho completo */
                 margin-right: 0; /* Elimina el margen derecho */
                 margin-bottom: 20px; /* Espacio inferior entre el texto y la imagen */
@@ -176,9 +177,10 @@
         <ul>
             <li><a href="index.html">Home</a></li> <!-- Agrega un enlace de vuelta a la página principal -->
             <li><a href="about.html">About Me</a></li>
-            <li><a href="publications">Publications & CV</a></li>
+            <li><a href="publications">Publications  & CV</a></li>
             <li><a href="#teaching">Teaching & Advicing</a></li>
             <li><a href="#cosas">Cosas en Español</a></li>
+            <!-- Puedes añadir más elementos a la barra lateral aquí -->
         </ul>
     </div>
 
@@ -199,12 +201,12 @@
         <img src="quere.jpg" alt="About Me" class="about-image">
     </div>
 
-    <!-- Nuevo Contenedor de About Me con Imagen a la Izquierda -->
+    <!-- Nuevo Contenedor de About Me -->
     <div class="about-me-container">
         <!-- Imagen a la izquierda -->
         <img src="quere.jpg" alt="About Me" class="about-image">
         
-        <!-- Texto de About Me -->
+        <!-- Texto de About Me con recuadro -->
         <div class="about-me-text">
             <h2>About Me</h2>
             <p>I am originally from the city of Querétaro, though I've also lived in San Luis and now in Davis, both cities that I hold dear. I enjoy reading, playing with my dogs, traveling, and exploring new cultures, especially new cuisines. I appreciate many forms of artistic expression, although I wouldn't consider myself an expert. I value a good conversation, perhaps accompanied by a beer or a bit of mezcal.</p>
