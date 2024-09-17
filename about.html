@@ -67,22 +67,23 @@
 
         /* Contenedor principal de About Me con flexbox */
         .about-container {
-            margin-left: 200px; /* Desplaza el contenido hacia la derecha para que no quede debajo de la barra lateral */
+            max-width: 800px; /* Ancho máximo del contenedor para centrar el contenido */
+            margin: 0 auto; /* Centra el contenedor horizontalmente */
             padding: 20px;
             display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
-            justify-content: space-between; /* Distribuye el espacio entre los elementos */
+            justify-content: center; /* Centra el contenido horizontalmente */
             align-items: flex-start; /* Alinea los elementos al inicio */
         }
 
         /* Estilo del texto */
         .about-text {
             flex: 1; /* Permite que el texto ocupe más espacio */
-            max-width: 50%; /* Limita el ancho máximo del texto */
+            max-width: 45%; /* Limita el ancho máximo del texto */
             padding: 20px;
             border: 1px solid #ccc; /* Borde del marco */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
             text-align: justify; /* Justifica el texto */
-            margin-right: 10px; /* Reduce el espacio entre el texto y la imagen */
+            margin-right: 5px; /* Reduce aún más el espacio entre el texto y la imagen */
         }
 
         /* Estilo de la imagen */
