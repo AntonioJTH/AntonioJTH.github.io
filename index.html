@@ -1,9 +1,10 @@
+<!-- about.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página con Barra Lateral</title>
+    <title>About Me</title>
     <style>
         body {
             margin: 0; /* Elimina márgenes por defecto */
@@ -65,49 +66,23 @@
             text-align: center; /* Centra el texto de las pestañas */
         }
 
-        /* Estilo del contenedor de la imagen y el texto */
-        .image-text-container {
-            display: flex; /* Utiliza flexbox para alinear la imagen y el texto */
-            align-items: flex-start; /* Alinea los elementos al inicio */
-            margin-left: 200px; /* Alinea el contenedor con el contenido principal */
-            padding: 20px;
-            margin-top: 3cm; /* Añade un margen superior de 3 cm */
-        }
-
-        .image-text-container img {
-            width: 300px; /* Ancho de la imagen */
-            height: 380px; /* Altura de la imagen */
-            margin-left: 14cm; /* Separa la imagen 15 cm de la barra lateral */
-            margin-right: 2.5cm; /* Separa la imagen del texto a su derecha por 2.5 cm */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Da más sombra a la imagen */
-        }
-
-        .image-text-container .text-content {
-            font-size: 1.2em; /* Tamaño del texto */
-            color: #333; /* Color del texto */
-            margin-top: 1cm; /* Baja el texto 1 cm */
-        }
-
-        .image-text-container .text-content h2 {
-            font-size: 1.5em; /* Tamaño del título */
-            margin: 0; /* Elimina el margen */
-            margin-bottom: 0.5cm; /* Añade margen inferior de medio centímetro */
-            text-decoration: underline; /* Subraya el texto */
-        }
-
-        .image-text-container .text-content p {
-            margin: 0.5em 0; /* Margen superior e inferior */
-        }
-
-        /* Añadir espacio entre el primer y segundo bloque de texto */
-        .image-text-container .text-content .section-spacer {
-            margin-top: 1cm; /* Añade un margen superior de 1 cm */
-        }
-
         /* Estilo del contenido principal */
         .main-content {
             margin-left: 200px; /* Desplaza el contenido hacia la derecha para que no quede debajo de la barra lateral */
             padding: 20px;
+            text-align: center; /* Centra el texto */
+            max-width: 800px; /* Anchura máxima del contenido */
+            margin: 50px auto; /* Centra el contenido horizontalmente */
+        }
+
+        .main-content h2 {
+            font-size: 2.5em; /* Tamaño del título "About Me" */
+            margin-bottom: 20px; /* Espacio inferior */
+        }
+
+        .main-content p {
+            font-size: 1.2em; /* Tamaño del texto */
+            line-height: 1.6; /* Espaciado entre líneas */
         }
     </style>
 </head>
@@ -115,12 +90,8 @@
     <!-- Barra lateral -->
     <div class="sidebar">
         <ul>
-            <li><a href="#about">About Me</a></li>
-            <li><a href="#publications">Publications</a></li>
-            <li><a href="#curriculum">Curriculum</a></li>
-            <li><a href="#teaching">Teaching & Advicing</a></li>
-            <li><a href="#cosas">Cosas en Español</a></li>
-            <!-- Puedes añadir más elementos a la barra lateral aquí -->
+            <li><a href="about.html">About Me</a></li>
+            <li><a href="index.html">Home</a></li> <!-- Agrega un enlace de vuelta a la página principal -->
         </ul>
     </div>
 
@@ -129,28 +100,11 @@
         <h1>Antonio J. Torres</h1>
     </div>
 
-    <!-- Contenedor de la imagen y el texto -->
-    <div class="image-text-container">
-        <img src="foto.jpg" alt="Descripción de la imagen">
-        <div class="text-content">
-            <h2>Antonio J. Torres</h2>
-            <p>Postdoctoral Position<br>
-            Department of Mathematics<br>
-            U.C. Davis CA.</p>
-
-            <!-- Espacio entre el primer y segundo bloque -->
-            <div class="section-spacer"></div>
-
-            <h2>Research Interest</h2>
-            <p>I'm interested in areas such as<br>
-            combinatorics, discrete geometry,<br>
-            probability, and data analysis.</p>
-        </div>
-    </div>
-
-    <!-- Contenido principal -->
+    <!-- Contenido principal de About Me -->
     <div class="main-content">
-        <p>Este es el contenido principal de la página, que se muestra debajo de la imagen y el título.</p>
+        <h2>About Me</h2>
+        <p>I am originally from Querétaro, Mexico. I studied my bachelor's degree at UAQ, my master's degree at UASLP and my Ph.D. at UNAM. Currently, I have a postdoctoral position in the Department of Mathematics at the University of California, Davis.</p>
+        <p>I really enjoy math, reading, hiking, swimming, and going out into nature with my dogs.</p>
     </div>
 </body>
 </html>
