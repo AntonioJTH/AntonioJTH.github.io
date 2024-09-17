@@ -11,18 +11,18 @@
         }
 
         /* Sección superior con la imagen de fondo y el título */
+                /* Sección superior con la imagen de fondo y el título */
         .header {
             background-image: url('icosa1.jpg'); /* Ruta de la imagen */
             background-size: cover; /* Ajusta el tamaño de la imagen */
             background-repeat: no-repeat; /* Evita que la imagen se repita */
             background-position: bottom; /* Ajusta la posición para subir la imagen */
             height: 300px; /* Ajusta la altura de la sección superior */
-            width: 100%; /* Ancho completo de la página */
+            width: calc(100% - 200px); /* Ancho total menos el ancho de la barra lateral */
+            margin-left: 200px; /* Empuja hacia la derecha para dejar espacio a la barra lateral */
             display: flex; /* Utiliza flexbox */
             justify-content: center; /* Centra el contenido horizontalmente */
             align-items: center; /* Centra verticalmente */
-            box-sizing: border-box; /* Incluye el padding y el border en el ancho y alto */
-            padding-left: 200px; /* Deja espacio para la barra lateral */
         }
 
         .header h1 {
@@ -30,6 +30,7 @@
             font-size: 5em; /* Ajusta el tamaño del título */
             color: black; /* Color del texto */
             margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
+            text-indent: 20cm; /* Mueve el texto a la derecha */
             font-weight: 300; /* Hace la fuente más delgada */
         }
 
@@ -67,24 +68,23 @@
 
         /* Contenedor principal de About Me con flexbox */
         .about-container {
-            width: calc(100% - 200px); /* Ancho total menos la barra lateral */
-            margin-left: 200px; /* Desplaza el contenedor a la derecha */
-            display: flex; /* Utiliza flexbox */
+            max-width: 800px; /* Ancho máximo del contenedor para centrar el contenido */
+            margin: 2.5cm auto 0 auto; /* Centra el contenedor horizontalmente y añade margen superior de 2.5cm */
+            padding: 20px;
+            display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
             justify-content: center; /* Centra el contenido horizontalmente */
-            align-items: center; /* Centra verticalmente */
-            padding: 20px; /* Añade un relleno */
-            box-sizing: border-box; /* Incluye padding y border en el ancho */
+            align-items: flex-start; /* Alinea los elementos al inicio */
         }
 
         /* Estilo del texto */
         .about-text {
             flex: 1; /* Permite que el texto ocupe más espacio */
-            max-width: 50%; /* Limita el ancho máximo del texto */
+            max-width: 55%; /* Limita el ancho máximo del texto */
             padding: 20px;
             border: 1px solid #ccc; /* Borde del marco */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
             text-align: justify; /* Justifica el texto */
-            margin-right: 20px; /* Añade espacio entre el texto y la imagen */
+            margin-right: 1cm; /* Añade espacio de 1 cm entre el texto y la imagen */
             font-size: 1.3em; /* Aumenta el tamaño de la fuente */
         }
 
@@ -97,6 +97,8 @@
             width: 420px; /* Ancho de la imagen */
             height: auto; /* Altura automática para mantener la proporción */
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Sombra de la imagen */
+            margin-left: 1cm; /* Añade espacio de 1 cm entre el recuadro y la imagen */
+            margin-top: 1cm; /* Mueve la imagen 1 cm más abajo */
         }
 
         .main-content h2 {
@@ -131,7 +133,7 @@
             <p>I earned my bachelor's degree at the Autonomous University of Querétaro (UAQ), followed by my master's degree at the Autonomous University of San Luis Potosí (UASLP). Later, I completed my Ph.D. at the National Autonomous University of Mexico (UNAM). Currently, I hold a postdoctoral position in the Department of Mathematics at the University of California, Davis.</p>
         </div>
         
-        <!-- Imagen centrada junto al texto -->
+        <!-- Imagen a la derecha con sombra -->
         <img src="quere.jpg" alt="About Me" class="about-image">
     </div>
 </body>
