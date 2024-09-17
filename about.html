@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,6 +12,7 @@
         }
 
         /* Sección superior con la imagen de fondo y el título */
+                /* Sección superior con la imagen de fondo y el título */
         .header {
             background-image: url('icosa1.jpg'); /* Ruta de la imagen */
             background-size: cover; /* Ajusta el tamaño de la imagen */
@@ -67,19 +69,18 @@
 
         /* Contenedor principal de About Me con flexbox */
         .about-container {
-            width: calc(100% - 200px); /* Ajusta el ancho del contenedor para ocupar el espacio restante */
-            margin-left: 200px; /* Deja espacio para la barra lateral */
+            max-width: 800px; /* Ancho máximo del contenedor para centrar el contenido */
+            margin: 2.5cm auto 0 auto; /* Centra el contenedor horizontalmente y añade margen superior de 2.5cm */
             padding: 20px;
             display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
             justify-content: center; /* Centra el contenido horizontalmente */
             align-items: flex-start; /* Alinea los elementos al inicio */
-            box-sizing: border-box; /* Incluye el padding y el border en el ancho */
         }
 
         /* Estilo del texto */
         .about-text {
             flex: 1; /* Permite que el texto ocupe más espacio */
-            max-width: 60%; /* Ajusta el ancho máximo del texto */
+            max-width: 55%; /* Limita el ancho máximo del texto */
             padding: 20px;
             border: 1px solid #ccc; /* Borde del marco */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
@@ -94,7 +95,7 @@
 
         /* Estilo de la imagen */
         .about-image {
-            width: 400px; /* Ajusta el ancho de la imagen si es necesario */
+            width: 420px; /* Ancho de la imagen */
             height: auto; /* Altura automática para mantener la proporción */
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Sombra de la imagen */
             margin-left: 1cm; /* Añade espacio de 1 cm entre el recuadro y la imagen */
