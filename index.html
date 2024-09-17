@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage Antonio J. Torres</title>
+    <!-- Enlace a Font Awesome para los íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             margin: 0; /* Elimina márgenes por defecto */
@@ -109,6 +111,18 @@
             margin-left: 200px; /* Desplaza el contenido hacia la derecha para que no quede debajo de la barra lateral */
             padding: 20px;
         }
+
+        /* Estilo para el ícono de correo */
+        .email-icon {
+            text-align: center; /* Centra el contenido */
+            margin: 2cm 0; /* Margen superior e inferior */
+        }
+
+        .email-icon a {
+            text-decoration: none; /* Elimina el subrayado */
+            color: black; /* Color del ícono */
+            font-size: 2em; /* Tamaño del ícono */
+        }
     </style>
 </head>
 <body>
@@ -152,6 +166,11 @@
     <!-- Contenido principal -->
     <div class="main-content">
         <p>Este es el contenido principal de la página, que se muestra debajo de la imagen y el título.</p>
+    </div>
+
+    <!-- Sección del ícono de correo -->
+    <div class="email-icon">
+        <a href="mailto:antor@ucdavis.edu"><i class="fas fa-envelope"></i> antor@ucdavis.edu</a>
     </div>
 </body>
 </html>
