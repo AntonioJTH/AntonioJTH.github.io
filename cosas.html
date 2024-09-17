@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosas en Español</title>
+    <style>
+        body {
+            margin: 0; /* Elimina márgenes por defecto */
+            font-family: Arial, sans-serif; /* Fuente de la página */
+        }
+
+        /* Sección superior con la imagen de fondo y el título */
+        .header {
+            background-image: url('dode_10.jpg'); /* Ruta de la imagen */
+            background-size: cover; /* Ajusta el tamaño de la imagen */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            background-position: bottom; /* Ajusta la posición para subir la imagen */
+            height: 300px; /* Ajusta la altura de la sección superior */
+            display: flex; /* Utiliza flexbox */
+            justify-content: left; /* Centra el contenido horizontalmente */
+            align-items: center; /* Centra verticalmente */
+            margin-left: 200px; /* Espacio a la izquierda para la barra lateral */
+            padding-left: 4cm; /* Añade espacio a la derecha */
+        }
+
+        .header h1 {
+            font-family: 'Arial', sans-serif; /* Cambia la fuente a Arial */
+            font-size: 5em; /* Ajusta el tamaño del título */
+            color: black; /* Color del texto */
+            margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
+            font-weight: 300; /* Hace la fuente más delgada */
+        }
+
+        /* Estilos para la barra lateral */
+        .sidebar {
+            width: 200px; /* Ancho de la barra lateral */
+            height: 100vh; /* Altura completa de la ventana */
+            position: fixed; /* Fija la barra lateral en la parte izquierda */
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */
+            padding-top: 20px; /* Espacio superior */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */
+        }
+
+        /* Estilos para los elementos de la barra lateral */
+        .sidebar ul {
+            list-style: none; /* Elimina los puntos de lista */
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            margin: 20px 0; /* Margen entre los elementos */
+        }
+
+        .sidebar a {
+            text-decoration: none; /* Elimina el subrayado */
+            color: white; /* Color del texto */
+            font-size: 1.2em; /* Tamaño del texto */
+            display: block; /* Hace que el enlace ocupe toda la anchura del contenedor */
+            padding: 10px; /* Añade espaciado alrededor del texto */
+            text-align: center; /* Centra el texto de las pestañas */
+        }
+
+        /* Estilo para el mensaje de construcción */
+        .construction-message {
+            max-width: 1300px; /* Ancho máximo del contenedor */
+            margin: 5cm auto; /* Centra el contenedor horizontalmente y añade margen superior */
+            text-align: center; /* Centra el texto */
+            font-size: 2em; /* Tamaño de la fuente */
+            color: #555; /* Color del texto */
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            /* Ajustes para la cabecera */
+            .header {
+                height: 200px; /* Reduce la altura */
+                width: 100%; /* Ancho completo */
+                margin-left: 0; /* Sin margen izquierdo */
+            }
+
+            .header h1 {
+                font-size: 3em; /* Tamaño de fuente más pequeño */
+                text-align: center; /* Centra el texto */
+                margin: 0; /* Elimina márgenes */
+            }
+
+            /* Ajustes para la barra lateral */
+            .sidebar {
+                width: 100%; /* Ancho completo */
+                height: auto; /* Altura automática */
+                position: relative; /* Posición relativa */
+                display: flex; /* Flex para colocar enlaces horizontalmente */
+                justify-content: space-around; /* Distribuye los enlaces */
+            }
+
+            .sidebar ul {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 10px;
+            }
+
+            /* Ajustes para el mensaje de construcción */
+            .construction-message {
+                margin: 2cm auto; /* Ajusta el margen superior */
+                font-size: 1.5em; /* Reduce el tamaño de la fuente en pantallas pequeñas */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra lateral -->
+    <div class="sidebar">
+        <ul>
+            <li><a href="index.html">Home</a></li> <!-- Agrega un enlace de vuelta a la página principal -->
+            <li><a href="about.html">About Me</a></li>
+            <li><a href="publications.html">Publications  & CV</a></li>
+            <li><a href="teaching.html">Teaching & Advising</a></li>
+            <li><a href="cosas.html">Cosas en Español</a></li>
+        </ul>
+    </div>
+
+    <!-- Sección superior con la imagen de fondo y el título -->
+    <div class="header">
+        <h1>Cosas en Español</h1>
+    </div>
+
+    <!-- Mensaje de construcción -->
+    <div class="construction-message">
+        In construction
+    </div>
+</body>
+</html>
+
