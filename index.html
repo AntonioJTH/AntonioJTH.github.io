@@ -29,7 +29,7 @@
             font-size: 6em; /* Ajusta el tamaño del título */
             color: white; /* Color del texto */
             margin: 0; /* Elimina el margen del título */
-            text-indent: 20cm; /* Mueve el texto a la derecha */
+            text-indent: 16cm; /* Mueve el texto a la derecha */
         }
 
         /* Estilos para la barra lateral */
@@ -67,7 +67,7 @@
         /* Estilo del contenedor de la imagen y el texto */
         .image-text-container {
             display: flex; /* Utiliza flexbox para alinear la imagen y el texto */
-            align-items: center; /* Centra verticalmente los elementos */
+            align-items: flex-start; /* Alinea los elementos al inicio */
             margin-left: 200px; /* Alinea el contenedor con el contenido principal */
             padding: 20px;
             margin-top: 3cm; /* Añade un margen superior de 3 cm */
@@ -81,9 +81,19 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Contorno sombreado */
         }
 
-        .image-text-container p {
+        .image-text-container .text-content {
             font-size: 1.2em; /* Tamaño del texto */
             color: #333; /* Color del texto */
+        }
+
+        .image-text-container .text-content h2 {
+            font-size: 1.5em; /* Tamaño del título */
+            margin: 0; /* Elimina el margen */
+            text-decoration: underline; /* Subraya el texto */
+        }
+
+        .image-text-container .text-content p {
+            margin: 0.5em 0; /* Margen superior e inferior */
         }
 
         /* Estilo del contenido principal */
@@ -112,19 +122,14 @@
     <!-- Contenedor de la imagen y el texto -->
     <div class="image-text-container">
         <img src="foto.jpg" alt="Descripción de la imagen">
-       <p style="text-align: center;"><span style="font-size: 26px; font-family: Symbol;"><u>Antonio J. Torres</u></span></p>
-       <p style="text-align: center;"><span style="font-size: 20px; font-family: Symbol;">Postdoctoral Position</span></p> 
-       <p style="text-align: center;"><span style="font-size: 20px; font-family: Symbol;">Department of Mathematics</span></p>
-       <p style="text-align: center;"><span style="font-size: 20px; font-family: Symbol;">U.C. Davis CA.</span></p>
-       <p style="text-align: center;"><br></p>
-       <p style="text-align: center;"><span style="font-size: 26px; font-family: Symbol;"><u>Research Interest</u></span></p>
-       <p style="text-align: center;"><span style="font-size: 20px;">I&apos;m interested in areas such as&nbsp;</span></p>
-       <p style="text-align: center;"><span style="font-size: 20px;">combinatorics, discrete geometry,&nbsp;</span></p>
-       <p style="text-align: center;"><span style="font-size: 20px;">probability, and data analysis.<br></span></p>
-       <p style="text-align: center;"><span style="font-size: 20px;"><br></span></p>
-       <p style="text-align: center;"><br></p>
-       <p style="text-align: center;"><span style="font-size: 30px;"><br></span></p>
-       <p style="text-align: center;"><br></p>
+        <div class="text-content">
+            <h2>Antonio J. Torres</h2>
+            <p>Postdoctoral Position<br>
+            Department of Mathematics<br>
+            U.C. Davis CA.</p>
+            <h2>Research Interest</h2>
+            <p>I'm interested in areas such as combinatorics, discrete geometry, probability, and data analysis.</p>
+        </div>
     </div>
 
     <!-- Contenido principal -->
