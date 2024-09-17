@@ -3,25 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página con Título Centrado</title>
+    <title>Página con Barra Lateral</title>
     <style>
         body {
             background-image: url('gold_Icosa.jpg'); /* Ruta de la imagen */
-            background-size: 90%; /* Ajusta el tamaño de la imagen al 90% */
+            background-size: 100%; /* Ajusta el tamaño de la imagen al 90% */
             background-repeat: no-repeat; /* Evita que la imagen se repita */
             background-position: center center; /* Centra la imagen */
+            margin: 0; /* Elimina márgenes por defecto */
+            font-family: Arial, sans-serif; /* Fuente de la página */
+        }
+
+        /* Estilos para la barra lateral */
+        .sidebar {
+            width: 200px; /* Ancho de la barra lateral */
+            height: 100vh; /* Altura completa de la ventana */
+            position: fixed; /* Fija la barra lateral en la parte izquierda */
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */
+            padding-top: 20px; /* Espacio superior */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */
+        }
+
+        /* Estilos para los elementos de la barra lateral */
+        .sidebar ul {
+            list-style: none; /* Elimina los puntos de lista */
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            margin: 20px 0; /* Margen entre los elementos */
+        }
+
+        .sidebar a {
+            text-decoration: none; /* Elimina el subrayado */
+            color: white; /* Color del texto */
+            font-size: 1.2em; /* Tamaño del texto */
+            display: block; /* Hace que el enlace ocupe toda la anchura del contenedor */
+            padding: 10px; /* Añade espaciado alrededor del texto */
+        }
+
+        /* Estilo del contenido principal */
+        .main-content {
+            margin-left: 220px; /* Desplaza el contenido hacia la derecha para que no quede debajo de la barra lateral */
+            padding: 20px;
         }
 
         h1 {
             text-align: center; /* Centra el título */
             font-size: 3em; /* Cambia el tamaño del título */
-            margin-top: 20px; /* Añade un margen superior (opcional) */
-            color: white; /* Color del texto, opcional */
+            color: white; /* Color del texto */
         }
     </style>
 </head>
 <body>
-    <h1>Antonio J. Torres</h1>
-    <p>Este es un ejemplo de una imagen de fondo y un título centrado en HTML.</p>
+    <!-- Barra lateral -->
+    <div class="sidebar">
+        <ul>
+            <li><a href="#about">About Me</a></li>
+            <!-- Puedes añadir más elementos a la barra lateral aquí -->
+        </ul>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        <h1>Antonio J. Torres</h1>
+        <p>Este es un ejemplo de una imagen de fondo y un título centrado en HTML.</p>
+    </div>
 </body>
 </html>
