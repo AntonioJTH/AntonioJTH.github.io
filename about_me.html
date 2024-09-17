@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me</title>
+    <style>
+        body {
+            margin: 0; /* Elimina márgenes por defecto */
+            font-family: Arial, sans-serif; /* Fuente de la página */
+        }
+
+        /* Sección superior con la imagen de fondo y el título */
+        .header {
+            background-image: url('icosa1.jpg'); /* Ruta de la imagen */
+            background-size: cover; /* Ajusta el tamaño de la imagen */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            background-position: bottom; /* Ajusta la posición para subir la imagen */
+            height: 400px; /* Ajusta la altura de la sección superior */
+            width: calc(100% - 200px); /* Ancho total menos el ancho de la barra lateral */
+            margin-left: 200px; /* Empuja hacia la derecha para dejar espacio a la barra lateral */
+            display: flex; /* Utiliza flexbox */
+            justify-content: center; /* Centra el contenido horizontalmente */
+            align-items: center; /* Centra verticalmente */
+        }
+
+        .header h1 {
+            font-family: 'Arial', sans-serif; /* Cambia la fuente a Arial */
+            font-size: 6em; /* Ajusta el tamaño del título */
+            color: black; /* Color del texto */
+            margin: 0; /* Elimina el margen del título */
+            text-indent: 20cm; /* Mueve el texto a la derecha */
+            font-weight: 300; /* Hace la fuente más delgada */
+        }
+
+        /* Estilos para la barra lateral */
+        .sidebar {
+            width: 200px; /* Ancho de la barra lateral */
+            height: 100vh; /* Altura completa de la ventana */
+            position: fixed; /* Fija la barra lateral en la parte izquierda */
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */
+            padding-top: 20px; /* Espacio superior */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */
+        }
+
+        /* Estilos para los elementos de la barra lateral */
+        .sidebar ul {
+            list-style: none; /* Elimina los puntos de lista */
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar li {
+            margin: 20px 0; /* Margen entre los elementos */
+        }
+
+        .sidebar a {
+            text-decoration: none; /* Elimina el subrayado */
+            color: white; /* Color del texto */
+            font-size: 1.2em; /* Tamaño del texto */
+            display: block; /* Hace que el enlace ocupe toda la anchura del contenedor */
+            padding: 10px; /* Añade espaciado alrededor del texto */
+            text-align: center; /* Centra el texto de las pestañas */
+        }
+
+        /* Estilo del contenido principal */
+        .main-content {
+            margin-left: 200px; /* Desplaza el contenido hacia la derecha para que no quede debajo de la barra lateral */
+            padding: 20px;
+            text-align: center; /* Centra el texto */
+            max-width: 800px; /* Anchura máxima del contenido */
+            margin: 50px auto; /* Centra el contenido horizontalmente */
+        }
+
+        .main-content h2 {
+            font-size: 2.5em; /* Tamaño del título "About Me" */
+            margin-bottom: 20px; /* Espacio inferior */
+        }
+
+        .main-content p {
+            font-size: 1.2em; /* Tamaño del texto */
+            line-height: 1.6; /* Espaciado entre líneas */
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra lateral -->
+    <div class="sidebar">
+        <ul>
+            <li><a href="#about">About Me</a></li>
+            <li><a href="#publications">Publications</a></li>
+            <li><a href="#curriculum">Curriculum</a></li>
+            <!-- Puedes añadir más elementos a la barra lateral aquí -->
+        </ul>
+    </div>
+
+    <!-- Sección superior con la imagen de fondo y el título -->
+    <div class="header">
+        <h1>Antonio J. Torres</h1>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        <h2>About Me</h2>
+        <p>I am originally from Querétaro, Mexico. I studied my bachelor's degree at UAQ, my master's degree at UASLP and my Ph.D. at UNAM. Currently, I have a postdoctoral position in the Department of Mathematics at the University of California, Davis.</p>
+        <p>I really enjoy math, reading, hiking, swimming, and going out into nature with my dogs.</p>
+    </div>
+</body>
+</html>
+
