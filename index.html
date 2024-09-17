@@ -19,11 +19,10 @@
             background-repeat: no-repeat; /* Evita que la imagen se repita */
             background-position: bottom; /* Ajusta la posición para subir la imagen */
             height: 300px; /* Ajusta la altura de la sección superior */
-            width: calc(100% - 200px); /* Ancho total menos el ancho de la barra lateral */
-            margin-left: 200px; /* Empuja hacia la derecha para dejar espacio a la barra lateral */
             display: flex; /* Utiliza flexbox */
             justify-content: center; /* Centra el contenido horizontalmente */
             align-items: center; /* Centra verticalmente */
+            margin-left: 200px; /* Espacio a la izquierda para la barra lateral */
         }
 
         .header h1 {
@@ -31,7 +30,6 @@
             font-size: 5em; /* Ajusta el tamaño del título */
             color: black; /* Color del texto */
             margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
-            text-indent: 20cm; /* Mueve el texto a la derecha */
             font-weight: 300; /* Hace la fuente más delgada */
         }
 
@@ -78,8 +76,7 @@
 
         .image-text-container img {
             width: 300px; /* Ancho de la imagen */
-            height: 380px; /* Altura de la imagen */
-            margin-left: 14cm; /* Separa la imagen 15 cm de la barra lateral */
+            height: auto; /* Altura automática para mantener la proporción */
             margin-right: 2.5cm; /* Separa la imagen del texto a su derecha por 2.5 cm */
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Da más sombra a la imagen */
         }
@@ -123,6 +120,64 @@
             color: black; /* Color del ícono */
             font-size: 2em; /* Tamaño del ícono */
         }
+
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            /* Ajustes para la cabecera */
+            .header {
+                height: 200px; /* Reduce la altura */
+                width: 100%; /* Ancho completo */
+                margin-left: 0; /* Sin margen izquierdo */
+            }
+
+            .header h1 {
+                font-size: 2.5em; /* Tamaño de fuente más pequeño */
+                text-align: center; /* Centra el texto */
+                margin: 0; /* Elimina márgenes */
+            }
+
+            /* Ajustes para la barra lateral */
+            .sidebar {
+                width: 100%; /* Ancho completo */
+                height: auto; /* Altura automática */
+                position: relative; /* Posición relativa */
+                display: flex; /* Flex para colocar enlaces horizontalmente */
+                justify-content: space-around; /* Distribuye los enlaces */
+                padding: 10px;
+                box-shadow: none; /* Elimina la sombra */
+            }
+
+            .sidebar ul {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 0;
+            }
+
+            .sidebar li {
+                margin: 0; /* Elimina el margen */
+            }
+
+            /* Ajustes para el contenedor de imagen y texto */
+            .image-text-container {
+                flex-direction: column; /* Coloca la imagen y el texto en una columna */
+                align-items: center; /* Centra los elementos */
+                margin-left: 0; /* Elimina el margen izquierdo */
+                margin-top: 2cm; /* Ajusta el margen superior */
+            }
+
+            .image-text-container img {
+                width: 80%; /* Ancho adaptativo */
+                margin: 0; /* Elimina márgenes */
+                margin-bottom: 20px; /* Añade espacio inferior */
+            }
+
+            .image-text-container .text-content {
+                font-size: 1em; /* Reduce el tamaño del texto */
+                margin-top: 0; /* Elimina el margen superior */
+                text-align: center; /* Centra el texto */
+            }
+        }
     </style>
 </head>
 <body>
@@ -162,8 +217,6 @@
             probability, and data analysis.</p>
         </div>
     </div>
-
-
 
     <!-- Sección del ícono de correo -->
     <div class="email-icon">
