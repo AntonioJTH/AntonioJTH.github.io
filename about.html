@@ -1,118 +1,177 @@
-/* Sección general del CSS */
-body {
-    margin: 0; /* Elimina márgenes por defecto */
-    font-family: Arial, sans-serif; /* Fuente de la página */
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me</title>
+    <style>
+        body {
+            margin: 0; /* Elimina márgenes por defecto */
+            font-family: Arial, sans-serif; /* Fuente de la página */
+        }
 
-/* Estilos predeterminados */
-.header {
-    background-image: url('dode_3.jpg'); /* Ruta de la imagen */
-    background-size: cover; /* Ajusta el tamaño de la imagen */
-    background-repeat: no-repeat; /* Evita que la imagen se repita */
-    background-position: bottom; /* Ajusta la posición para subir la imagen */
-    height: 300px; /* Ajusta la altura de la sección superior */
-    width: calc(100% - 200px); /* Ancho total menos el ancho de la barra lateral */
-    margin-left: 200px; /* Empuja hacia la derecha para dejar espacio a la barra lateral */
-    display: flex; /* Utiliza flexbox */
-    justify-content: center; /* Centra el contenido horizontalmente */
-    align-items: center; /* Centra verticalmente */
-}
+        /* Sección superior con la imagen de fondo y el título */
+        .header {
+            background-image: url('dode_3.jpg'); /* Ruta de la imagen */
+            background-size: cover; /* Ajusta el tamaño de la imagen */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            background-position: bottom; /* Ajusta la posición para subir la imagen */
+            height: 300px; /* Ajusta la altura de la sección superior */
+            display: flex; /* Utiliza flexbox */
+            justify-content: center; /* Centra el contenido horizontalmente */
+            align-items: center; /* Centra verticalmente */
+            margin-left: 200px; /* Espacio a la izquierda para la barra lateral */
+        }
 
-.header h1 {
-    font-family: 'Arial', sans-serif; /* Cambia la fuente a Arial */
-    font-size: 5em; /* Ajusta el tamaño del título */
-    color: black; /* Color del texto */
-    margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
-    text-indent: -16cm; /* Mueve el texto a la izquierda */
-    font-weight: 300; /* Hace la fuente más delgada */
-}
+        .header h1 {
+            font-family: 'Arial', sans-serif; /* Cambia la fuente a Arial */
+            font-size: 5em; /* Ajusta el tamaño del título */
+            color: black; /* Color del texto */
+            margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
+            font-weight: 300; /* Hace la fuente más delgada */
+        }
 
-.sidebar {
-    width: 200px; /* Ancho de la barra lateral */
-    height: 100vh; /* Altura completa de la ventana */
-    position: fixed; /* Fija la barra lateral en la parte izquierda */
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */
-    padding-top: 20px; /* Espacio superior */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */
-}
+        /* Estilos para la barra lateral */
+        .sidebar {
+            width: 200px; /* Ancho de la barra lateral */
+            height: 100vh; /* Altura completa de la ventana */
+            position: fixed; /* Fija la barra lateral en la parte izquierda */
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */
+            padding-top: 20px; /* Espacio superior */
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */
+        }
 
-/* Contenedor principal de About Me con flexbox */
-.about-container {
-    max-width: 800px; /* Ancho máximo del contenedor para centrar el contenido */
-    margin: 2.5cm auto 0 auto; /* Centra el contenedor horizontalmente y añade margen superior de 2.5cm */
-    padding: 20px;
-    display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
-    justify-content: center; /* Centra el contenido horizontalmente */
-    align-items: flex-start; /* Alinea los elementos al inicio */
-}
+        /* Estilos para los elementos de la barra lateral */
+        .sidebar ul {
+            list-style: none; /* Elimina los puntos de lista */
+            padding: 0;
+            margin: 0;
+        }
 
-/* Estilo del texto */
-.about-text {
-    flex: 1; /* Permite que el texto ocupe más espacio */
-    max-width: 80%; /* Aumenta el ancho máximo del texto */
-    padding: 20px;
-    border: 1px solid #ccc; /* Borde del marco */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
-    text-align: justify; /* Justifica el texto */
-    margin-right: 1cm; /* Añade espacio de 1 cm entre el texto y la imagen */
-    font-size: 1.3em; /* Aumenta el tamaño de la fuente */
-}
+        .sidebar li {
+            margin: 20px 0; /* Margen entre los elementos */
+        }
 
-.about-image {
-    width: 420px; /* Ancho de la imagen */
-    height: auto; /* Altura automática para mantener la proporción */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Sombra de la imagen */
-    margin-left: 1cm; /* Añade espacio de 1 cm entre el recuadro y la imagen */
-    margin-top: 1cm; /* Mueve la imagen 1 cm más abajo */
-}
+        .sidebar a {
+            text-decoration: none; /* Elimina el subrayado */
+            color: white; /* Color del texto */
+            font-size: 1.2em; /* Tamaño del texto */
+            display: block; /* Hace que el enlace ocupe toda la anchura del contenedor */
+            padding: 10px; /* Añade espaciado alrededor del texto */
+            text-align: center; /* Centra el texto de las pestañas */
+        }
 
-/* Consultas de medios para dispositivos móviles */
-@media (max-width: 768px) {
-    /* Ajustes para la barra lateral */
-    .sidebar {
-        width: 100%; /* La barra lateral ocupa todo el ancho */
-        height: auto; /* Altura automática */
-        position: relative; /* Posición relativa */
-        box-shadow: none; /* Sin sombra */
-    }
+        /* Contenedor principal de About Me con flexbox */
+        .about-container {
+            max-width: 800px; /* Ancho máximo del contenedor para centrar el contenido */
+            margin: 2.5cm auto 0 auto; /* Centra el contenedor horizontalmente y añade margen superior de 2.5cm */
+            padding: 20px;
+            display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
+            justify-content: center; /* Centra el contenido horizontalmente */
+            align-items: flex-start; /* Alinea los elementos al inicio */
+        }
 
-    .sidebar ul {
-        display: flex; /* Muestra las opciones horizontalmente */
-        justify-content: space-around; /* Distribuye las opciones */
-    }
+        /* Estilo del texto */
+        .about-text {
+            flex: 1; /* Permite que el texto ocupe más espacio */
+            max-width: 55%; /* Ancho máximo del texto */
+            padding: 20px;
+            border: 1px solid #ccc; /* Borde del marco */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
+            text-align: justify; /* Justifica el texto */
+            margin-right: 1cm; /* Añade espacio de 1 cm entre el texto y la imagen */
+            font-size: 1.3em; /* Aumenta el tamaño de la fuente */
+        }
 
-    /* Ajustes para la cabecera */
-    .header {
-        width: 100%; /* Ancho completo */
-        margin-left: 0; /* Sin margen a la izquierda */
-    }
+        /* Estilo de la imagen */
+        .about-image {
+            width: 420px; /* Ancho de la imagen */
+            height: auto; /* Altura automática para mantener la proporción */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Sombra de la imagen */
+            margin-left: 1cm; /* Añade espacio de 1 cm entre el recuadro y la imagen */
+            margin-top: 1cm; /* Mueve la imagen 1 cm más abajo */
+        }
 
-    .header h1 {
-        font-size: 3em; /* Tamaño de fuente más pequeño */
-        text-indent: 0; /* Elimina la sangría */
-        margin: 0; /* Elimina márgenes */
-        text-align: center; /* Centra el texto */
-    }
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            /* Ajustes para la cabecera */
+            .header {
+                height: 200px; /* Reduce la altura */
+                width: 100%; /* Ancho completo */
+                margin-left: 0; /* Sin margen izquierdo */
+            }
 
-    /* Ajustes para el contenedor principal */
-    .about-container {
-        flex-direction: column; /* Apila el texto y la imagen verticalmente */
-        margin-top: 1cm; /* Ajusta el margen superior */
-    }
+            .header h1 {
+                font-size: 3em; /* Tamaño de fuente más pequeño */
+                text-align: center; /* Centra el texto */
+                margin: 0; /* Elimina márgenes */
+            }
 
-    /* Ajustes para el texto */
-    .about-text {
-        max-width: 100%; /* Ancho completo */
-        margin-right: 0; /* Sin margen derecho */
-        font-size: 1em; /* Reduce el tamaño de la fuente */
-    }
+            /* Ajustes para la barra lateral */
+            .sidebar {
+                width: 100%; /* Ancho completo */
+                height: auto; /* Altura automática */
+                position: relative; /* Posición relativa */
+                display: flex; /* Flex para colocar enlaces horizontalmente */
+                justify-content: space-around; /* Distribuye los enlaces */
+            }
 
-    /* Ajustes para la imagen */
-    .about-image {
-        width: 100%; /* Ancho completo */
-        margin-left: 0; /* Sin margen izquierdo */
-        margin-top: 1cm; /* Añade un margen superior */
-    }
-}
+            .sidebar ul {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 10px;
+            }
+
+            /* Ajustes para el contenedor principal */
+            .about-container {
+                flex-direction: column; /* Coloca el texto y la imagen en columnas */
+                align-items: center; /* Centra los elementos */
+            }
+
+            .about-text {
+                max-width: 100%; /* Ancho completo */
+                margin-right: 0; /* Elimina el margen derecho */
+                margin-bottom: 20px; /* Espacio inferior entre el texto y la imagen */
+            }
+
+            .about-image {
+                width: 80%; /* Ancho adaptativo */
+                margin-left: 0; /* Elimina el margen izquierdo */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra lateral -->
+    <div class="sidebar">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Me</a></li>
+            <li><a href="#publications">Publications</a></li>
+            <li><a href="#curriculum">Curriculum</a></li>
+            <li><a href="#teaching">Teaching & Advicing</a></li>
+            <li><a href="#cosas">Cosas en Español</a></li>
+        </ul>
+    </div>
+
+    <!-- Sección superior con la imagen de fondo y el título -->
+    <div class="header">
+        <h1>About Me</h1>
+    </div>
+
+    <!-- Contenedor principal de About Me -->
+    <div class="about-container">
+        <!-- Texto justificado en un marco -->
+        <div class="about-text">
+            <h2>Education</h2>
+            <p>I earned my bachelor's degree at the Autonomous University of Querétaro (UAQ), followed by my master's degree at the Autonomous University of San Luis Potosí (UASLP). Later, I completed my Ph.D. at the National Autonomous University of Mexico (UNAM). Currently, I hold a postdoctoral position in the Department of Mathematics at the University of California, Davis.</p>
+        </div>
+        
+        <!-- Imagen a la derecha con sombra -->
+        <img src="quere.jpg" alt="About Me" class="about-image">
+    </div>
+</body>
+</html>
