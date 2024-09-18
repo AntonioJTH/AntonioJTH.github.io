@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage Antonio J. Torres</title>
-    <!-- Enlace a Font Awesome para los íconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>About Me</title>
     <style>
         body {
             margin: 0; /* Elimina márgenes por defecto */
@@ -14,7 +12,7 @@
 
         /* Sección superior con la imagen de fondo y el título */
         .header {
-            background-image: url('icosa1.jpg'); /* Ruta de la imagen */
+            background-image: url('dode_6.jpg'); /* Ruta de la imagen */
             background-size: cover; /* Ajusta el tamaño de la imagen */
             background-repeat: no-repeat; /* Evita que la imagen se repita */
             background-position: center; /* Centra la imagen */
@@ -31,7 +29,7 @@
             font-family: 'Arial', sans-serif; /* Cambia la fuente a Arial */
             font-size: 5em; /* Ajusta el tamaño del título */
             color: black; /* Color del texto */
-            margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
+            margin: -0.5cm 0 0 -1cm; /* Sube el título medio centímetro y lo mueve 1 cm a la izquierda */
             font-weight: 300; /* Hace la fuente más delgada */
             text-align: right; /* Alinea el texto a la derecha */
         }
@@ -69,84 +67,67 @@
             text-align: center; /* Centra el texto de las pestañas */
         }
 
-        /* Estilo del contenedor de la imagen y el texto */
-        .image-text-container {
-            display: flex; /* Utiliza flexbox para alinear la imagen y el texto */
-            justify-content: center; /* Centra los elementos horizontalmente */
-            align-items: flex-start; /* Alinea los elementos al inicio */
-            margin: 2cm auto; /* Añade un margen superior e inferior */
+        /* Contenedor principal de About Me con flexbox */
+        .about-container {
+            max-width: 1000px; /* Ancho máximo del contenedor para centrar el contenido */
+            margin: 2cm auto; /* Centra el contenedor horizontalmente y añade margen superior */
             padding: 20px;
-            max-width: 800px; /* Ancho máximo del contenedor */
+            display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
+            flex-wrap: wrap; /* Permite que el contenido se ajuste a múltiples líneas */
+            justify-content: center; /* Centra el contenido horizontalmente */
+            align-items: center; /* Alinea los elementos al centro */
         }
 
-        .image-text-wrapper {
-            display: flex; /* Crea un nuevo contenedor flex */
-            justify-content: center; /* Centra el contenido */
-            align-items: flex-start; /* Alinea el contenido al inicio */
-            margin-left: 220px; /* Añade margen izquierdo para evitar superposición con la barra lateral */
+        /* Estilo del texto */
+        .about-text {
+            flex: 1; /* Permite que el texto ocupe más espacio */
+            max-width: 65%; /* Aumenta el ancho máximo del texto */
+            padding: 20px;
+            border: 1px solid #ccc; /* Borde del marco */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
+            text-align: justify; /* Justifica el texto */
+            margin: 10px; /* Reduce el margen alrededor del texto */
+            font-size: 1.3em; /* Aumenta el tamaño de la fuente */
+            text-align: center; /* Centra el texto */
         }
 
-        .image-text-container img {
-            width: 350px; /* Ancho de la imagen */
+        /* Estilo de la imagen */
+        .about-image {
+            width: 440px; /* Ancho de la imagen */
             height: auto; /* Altura automática para mantener la proporción */
-            margin-right: 2.5cm; /* Separa la imagen del texto a su derecha por 2.5 cm */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Da más sombra a la imagen */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Sombra de la imagen */
+            margin: 10px auto; /* Centra la imagen */
         }
 
-        .image-text-container .text-content {
-            font-size: 1.2em; /* Tamaño del texto */
-            color: #333; /* Color del texto */
-            margin-top: 1cm; /* Baja el texto 1 cm */
-        }
-
-        .image-text-container .text-content h2 {
-            font-size: 1.5em; /* Tamaño del título */
-            margin: 0; /* Elimina el margen */
-            margin-bottom: 0.5cm; /* Añade margen inferior de medio centímetro */
-            text-decoration: underline; /* Subraya el texto */
-        }
-
-        .image-text-container .text-content p {
-            margin: 0.5em 0; /* Margen superior e inferior */
-        }
-
-        /* Añadir espacio entre el primer y segundo bloque de texto */
-        .image-text-container .text-content .section-spacer {
-            margin-top: 1cm; /* Añade un margen superior de 1 cm */
-        }
-
-        /* Estilo del contenido principal */
-        .main-content {
-            margin-left: 220px; /* Desplaza el contenido hacia la derecha para que no quede debajo de la barra lateral */
+        /* Nuevo contenedor para "About Me" */
+        .about-me-container {
+            max-width: 1000px; /* Ancho máximo del contenedor */
+            margin: 2cm auto; /* Centra el contenedor horizontalmente */
             padding: 20px;
+            display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
+            flex-wrap: wrap; /* Permite que el contenido se ajuste a múltiples líneas */
+            justify-content: center; /* Centra el contenido horizontalmente */
+            align-items: center; /* Alinea los elementos al centro */
         }
 
-        /* Estilo de la sección de contacto */
-        .contact-section {
-            text-align: center; /* Centra el contenido */
-            margin: 2cm auto; /* Margen superior e inferior y centrado horizontal */
-            max-width: 600px; /* Ancho máximo de la sección */
+        .about-me-text {
+            flex: 1; /* Permite que el texto ocupe más espacio */
+            padding: 20px;
+            border: 1px solid #ccc; /* Borde del marco */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
+            margin: 10px; /* Reduce el margen alrededor del texto */
+            background-color: #f9f9f9; /* Fondo claro para el recuadro */
+            font-size: 1.3em; /* Aumenta el tamaño de la fuente */
+            text-align: center; /* Centra el texto */
         }
 
-        .contact-box {
-            border: 1px solid #333; /* Borde alrededor del recuadro */
-            padding: 20px; /* Espaciado interno */
-            border-radius: 5px; /* Bordes redondeados */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Sombra para darle un poco de profundidad */
-            background-color: #f9f9f9; /* Color de fondo */
+        .about-me-text h2 {
+            text-decoration: underline; /* Subraya el título "Other Interests" */
         }
 
-        .contact-section h2 {
-            font-size: 2em; /* Tamaño de la leyenda de contacto */
-            margin-bottom: 10px; /* Espacio debajo de "Contacto" */
-        }
-
-        .contact-section a {
-            text-decoration: none; /* Elimina el subrayado */
-            color: black; /* Color del texto */
-            font-size: 1.2em; /* Tamaño de la fuente para el correo y teléfono */
-            display: block; /* Hace que cada enlace esté en una línea separada */
-            margin: 5px 0; /* Añade un poco de margen entre las líneas */
+        /* Clase para subrayar el título "Other Interest" */
+        .underline {
+            text-decoration: underline;
         }
 
         /* Estilos responsivos */
@@ -190,29 +171,23 @@
                 margin: 5px 0; /* Ajusta el margen */
             }
 
-            /* Ajustes para el contenedor de imagen y texto */
-            .image-text-container {
-                flex-direction: column; /* Coloca la imagen y el texto en una columna */
+            /* Ajustes para el contenedor principal */
+            .about-container,
+            .about-me-container {
+                flex-direction: column; /* Coloca el texto y la imagen en columnas */
                 align-items: center; /* Centra los elementos */
                 margin-left: 0; /* Elimina el margen izquierdo */
-                margin-top: 2cm; /* Ajusta el margen superior */
             }
 
-            .image-text-container img {
-                width: 80%; /* Ancho adaptativo */
-                margin: 0; /* Elimina márgenes */
-                margin-bottom: 20px; /* Añade espacio inferior */
+            .about-text,
+            .about-me-text {
+                max-width: 100%; /* Ancho completo */
+                margin: 10px 0; /* Reduce el margen superior e inferior */
             }
 
-            .image-text-container .text-content {
-                font-size: 1em; /* Reduce el tamaño del texto */
-                margin-top: 0; /* Elimina el margen superior */
-                text-align: center; /* Centra el texto */
-            }
-
-            /* Ajustes para la sección de contacto */
-            .contact-section {
-                margin-left: 0; /* Elimina el margen izquierdo */
+            .about-image {
+                width: 100%; /* Ancho completo */
+                margin: 0 auto; /* Centra la imagen */
             }
         }
     </style>
@@ -221,52 +196,46 @@
     <!-- Barra lateral -->
     <div class="sidebar">
         <ul>
-            <li><a href="index.html">Home</a></li> <!-- Agrega un enlace de vuelta a la página principal -->
+            <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About Me</a></li>
             <li><a href="publications.html">Publications & CV</a></li>
             <li><a href="teaching.html">Teaching & Advising</a></li>
             <li><a href="cosas.html">Cosas en Español</a></li>
-            <!-- Puedes añadir más elementos a la barra lateral aquí -->
         </ul>
     </div>
 
     <!-- Sección superior con la imagen de fondo y el título -->
     <div class="header">
-        <h1>Antonio J. Torres</h1>
+        <h1>About Me</h1>
     </div>
 
-    <!-- Contenedor de la imagen y el texto -->
-    <div class="image-text-wrapper">
-        <div class="image-text-container">
-            <img src="foto.jpg" alt="Descripción de la imagen">
-            <div class="text-content">
-                <h2>Antonio J. Torres</h2>
-                <p>Postdoctoral Position<br>
-                Department of Mathematics<br>
-                U.C. Davis CA.</p>
-
-                <!-- Espacio entre el primer y segundo bloque -->
-                <div class="section-spacer"></div>
-                <div class="section-spacer"></div>
-
-                <h2>Research Interest</h2>
-                <p>I'm interested in areas such as<br>
-                combinatorics, discrete geometry,<br>
-                probability, and data analysis.</p>
-            </div>
+    <!-- Contenedor principal de About Me -->
+    <div class="about-container">
+        <!-- Imagen arriba y texto centrado -->
+        <img src="quere.jpg" alt="About Me" class="about-image">
+        <div class="about-text">
+            <h2 class="underline">Education</h2>
+            <p>I earned my bachelor's degree at the Autonomous University of Querétaro (UAQ), followed by my master's degree at the Autonomous University of San Luis Potosí (UASLP). Later, I completed my Ph.D. at the National Autonomous University of Mexico (UNAM). Currently, I hold a postdoctoral position in the Department of Mathematics at the University of California, Davis.</p>
         </div>
     </div>
 
-    <!-- Sección de contacto -->
-    <div class="contact-section">
-        <div class="contact-box">
-            <h2>Contact</h2>
-            <!-- Correo electrónico -->
-            <a href="mailto:antor@ucdavis.edu"><i class="fas fa-envelope"></i> antor@ucdavis.edu</a>
-            <!-- Línea divisoria -->
-            <br>
-            <!-- Número de teléfono -->
-            <a href="tel:+123456789"><i class="fas fa-phone"></i> +1 (234) 567-890</a>
+    <!-- Nuevo Contenedor de About Me -->
+    <div class="about-me-container">
+        <!-- Imagen arriba y texto centrado -->
+        <img src="sofi_1.jpg" alt="About Me" class="about-image">
+        <div class="about-me-text">
+            <h2>Math Interests</h2>
+            <p>My research interests encompass discrete geometry, combinatorics, graph theory, data analysis, and algorithm theory. I am especially drawn to problems involving the structure and properties of point sets, lines, and polytopes. While these areas are my primary focus, my curiosity often extends to related topics within these fields.</p>
+        </div>
+    </div>
+
+    <!-- Contenedor para Other Interest -->
+    <div class="about-container">
+        <!-- Imagen arriba y texto centrado -->
+        <img src="davis.jpg" alt="About Me" class="about-image">
+        <div class="about-text">
+            <h2 class="underline">Other Things</h2>
+            <p>I am originally from the city of Querétaro, though I've also lived in San Luis and now in Davis, both cities that I hold dear. I enjoy reading, playing with my dogs, traveling, and exploring new cultures, especially new cuisines. I appreciate many forms of artistic expression, although I wouldn't consider myself an expert. I value a good conversation, perhaps accompanied by a beer or a bit of mezcal.</p>
         </div>
     </div>
 </body>
