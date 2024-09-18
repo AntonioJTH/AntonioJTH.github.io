@@ -69,7 +69,7 @@
 
         /* Contenedor principal de Teaching con flexbox */
         .teaching-container {
-            max-width: 1000px; /* Ancho máximo del contenedor para centrar el contenido */
+            max-width: 1200px; /* Ancho máximo del contenedor para centrar el contenido, 2 cm más ancho */
             margin: 2cm auto; /* Centra el contenedor horizontalmente y añade margen superior */
             padding: 20px;
             display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
@@ -80,7 +80,7 @@
         /* Estilo del texto */
         .teaching-text {
             flex: 1; /* Permite que el texto ocupe más espacio */
-            max-width: 65%; /* Aumenta el ancho máximo del texto */
+            max-width: 75%; /* Aumenta el ancho máximo del texto, 2 cm más ancho */
             padding: 20px;
             border: 1px solid #ccc; /* Borde del marco */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
@@ -91,7 +91,7 @@
 
         /* Estilo de la imagen */
         .teaching-image {
-            width: 440px; /* Ancho de la imagen */
+            width: 300px; /* Reduce el ancho de la imagen */
             height: auto; /* Altura automática para mantener la proporción */
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Sombra de la imagen */
             margin: 10px; /* Reduce el margen alrededor de la imagen */
@@ -105,12 +105,12 @@
 
         .image-right {
             order: 2; /* Alinea la imagen a la derecha */
-            margin-left: 1cm; /* Añade espacio entre la imagen y el texto */
+            margin-left: 1cm; /* Añade espacio entre el texto y la imagen */
         }
 
         /* Nuevo contenedor para "Teaching & Advising" */
         .teaching-advising-container {
-            max-width: 1000px; /* Ancho máximo del contenedor */
+            max-width: 1200px; /* Ancho máximo del contenedor, 2 cm más ancho */
             margin: 2cm auto; /* Centra el contenedor horizontalmente */
             padding: 20px;
             display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
@@ -120,6 +120,7 @@
 
         .teaching-advising-text {
             flex: 1; /* Permite que el texto ocupe más espacio */
+            max-width: 75%; /* Aumenta el ancho máximo del texto, 2 cm más ancho */
             padding: 20px;
             border: 1px solid #ccc; /* Borde del marco */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
@@ -127,7 +128,6 @@
             background-color: #f9f9f9; /* Fondo claro para el recuadro */
             font-size: 1.3em; /* Aumenta el tamaño de la fuente */
             text-align: justify; /* Justifica el texto */
-            order: -1; /* Cambia el orden del texto en el segundo recuadro */
         }
 
         .teaching-advising-text h2 {
@@ -194,12 +194,6 @@
                 margin: 0 auto; /* Centra la imagen */
                 order: unset; /* Resetea el orden para evitar problemas de posición en dispositivos móviles */
             }
-
-            /* Elimina el margen entre imágenes y texto para pantallas pequeñas */
-            .image-left,
-            .image-right {
-                margin: 0; /* Elimina el margen */
-            }
         }
     </style>
 </head>
@@ -225,21 +219,19 @@
         <!-- Texto a la izquierda e imagen a la derecha -->
         <div class="teaching-text">
             <h2 class="underline">Teaching Experience</h2>
-            <li>(2018 - 2019) Universidad Politécnica de Querétaro (UPQ)</li>
-            <li>(2024 - 2024) Universidad Nacional Autónoma de México (UNAM)</li>
-            <li>(2024 - ) University of California Davis</li>  
+            <p>Here you can add your teaching experience details. Mention the universities, courses, and the years you have taught.</p>
         </div>
         <img src="teaching1.jpg" alt="Teaching Image 1" class="teaching-image image-right">
     </div>
 
     <!-- Nuevo Contenedor de Teaching & Advising -->
     <div class="teaching-advising-container">
-        <!-- Texto a la izquierda e imagen a la derecha -->
-        <div class="teaching-advising-text">
-            <h2 class="underline">Advising</h2>
-            <p>I'm looking for students who want to work on a cool thesis with me.</p>
-        </div>
+        <!-- Imagen a la izquierda y texto a la derecha -->
         <img src="teaching2.jpg" alt="Teaching Image 2" class="teaching-image image-left">
+        <div class="teaching-advising-text">
+            <h2>Advising</h2>
+            <p>Here you can add details about your advising experience. Include information about the students you have advised, their projects, and their achievements.</p>
+        </div>
     </div>
 </body>
 </html>
