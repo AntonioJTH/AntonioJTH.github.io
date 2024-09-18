@@ -32,7 +32,7 @@
             margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
             font-weight: 300; /* Hace la fuente más delgada */
             text-align: left; /* Alinea el texto a la izquierda */
-            padding-left: 3cm;
+            background-color: transparent; /* Fondo transparente por defecto */
         }
 
         /* Estilos para la barra lateral */
@@ -145,12 +145,16 @@
                 padding-left: 10px; /* Reduce el padding izquierdo */
                 background-size: contain; /* Ajusta la imagen al contenedor sin desbordar */
                 background-color: white; /* Fondo blanco solo en dispositivos móviles */
+                justify-content: center; /* Centra el contenido en dispositivos móviles */
             }
 
             .header h1 {
                 font-size: 2.5em; /* Tamaño de fuente más pequeño */
                 text-align: center; /* Centra el texto */
                 margin: 0; /* Elimina márgenes */
+                background-color: white; /* Fondo blanco para el título en dispositivos móviles */
+                width: 100%; /* Ancho completo del título */
+                padding: 10px 0; /* Añade padding alrededor del título */
             }
 
             /* Ajustes para la barra lateral */
