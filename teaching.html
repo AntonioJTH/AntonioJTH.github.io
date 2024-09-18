@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Me</title>
+    <title>Teaching & Advising</title>
     <style>
         body {
             margin: 0; /* Elimina márgenes por defecto */
@@ -12,15 +12,15 @@
 
         /* Sección superior con la imagen de fondo y el título */
         .header {
-            background-image: url('dode_6.jpg'); /* Ruta de la imagen */
+            background-image: url('dode_9.jpg'); /* Ruta de la imagen */
             background-size: cover; /* Ajusta el tamaño de la imagen */
             background-repeat: no-repeat; /* Evita que la imagen se repita */
             background-position: center; /* Centra la imagen */
             height: 300px; /* Ajusta la altura de la sección superior */
             display: flex; /* Utiliza flexbox */
-            justify-content: flex-end; /* Alinea el contenido a la derecha */
+            justify-content: flex-start; /* Alinea el contenido a la izquierda */
             align-items: center; /* Centra verticalmente */
-            padding-right: 50px; /* Reduce el padding a la derecha */
+            padding-left: 50px; /* Reduce el padding a la izquierda */
             margin-left: 200px; /* Añade margen izquierdo para evitar superposición con la barra lateral */
             box-sizing: border-box; /* Incluye el padding en el tamaño del elemento */
         }
@@ -29,9 +29,9 @@
             font-family: 'Arial', sans-serif; /* Cambia la fuente a Arial */
             font-size: 5em; /* Ajusta el tamaño del título */
             color: black; /* Color del texto */
-            margin: -0.5cm 0 0 -1cm; /* Sube el título medio centímetro y lo mueve 1 cm a la izquierda */
+            margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
             font-weight: 300; /* Hace la fuente más delgada */
-            text-align: right; /* Alinea el texto a la derecha */
+            text-align: left; /* Alinea el texto a la izquierda */
         }
 
         /* Estilos para la barra lateral */
@@ -67,8 +67,8 @@
             text-align: center; /* Centra el texto de las pestañas */
         }
 
-        /* Contenedor principal de About Me con flexbox */
-        .about-container {
+        /* Contenedor principal de Teaching con flexbox */
+        .teaching-container {
             max-width: 1000px; /* Ancho máximo del contenedor para centrar el contenido */
             margin: 2cm auto; /* Centra el contenedor horizontalmente y añade margen superior */
             padding: 20px;
@@ -78,7 +78,7 @@
         }
 
         /* Estilo del texto */
-        .about-text {
+        .teaching-text {
             flex: 1; /* Permite que el texto ocupe más espacio */
             max-width: 65%; /* Aumenta el ancho máximo del texto */
             padding: 20px;
@@ -90,7 +90,7 @@
         }
 
         /* Estilo de la imagen */
-        .about-image {
+        .teaching-image {
             width: 440px; /* Ancho de la imagen */
             height: auto; /* Altura automática para mantener la proporción */
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Sombra de la imagen */
@@ -108,8 +108,8 @@
             margin-left: 1cm; /* Añade espacio entre la imagen y el texto */
         }
 
-        /* Nuevo contenedor para "About Me" */
-        .about-me-container {
+        /* Nuevo contenedor para "Teaching & Advising" */
+        .teaching-advising-container {
             max-width: 1000px; /* Ancho máximo del contenedor */
             margin: 2cm auto; /* Centra el contenedor horizontalmente */
             padding: 20px;
@@ -118,7 +118,7 @@
             align-items: center; /* Alinea los elementos al centro */
         }
 
-        .about-me-text {
+        .teaching-advising-text {
             flex: 1; /* Permite que el texto ocupe más espacio */
             padding: 20px;
             border: 1px solid #ccc; /* Borde del marco */
@@ -127,15 +127,11 @@
             background-color: #f9f9f9; /* Fondo claro para el recuadro */
             font-size: 1.3em; /* Aumenta el tamaño de la fuente */
             text-align: justify; /* Justifica el texto */
+            order: -1; /* Cambia el orden del texto en el segundo recuadro */
         }
 
-        .about-me-text h2 {
-            text-decoration: underline; /* Subraya el título "Other Interests" */
-        }
-
-        /* Clase para subrayar el título "Other Interest" */
-        .underline {
-            text-decoration: underline;
+        .teaching-advising-text h2 {
+            text-decoration: underline; /* Subraya el título "Teaching & Advising" */
         }
 
         /* Estilos responsivos */
@@ -145,7 +141,7 @@
                 height: 200px; /* Reduce la altura */
                 width: 100%; /* Ancho completo */
                 margin-left: 0; /* Sin margen izquierdo */
-                padding-right: 10px; /* Reduce el padding derecho */
+                padding-left: 10px; /* Reduce el padding izquierdo */
                 background-size: contain; /* Ajusta la imagen al contenedor sin desbordar */
             }
 
@@ -180,20 +176,20 @@
             }
 
             /* Ajustes para el contenedor principal */
-            .about-container,
-            .about-me-container {
+            .teaching-container,
+            .teaching-advising-container {
                 flex-direction: column; /* Coloca el texto y la imagen en columnas */
                 align-items: center; /* Centra los elementos */
                 margin-left: 0; /* Elimina el margen izquierdo */
             }
 
-            .about-text,
-            .about-me-text {
+            .teaching-text,
+            .teaching-advising-text {
                 max-width: 100%; /* Ancho completo */
                 margin: 10px 0; /* Reduce el margen superior e inferior */
             }
 
-            .about-image {
+            .teaching-image {
                 width: 100%; /* Ancho completo */
                 margin: 0 auto; /* Centra la imagen */
                 order: unset; /* Resetea el orden para evitar problemas de posición en dispositivos móviles */
@@ -221,37 +217,27 @@
 
     <!-- Sección superior con la imagen de fondo y el título -->
     <div class="header">
-        <h1>About Me</h1>
+        <h1>Teaching & Advising</h1>
     </div>
 
-    <!-- Contenedor principal de About Me -->
-    <div class="about-container">
+    <!-- Contenedor principal de Teaching & Advising -->
+    <div class="teaching-container">
         <!-- Texto a la izquierda e imagen a la derecha -->
-        <div class="about-text">
-            <h2 class="underline">Education</h2>
-            <p>I earned my bachelor's degree at the Autonomous University of Querétaro (UAQ), followed by my master's degree at the Autonomous University of San Luis Potosí (UASLP). Later, I completed my Ph.D. at the National Autonomous University of Mexico (UNAM). Currently, I hold a postdoctoral position in the Department of Mathematics at the University of California, Davis.</p>
+        <div class="teaching-text">
+            <h2 class="underline">Teaching Experience</h2>
+            <p>Here you can add your teaching experience details. Mention the universities, courses, and the years you have taught.</p>
         </div>
-        <img src="quere.jpg" alt="About Me" class="about-image image-right">
+        <img src="teaching1.jpg" alt="Teaching Image 1" class="teaching-image image-right">
     </div>
 
-    <!-- Nuevo Contenedor de About Me -->
-    <div class="about-me-container">
-        <!-- Imagen a la izquierda y texto a la derecha -->
-        <img src="sofi_1.jpg" alt="About Me" class="about-image image-left">
-        <div class="about-me-text">
-            <h2>Math Interests</h2>
-            <p>My research interests encompass discrete geometry, combinatorics, graph theory, data analysis, and algorithm theory. I am especially drawn to problems involving the structure and properties of point sets, lines, and polytopes. While these areas are my primary focus, my curiosity often extends to related topics within these fields.</p>
-        </div>
-    </div>
-
-    <!-- Contenedor para Other Interest -->
-    <div class="about-container">
+    <!-- Nuevo Contenedor de Teaching & Advising -->
+    <div class="teaching-advising-container">
         <!-- Texto a la izquierda e imagen a la derecha -->
-        <div class="about-text">
-            <h2 class="underline">Other Things</h2>
-            <p>I am originally from the city of Querétaro, though I've also lived in San Luis and now in Davis, both cities that I hold dear. I enjoy reading, playing with my dogs, traveling, and exploring new cultures, especially new cuisines. I appreciate many forms of artistic expression, although I wouldn't consider myself an expert. I value a good conversation, perhaps accompanied by a beer or a bit of mezcal.</p>
+        <div class="teaching-advising-text">
+            <h2>Advising</h2>
+            <p>Here you can add details about your advising experience. Include information about the students you have advised, their projects, and their achievements.</p>
         </div>
-        <img src="davis.jpg" alt="About Me" class="about-image image-right">
+        <img src="teaching2.jpg" alt="Teaching Image 2" class="teaching-image image-left">
     </div>
 </body>
 </html>
