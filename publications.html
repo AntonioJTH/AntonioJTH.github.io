@@ -21,7 +21,7 @@
             display: flex; /* Utiliza flexbox */
             justify-content: left; /* Alinea el contenido a la izquierda */
             align-items: center; /* Centra verticalmente */
-            padding-left: 4cm; /* Añade espacio a la izquierda */
+            padding-left: 220px; /* Ajusta el espacio para evitar la superposición con la barra lateral */
         }
 
         .header h1 {
@@ -40,9 +40,10 @@
             position: fixed; /* Fija la barra lateral en la parte izquierda */
             top: 0;
             left: 0;
-            background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */
+            background-color: rgba(0, 0, 0, 0.9); /* Fondo con menor transparencia */
             padding-top: 20px; /* Espacio superior */
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */
+            z-index: 10; /* Asegura que la barra lateral esté por encima del contenido */
         }
 
         /* Estilos para los elementos de la barra lateral */
@@ -70,6 +71,7 @@
             margin: 1.5cm auto; /* Reduce el margen superior */
             padding: 1cm 2cm; /* Reduce el espaciado alrededor */
             max-width: 1000px; /* Ancho máximo del contenedor */
+            margin-left: 220px; /* Añade margen izquierdo para no solaparse con la barra lateral */
         }
 
         .publications-list {
@@ -166,6 +168,7 @@
             /* Ajustes para el contenedor de publicaciones */
             .publications-container {
                 padding: 1cm 1cm; /* Reduce el espaciado */
+                margin-left: 0; /* Elimina el margen izquierdo */
             }
 
             /* Publicaciones en columna en pantallas pequeñas */
