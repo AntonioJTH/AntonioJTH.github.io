@@ -88,7 +88,6 @@
             text-align: justify; /* Justifica el texto */
             margin: 10px; /* Reduce el margen alrededor del texto */
             font-size: 1.3em; /* Aumenta el tamaño de la fuente */
-            text-align: center; /* Centra el texto */
         }
 
         /* Estilo de la imagen */
@@ -96,7 +95,18 @@
             width: 440px; /* Ancho de la imagen */
             height: auto; /* Altura automática para mantener la proporción */
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Sombra de la imagen */
-            margin: 10px auto; /* Centra la imagen */
+            margin: 10px; /* Reduce el margen alrededor de la imagen */
+        }
+
+        /* Clases para alternar la posición de las imágenes */
+        .image-left {
+            order: 1; /* Alinea la imagen a la izquierda */
+            margin-right: 1cm; /* Añade espacio entre la imagen y el texto */
+        }
+
+        .image-right {
+            order: 2; /* Alinea la imagen a la derecha */
+            margin-left: 1cm; /* Añade espacio entre la imagen y el texto */
         }
 
         /* Nuevo contenedor para "About Me" */
@@ -118,7 +128,7 @@
             margin: 10px; /* Reduce el margen alrededor del texto */
             background-color: #f9f9f9; /* Fondo claro para el recuadro */
             font-size: 1.3em; /* Aumenta el tamaño de la fuente */
-            text-align: center; /* Centra el texto */
+            text-align: justify; /* Justifica el texto */
         }
 
         .about-me-text h2 {
@@ -211,18 +221,18 @@
 
     <!-- Contenedor principal de About Me -->
     <div class="about-container">
-        <!-- Imagen arriba y texto centrado -->
-        <img src="quere.jpg" alt="About Me" class="about-image">
+        <!-- Texto a la izquierda e imagen a la derecha -->
         <div class="about-text">
             <h2 class="underline">Education</h2>
             <p>I earned my bachelor's degree at the Autonomous University of Querétaro (UAQ), followed by my master's degree at the Autonomous University of San Luis Potosí (UASLP). Later, I completed my Ph.D. at the National Autonomous University of Mexico (UNAM). Currently, I hold a postdoctoral position in the Department of Mathematics at the University of California, Davis.</p>
         </div>
+        <img src="quere.jpg" alt="About Me" class="about-image image-right">
     </div>
 
     <!-- Nuevo Contenedor de About Me -->
     <div class="about-me-container">
-        <!-- Imagen arriba y texto centrado -->
-        <img src="sofi_1.jpg" alt="About Me" class="about-image">
+        <!-- Imagen a la izquierda y texto a la derecha -->
+        <img src="sofi_1.jpg" alt="About Me" class="about-image image-left">
         <div class="about-me-text">
             <h2>Math Interests</h2>
             <p>My research interests encompass discrete geometry, combinatorics, graph theory, data analysis, and algorithm theory. I am especially drawn to problems involving the structure and properties of point sets, lines, and polytopes. While these areas are my primary focus, my curiosity often extends to related topics within these fields.</p>
@@ -231,12 +241,12 @@
 
     <!-- Contenedor para Other Interest -->
     <div class="about-container">
-        <!-- Imagen arriba y texto centrado -->
-        <img src="davis.jpg" alt="About Me" class="about-image">
+        <!-- Texto a la izquierda e imagen a la derecha -->
         <div class="about-text">
             <h2 class="underline">Other Things</h2>
             <p>I am originally from the city of Querétaro, though I've also lived in San Luis and now in Davis, both cities that I hold dear. I enjoy reading, playing with my dogs, traveling, and exploring new cultures, especially new cuisines. I appreciate many forms of artistic expression, although I wouldn't consider myself an expert. I value a good conversation, perhaps accompanied by a beer or a bit of mezcal.</p>
         </div>
+        <img src="davis.jpg" alt="About Me" class="about-image image-right">
     </div>
 </body>
 </html>
