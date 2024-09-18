@@ -15,13 +15,14 @@
             background-image: url('dode_10.jpg'); /* Ruta de la imagen */
             background-size: cover; /* Ajusta el tamaño de la imagen */
             background-repeat: no-repeat; /* Evita que la imagen se repita */
-            background-position: bottom; /* Ajusta la posición para subir la imagen */
+            background-position: center; /* Centra la imagen */
             height: 300px; /* Ajusta la altura de la sección superior */
             display: flex; /* Utiliza flexbox */
-            justify-content: right; /* Centra el contenido horizontalmente */
+            justify-content: flex-end; /* Alinea el contenido a la derecha */
             align-items: center; /* Centra verticalmente */
-            margin-left: 200px; /* Espacio a la izquierda para la barra lateral */
-            padding-right: 4cm; /* Añade espacio a la derecha */
+            padding-right: 50px; /* Reduce el padding a la derecha */
+            margin-left: 200px; /* Añade margen izquierdo para evitar superposición con la barra lateral */
+            box-sizing: border-box; /* Incluye el padding en el tamaño del elemento */
         }
 
         .header h1 {
@@ -30,6 +31,9 @@
             color: black; /* Color del texto */
             margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
             font-weight: 300; /* Hace la fuente más delgada */
+            text-align: right; /* Alinea el texto a la derecha */
+            padding-right: 4cm;
+            background-color: transparent; /* Fondo transparente por defecto */
         }
 
         /* Estilos para la barra lateral */
@@ -42,6 +46,7 @@
             background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */
             padding-top: 20px; /* Espacio superior */
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */
+            z-index: 10; /* Asegura que la barra lateral esté por encima del contenido */
         }
 
         /* Estilos para los elementos de la barra lateral */
@@ -66,11 +71,15 @@
 
         /* Estilo para el mensaje de construcción */
         .construction-message {
-            max-width: 1300px; /* Ancho máximo del contenedor */
-            margin: 5cm auto; /* Centra el contenedor horizontalmente y añade margen superior */
+            max-width: 1000px; /* Ancho máximo del contenedor */
+            margin: 3cm auto; /* Centra el contenedor horizontalmente y añade margen superior */
             text-align: center; /* Centra el texto */
             font-size: 2em; /* Tamaño de la fuente */
             color: #555; /* Color del texto */
+            padding: 20px;
+            border: 1px solid #ccc; /* Borde del contenedor */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del recuadro */
+            background-color: #f9f9f9; /* Fondo claro */
         }
 
         /* Estilos responsivos */
@@ -80,12 +89,18 @@
                 height: 200px; /* Reduce la altura */
                 width: 100%; /* Ancho completo */
                 margin-left: 0; /* Sin margen izquierdo */
+                padding-right: 10px; /* Reduce el padding derecho */
+                background-size: contain; /* Ajusta la imagen al contenedor sin desbordar */
+                justify-content: center; /* Centra el contenido en dispositivos móviles */
             }
 
             .header h1 {
-                font-size: 3em; /* Tamaño de fuente más pequeño */
+                font-size: 2.5em; /* Tamaño de fuente más pequeño */
                 text-align: center; /* Centra el texto */
                 margin: 0; /* Elimina márgenes */
+                background-color: white; /* Fondo blanco para el título en dispositivos móviles */
+                width: 100%; /* Ancho completo del título */
+                padding: 10px 0; /* Añade padding alrededor del título */
             }
 
             /* Ajustes para la barra lateral */
@@ -94,14 +109,22 @@
                 height: auto; /* Altura automática */
                 position: relative; /* Posición relativa */
                 display: flex; /* Flex para colocar enlaces horizontalmente */
+                flex-wrap: wrap; /* Permite que las pestañas se ajusten */
                 justify-content: space-around; /* Distribuye los enlaces */
+                padding: 10px;
+                box-shadow: none; /* Elimina la sombra */
             }
 
             .sidebar ul {
-                display: flex;
                 flex-direction: row;
-                justify-content: space-around;
-                padding: 10px;
+                flex-wrap: wrap; /* Permite que los elementos se ajusten a múltiples líneas */
+                justify-content: center;
+                padding: 0;
+            }
+
+            .sidebar li {
+                flex: 1 1 50%; /* Permite que cada pestaña ocupe hasta el 50% del ancho */
+                margin: 5px 0; /* Ajusta el margen */
             }
 
             /* Ajustes para el mensaje de construcción */
@@ -118,7 +141,7 @@
         <ul>
             <li><a href="index.html">Home</a></li> <!-- Agrega un enlace de vuelta a la página principal -->
             <li><a href="about.html">About Me</a></li>
-            <li><a href="publications.html">Publications  & CV</a></li>
+            <li><a href="publications.html">Publications & CV</a></li>
             <li><a href="teaching.html">Teaching & Advising</a></li>
             <li><a href="cosas.html">Cosas en Español</a></li>
         </ul>
@@ -135,4 +158,3 @@
     </div>
 </body>
 </html>
-
