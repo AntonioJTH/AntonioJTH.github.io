@@ -20,15 +20,14 @@
             display: flex; /* Utiliza flexbox */
             justify-content: flex-end; /* Alinea el contenido a la derecha */
             align-items: center; /* Centra verticalmente */
-            padding: 0 20px; /* Añade espaciado horizontal */
-            padding-right: 4cm; /* Añade espacio a la derecha */
+            padding-right: 220px; /* Ajusta el espacio para evitar la superposición con la barra lateral */
         }
 
         .header h1 {
             font-family: 'Arial', sans-serif; /* Cambia la fuente a Arial */
             font-size: 5em; /* Ajusta el tamaño del título */
             color: black; /* Color del texto */
-            margin: 0; /* Elimina márgenes */
+            margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
             font-weight: 300; /* Hace la fuente más delgada */
             text-align: right; /* Alinea el texto a la derecha */
         }
@@ -40,9 +39,10 @@
             position: fixed; /* Fija la barra lateral en la parte izquierda */
             top: 0;
             left: 0;
-            background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */
+            background-color: rgba(0, 0, 0, 0.9); /* Fondo con menor transparencia */
             padding-top: 20px; /* Espacio superior */
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */
+            z-index: 10; /* Asegura que la barra lateral esté por encima del contenido */
         }
 
         /* Estilos para los elementos de la barra lateral */
@@ -68,12 +68,13 @@
         /* Contenedor principal de About Me con flexbox */
         .about-container {
             max-width: 1300px; /* Ancho máximo del contenedor para centrar el contenido */
-            margin: 1.5cm auto; /* Centra el contenedor horizontalmente y reduce el margen superior */
+            margin: 1.5cm auto; /* Reduce el margen superior */
             padding: 20px;
             display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
             flex-wrap: wrap; /* Permite que el contenido se ajuste a múltiples líneas */
             justify-content: center; /* Centra el contenido horizontalmente */
             align-items: flex-start; /* Alinea los elementos al inicio */
+            margin-left: 220px; /* Añade margen izquierdo para no solaparse con la barra lateral */
         }
 
         /* Estilo del texto */
@@ -99,12 +100,13 @@
         /* Nuevo contenedor para "About Me" */
         .about-me-container {
             max-width: 1300px; /* Ancho máximo del contenedor */
-            margin: 1.5cm auto; /* Centra el contenedor horizontalmente y reduce el margen superior */
+            margin: 1.5cm auto; /* Reduce el margen superior */
             padding: 20px;
             display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
             flex-wrap: wrap; /* Permite que el contenido se ajuste a múltiples líneas */
             justify-content: center; /* Centra el contenido horizontalmente */
             align-items: flex-start; /* Alinea los elementos al inicio */
+            margin-left: 220px; /* Añade margen izquierdo para no solaparse con la barra lateral */
         }
 
         .about-me-text {
@@ -135,13 +137,12 @@
                 height: 200px; /* Reduce la altura */
                 width: 100%; /* Ancho completo */
                 margin-left: 0; /* Sin margen izquierdo */
-                justify-content: flex-end; /* Alinea el contenido a la derecha */
-                padding: 0 10px; /* Añade padding horizontal */
+                padding-left: 10px; /* Añade padding horizontal */
             }
 
             .header h1 {
-                font-size: 3em; /* Tamaño de fuente más pequeño */
-                text-align: right; /* Alinea el texto a la derecha */
+                font-size: 2.5em; /* Tamaño de fuente más pequeño */
+                text-align: right; /* Mantiene el texto alineado a la derecha */
                 margin: 0; /* Elimina márgenes */
             }
 
@@ -153,13 +154,15 @@
                 display: flex; /* Flex para colocar enlaces horizontalmente */
                 flex-wrap: wrap; /* Permite que las pestañas se ajusten */
                 justify-content: space-around; /* Distribuye los enlaces */
-                padding: 10px; /* Añade padding */
+                padding: 10px;
+                box-shadow: none; /* Elimina la sombra */
             }
 
             .sidebar ul {
                 flex-direction: row;
                 flex-wrap: wrap; /* Permite que los elementos se ajusten a múltiples líneas */
                 justify-content: center;
+                padding: 0;
             }
 
             .sidebar li {
@@ -172,6 +175,7 @@
             .about-me-container {
                 flex-direction: column; /* Coloca el texto y la imagen en columnas */
                 align-items: center; /* Centra los elementos */
+                margin-left: 0; /* Elimina el margen izquierdo */
             }
 
             .about-text,
