@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teaching & Advising</title>
+    <title>About Me</title>
     <style>
         body {
             margin: 0; /* Elimina márgenes por defecto */
@@ -12,24 +12,26 @@
 
         /* Sección superior con la imagen de fondo y el título */
         .header {
-            background-image: url('dode_9.jpg'); /* Ruta de la imagen */
+            background-image: url('dode_6.jpg'); /* Ruta de la imagen */
             background-size: cover; /* Ajusta el tamaño de la imagen */
             background-repeat: no-repeat; /* Evita que la imagen se repita */
-            background-position: bottom; /* Ajusta la posición para subir la imagen */
+            background-position: center; /* Centra la imagen */
             height: 300px; /* Ajusta la altura de la sección superior */
             display: flex; /* Utiliza flexbox */
-            justify-content: left; /* Centra el contenido horizontalmente */
+            justify-content: flex-end; /* Alinea el contenido a la derecha */
             align-items: center; /* Centra verticalmente */
-            margin-left: 200px; /* Espacio a la izquierda para la barra lateral */
-            padding-left: 4cm; /* Añade espacio a la derecha */
+            padding-right: 50px; /* Reduce el padding a la derecha */
+            margin-left: 200px; /* Añade margen izquierdo para evitar superposición con la barra lateral */
+            box-sizing: border-box; /* Incluye el padding en el tamaño del elemento */
         }
 
         .header h1 {
             font-family: 'Arial', sans-serif; /* Cambia la fuente a Arial */
             font-size: 5em; /* Ajusta el tamaño del título */
             color: black; /* Color del texto */
-            margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
+            margin: -0.5cm 0 0 -1cm; /* Sube el título medio centímetro y lo mueve 1 cm a la izquierda */
             font-weight: 300; /* Hace la fuente más delgada */
+            text-align: right; /* Alinea el texto a la derecha */
         }
 
         /* Estilos para la barra lateral */
@@ -42,6 +44,7 @@
             background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */
             padding-top: 20px; /* Espacio superior */
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */
+            z-index: 10; /* Asegura que la barra lateral esté por encima del contenido */
         }
 
         /* Estilos para los elementos de la barra lateral */
@@ -64,30 +67,75 @@
             text-align: center; /* Centra el texto de las pestañas */
         }
 
-        /* Estilo para la sección de Teaching Experience y Advising */
-        .section-container {
-            max-width: 1000px; /* Ancho máximo del contenedor */
+        /* Contenedor principal de About Me con flexbox */
+        .about-container {
+            max-width: 1000px; /* Ancho máximo del contenedor para centrar el contenido */
             margin: 2cm auto; /* Centra el contenedor horizontalmente y añade margen superior */
-            padding-left: 4cm; /* Añade espacio a la izquierda */
+            padding: 20px;
+            display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
+            justify-content: center; /* Centra el contenido horizontalmente */
+            align-items: center; /* Alinea los elementos al centro */
+        }
+
+        /* Estilo del texto */
+        .about-text {
+            flex: 1; /* Permite que el texto ocupe más espacio */
+            max-width: 65%; /* Aumenta el ancho máximo del texto */
             padding: 20px;
             border: 1px solid #ccc; /* Borde del marco */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
-            font-size: 1.3em; /* Tamaño de la fuente */
-            color: #333; /* Color del texto */
+            text-align: justify; /* Justifica el texto */
+            margin: 10px; /* Reduce el margen alrededor del texto */
+            font-size: 1.3em; /* Aumenta el tamaño de la fuente */
+        }
+
+        /* Estilo de la imagen */
+        .about-image {
+            width: 440px; /* Ancho de la imagen */
+            height: auto; /* Altura automática para mantener la proporción */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Sombra de la imagen */
+            margin: 10px; /* Reduce el margen alrededor de la imagen */
+        }
+
+        /* Clases para alternar la posición de las imágenes */
+        .image-left {
+            order: 1; /* Alinea la imagen a la izquierda */
+            margin-right: 1cm; /* Añade espacio entre la imagen y el texto */
+        }
+
+        .image-right {
+            order: 2; /* Alinea la imagen a la derecha */
+            margin-left: 1cm; /* Añade espacio entre la imagen y el texto */
+        }
+
+        /* Nuevo contenedor para "About Me" */
+        .about-me-container {
+            max-width: 1000px; /* Ancho máximo del contenedor */
+            margin: 2cm auto; /* Centra el contenedor horizontalmente */
+            padding: 20px;
+            display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
+            justify-content: center; /* Centra el contenido horizontalmente */
+            align-items: center; /* Alinea los elementos al centro */
+        }
+
+        .about-me-text {
+            flex: 1; /* Permite que el texto ocupe más espacio */
+            padding: 20px;
+            border: 1px solid #ccc; /* Borde del marco */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
+            margin: 10px; /* Reduce el margen alrededor del texto */
+            background-color: #f9f9f9; /* Fondo claro para el recuadro */
+            font-size: 1.3em; /* Aumenta el tamaño de la fuente */
             text-align: justify; /* Justifica el texto */
         }
 
-        .section-container h2 {
-            text-decoration: underline; /* Subraya el título */
+        .about-me-text h2 {
+            text-decoration: underline; /* Subraya el título "Other Interests" */
         }
 
-        .section-container ul {
-            list-style-type: none; /* Elimina los puntos de lista */
-            padding-left: 0; /* Elimina el padding por defecto */
-        }
-
-        .section-container li {
-            margin-bottom: 10px; /* Margen inferior entre los elementos de la lista */
+        /* Clase para subrayar el título "Other Interest" */
+        .underline {
+            text-decoration: underline;
         }
 
         /* Estilos responsivos */
@@ -97,10 +145,12 @@
                 height: 200px; /* Reduce la altura */
                 width: 100%; /* Ancho completo */
                 margin-left: 0; /* Sin margen izquierdo */
+                padding-right: 10px; /* Reduce el padding derecho */
+                background-size: contain; /* Ajusta la imagen al contenedor sin desbordar */
             }
 
             .header h1 {
-                font-size: 3em; /* Tamaño de fuente más pequeño */
+                font-size: 2.5em; /* Tamaño de fuente más pequeño */
                 text-align: center; /* Centra el texto */
                 margin: 0; /* Elimina márgenes */
             }
@@ -111,20 +161,48 @@
                 height: auto; /* Altura automática */
                 position: relative; /* Posición relativa */
                 display: flex; /* Flex para colocar enlaces horizontalmente */
+                flex-wrap: wrap; /* Permite que las pestañas se ajusten */
                 justify-content: space-around; /* Distribuye los enlaces */
+                padding: 10px;
+                box-shadow: none; /* Elimina la sombra */
             }
 
             .sidebar ul {
-                display: flex;
                 flex-direction: row;
-                justify-content: space-around;
-                padding: 10px;
+                flex-wrap: wrap; /* Permite que los elementos se ajusten a múltiples líneas */
+                justify-content: center;
+                padding: 0;
             }
 
-            /* Ajustes para la sección de Teaching Experience y Advising */
-            .section-container {
-                margin: 2cm auto; /* Ajusta el margen superior */
-                font-size: 1.2em; /* Reduce el tamaño de la fuente en pantallas pequeñas */
+            .sidebar li {
+                flex: 1 1 50%; /* Permite que cada pestaña ocupe hasta el 50% del ancho */
+                margin: 5px 0; /* Ajusta el margen */
+            }
+
+            /* Ajustes para el contenedor principal */
+            .about-container,
+            .about-me-container {
+                flex-direction: column; /* Coloca el texto y la imagen en columnas */
+                align-items: center; /* Centra los elementos */
+                margin-left: 0; /* Elimina el margen izquierdo */
+            }
+
+            .about-text,
+            .about-me-text {
+                max-width: 100%; /* Ancho completo */
+                margin: 10px 0; /* Reduce el margen superior e inferior */
+            }
+
+            .about-image {
+                width: 100%; /* Ancho completo */
+                margin: 0 auto; /* Centra la imagen */
+                order: unset; /* Resetea el orden para evitar problemas de posición en dispositivos móviles */
+            }
+
+            /* Elimina el margen entre imágenes y texto para pantallas pequeñas */
+            .image-left,
+            .image-right {
+                margin: 0; /* Elimina el margen */
             }
         }
     </style>
@@ -133,7 +211,7 @@
     <!-- Barra lateral -->
     <div class="sidebar">
         <ul>
-            <li><a href="index.html">Home</a></li> <!-- Agrega un enlace de vuelta a la página principal -->
+            <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About Me</a></li>
             <li><a href="publications.html">Publications & CV</a></li>
             <li><a href="teaching.html">Teaching & Advising</a></li>
@@ -143,23 +221,37 @@
 
     <!-- Sección superior con la imagen de fondo y el título -->
     <div class="header">
-        <h1>Teaching & Advising</h1>
-    </div>
-    
-    <!-- Sección de Teaching Experience -->
-    <div class="section-container">
-        <h2>Teaching Experience</h2>
-        <ul>
-            <li>(2018 - 2019) Universidad Politécnica de Querétaro (UPQ)</li>
-            <li>(2024 - 2024) Universidad Nacional Autónoma de México (UNAM)</li>
-            <li>(2024 - ) University of California Davis</li>
-        </ul>
+        <h1>About Me</h1>
     </div>
 
-    <!-- Sección de Advising -->
-    <div class="section-container">
-        <h2>Advising</h2>
-        <p>I'm looking for students who want to work on a cool thesis with me.</p>
+    <!-- Contenedor principal de About Me -->
+    <div class="about-container">
+        <!-- Texto a la izquierda e imagen a la derecha -->
+        <div class="about-text">
+            <h2 class="underline">Education</h2>
+            <p>I earned my bachelor's degree at the Autonomous University of Querétaro (UAQ), followed by my master's degree at the Autonomous University of San Luis Potosí (UASLP). Later, I completed my Ph.D. at the National Autonomous University of Mexico (UNAM). Currently, I hold a postdoctoral position in the Department of Mathematics at the University of California, Davis.</p>
+        </div>
+        <img src="quere.jpg" alt="About Me" class="about-image image-right">
+    </div>
+
+    <!-- Nuevo Contenedor de About Me -->
+    <div class="about-me-container">
+        <!-- Imagen a la izquierda y texto a la derecha -->
+        <img src="sofi_1.jpg" alt="About Me" class="about-image image-left">
+        <div class="about-me-text">
+            <h2>Math Interests</h2>
+            <p>My research interests encompass discrete geometry, combinatorics, graph theory, data analysis, and algorithm theory. I am especially drawn to problems involving the structure and properties of point sets, lines, and polytopes. While these areas are my primary focus, my curiosity often extends to related topics within these fields.</p>
+        </div>
+    </div>
+
+    <!-- Contenedor para Other Interest -->
+    <div class="about-container">
+        <!-- Texto a la izquierda e imagen a la derecha -->
+        <div class="about-text">
+            <h2 class="underline">Other Things</h2>
+            <p>I am originally from the city of Querétaro, though I've also lived in San Luis and now in Davis, both cities that I hold dear. I enjoy reading, playing with my dogs, traveling, and exploring new cultures, especially new cuisines. I appreciate many forms of artistic expression, although I wouldn't consider myself an expert. I value a good conversation, perhaps accompanied by a beer or a bit of mezcal.</p>
+        </div>
+        <img src="davis.jpg" alt="About Me" class="about-image image-right">
     </div>
 </body>
 </html>
