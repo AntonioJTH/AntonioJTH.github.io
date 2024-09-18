@@ -20,9 +20,9 @@
             display: flex; /* Utiliza flexbox */
             justify-content: flex-end; /* Alinea el contenido a la derecha */
             align-items: center; /* Centra verticalmente */
-            padding-right: 280px; /* Ajusta el espacio para evitar la superposición con la barra lateral */
+            padding-right: 50px; /* Reduce el padding a la derecha */
+            margin-left: 200px; /* Añade margen izquierdo para evitar superposición con la barra lateral */
             box-sizing: border-box; /* Incluye el padding en el tamaño del elemento */
-            overflow: hidden; /* Esconde cualquier contenido que se desborde */
         }
 
         .header h1 {
@@ -41,7 +41,7 @@
             position: fixed; /* Fija la barra lateral en la parte izquierda */
             top: 0;
             left: 0;
-            background-color: rgba(0, 0, 0, 0.9); /* Fondo con menor transparencia */
+            background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */
             padding-top: 20px; /* Espacio superior */
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */
             z-index: 10; /* Asegura que la barra lateral esté por encima del contenido */
@@ -139,7 +139,7 @@
                 height: 200px; /* Reduce la altura */
                 width: 100%; /* Ancho completo */
                 margin-left: 0; /* Sin margen izquierdo */
-                padding-right: 10px; /* Elimina padding derecho */
+                padding-right: 10px; /* Reduce el padding derecho */
                 background-size: contain; /* Ajusta la imagen al contenedor sin desbordar */
             }
 
