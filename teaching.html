@@ -64,13 +64,26 @@
             text-align: center; /* Centra el texto de las pestañas */
         }
 
-        /* Estilo para el mensaje de construcción */
-        .construction-message {
+        /* Estilo para la sección de Teaching Experience */
+        .teaching-experience {
             max-width: 1300px; /* Ancho máximo del contenedor */
             margin: 5cm auto; /* Centra el contenedor horizontalmente y añade margen superior */
-            text-align: center; /* Centra el texto */
-            font-size: 2em; /* Tamaño de la fuente */
+            padding-left: 4cm; /* Añade espacio a la izquierda */
+            font-size: 1.5em; /* Tamaño de la fuente */
             color: #555; /* Color del texto */
+        }
+
+        .teaching-experience h2 {
+            text-decoration: underline; /* Subraya el título */
+        }
+
+        .teaching-experience ul {
+            list-style-type: none; /* Elimina los puntos de lista */
+            padding-left: 0; /* Elimina el padding por defecto */
+        }
+
+        .teaching-experience li {
+            margin-bottom: 10px; /* Margen inferior entre los elementos de la lista */
         }
 
         /* Estilos responsivos */
@@ -104,10 +117,10 @@
                 padding: 10px;
             }
 
-            /* Ajustes para el mensaje de construcción */
-            .construction-message {
+            /* Ajustes para la sección de Teaching Experience */
+            .teaching-experience {
                 margin: 2cm auto; /* Ajusta el margen superior */
-                font-size: 1.5em; /* Reduce el tamaño de la fuente en pantallas pequeñas */
+                font-size: 1.2em; /* Reduce el tamaño de la fuente en pantallas pequeñas */
             }
         }
     </style>
@@ -118,7 +131,7 @@
         <ul>
             <li><a href="index.html">Home</a></li> <!-- Agrega un enlace de vuelta a la página principal -->
             <li><a href="about.html">About Me</a></li>
-            <li><a href="publications.html">Publications  & CV</a></li>
+            <li><a href="publications.html">Publications & CV</a></li>
             <li><a href="teaching.html">Teaching & Advising</a></li>
             <li><a href="cosas.html">Cosas en Español</a></li>
         </ul>
@@ -128,13 +141,15 @@
     <div class="header">
         <h1>Teaching & Advising</h1>
     </div>
-
-    <!-- Mensaje de construcción -->
-    <div class="construction-message">
-        <p> Universidad Politécnica de Querétaro (UPQ), 2018 - 2019 </p>
-        <p> Universidad Nacional Autónoma de México (UNAM), 2024 - 2024 </p>
-        <p> Univertity of California Davis, 2024 -  </p>
-        
+    
+    <!-- Sección de Teaching Experience -->
+    <div class="teaching-experience">
+        <h2>Teaching Experience</h2>
+        <ul>
+            <li>(2018 - 2019) Universidad Politécnica de Querétaro (UPQ)</li>
+            <li>(2024 - 2024) Universidad Nacional Autónoma de México (UNAM)</li>
+            <li>(2024 - ) University of California Davis</li>
+        </ul>
     </div>
 </body>
 </html>
