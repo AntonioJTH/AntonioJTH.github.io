@@ -15,10 +15,10 @@
             background-image: url('dode_6.jpg'); /* Ruta de la imagen */
             background-size: cover; /* Ajusta el tamaño de la imagen */
             background-repeat: no-repeat; /* Evita que la imagen se repita */
-            background-position: center; /* Ajusta la posición para centrar la imagen */
+            background-position: bottom; /* Ajusta la posición para subir la imagen */
             height: 300px; /* Ajusta la altura de la sección superior */
             display: flex; /* Utiliza flexbox */
-            justify-content: center; /* Centra el contenido horizontalmente */
+            justify-content: flex-end; /* Alinea el contenido a la derecha */
             align-items: center; /* Centra verticalmente */
             padding: 0 20px; /* Añade espaciado horizontal */
         }
@@ -29,7 +29,7 @@
             color: black; /* Color del texto */
             margin: 0; /* Elimina márgenes */
             font-weight: 300; /* Hace la fuente más delgada */
-            text-align: center; /* Asegura que el texto esté centrado */
+            text-align: right; /* Alinea el texto a la derecha */
         }
 
         /* Estilos para la barra lateral */
@@ -67,7 +67,7 @@
         /* Contenedor principal de About Me con flexbox */
         .about-container {
             max-width: 1300px; /* Ancho máximo del contenedor para centrar el contenido */
-            margin: 2.5cm auto; /* Centra el contenedor horizontalmente y añade margen superior de 2.5cm */
+            margin: 1.5cm auto; /* Centra el contenedor horizontalmente y reduce el margen superior */
             padding: 20px;
             display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
             flex-wrap: wrap; /* Permite que el contenido se ajuste a múltiples líneas */
@@ -83,7 +83,7 @@
             border: 1px solid #ccc; /* Borde del marco */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
             text-align: justify; /* Justifica el texto */
-            margin: 1cm; /* Añade margen alrededor del texto */
+            margin: 10px; /* Reduce el margen alrededor del texto */
             font-size: 1.3em; /* Aumenta el tamaño de la fuente */
         }
 
@@ -92,13 +92,13 @@
             width: 440px; /* Ancho de la imagen */
             height: auto; /* Altura automática para mantener la proporción */
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7); /* Sombra de la imagen */
-            margin: 1cm; /* Añade margen alrededor de la imagen */
+            margin: 10px; /* Reduce el margen alrededor de la imagen */
         }
 
         /* Nuevo contenedor para "About Me" */
         .about-me-container {
             max-width: 1300px; /* Ancho máximo del contenedor */
-            margin: 2.5cm auto; /* Centra el contenedor horizontalmente */
+            margin: 1.5cm auto; /* Centra el contenedor horizontalmente y reduce el margen superior */
             padding: 20px;
             display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
             flex-wrap: wrap; /* Permite que el contenido se ajuste a múltiples líneas */
@@ -111,7 +111,7 @@
             padding: 20px;
             border: 1px solid #ccc; /* Borde del marco */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del marco */
-            margin: 1cm; /* Añade margen alrededor del texto */
+            margin: 10px; /* Reduce el margen alrededor del texto */
             background-color: #f9f9f9; /* Fondo claro para el recuadro */
             font-size: 1.3em; /* Aumenta el tamaño de la fuente */
             text-align: justify; /* Justifica el texto */
@@ -134,13 +134,13 @@
                 height: 200px; /* Reduce la altura */
                 width: 100%; /* Ancho completo */
                 margin-left: 0; /* Sin margen izquierdo */
-                justify-content: center; /* Centra el contenido horizontalmente */
+                justify-content: flex-end; /* Alinea el contenido a la derecha */
                 padding: 0 10px; /* Añade padding horizontal */
             }
 
             .header h1 {
                 font-size: 3em; /* Tamaño de fuente más pequeño */
-                text-align: center; /* Centra el texto */
+                text-align: right; /* Alinea el texto a la derecha */
                 margin: 0; /* Elimina márgenes */
             }
 
@@ -176,7 +176,7 @@
             .about-text,
             .about-me-text {
                 max-width: 100%; /* Ancho completo */
-                margin: 20px 0; /* Añade margen superior e inferior */
+                margin: 10px 0; /* Reduce el margen superior e inferior */
             }
 
             .about-image {
