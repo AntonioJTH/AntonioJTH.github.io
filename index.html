@@ -191,16 +191,23 @@
             }
 
             /* Ajustes para el contenedor de imagen y texto */
-            .image-text-container {
+            .image-text-wrapper {
                 flex-direction: column; /* Coloca la imagen y el texto en una columna */
                 align-items: center; /* Centra los elementos */
                 margin-left: 0; /* Elimina el margen izquierdo */
                 margin-top: 2cm; /* Ajusta el margen superior */
             }
 
+            .image-text-container {
+                flex-direction: column; /* Coloca la imagen y el texto en una columna */
+                align-items: center; /* Centra los elementos */
+                margin: 0 auto; /* Centra el contenedor */
+                text-align: center; /* Centra el texto */
+            }
+
             .image-text-container img {
                 width: 80%; /* Ancho adaptativo */
-                margin: 0; /* Elimina márgenes */
+                margin: 0 auto; /* Centra la imagen */
                 margin-bottom: 20px; /* Añade espacio inferior */
             }
 
