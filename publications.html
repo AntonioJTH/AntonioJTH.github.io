@@ -21,7 +21,6 @@
             display: flex; /* Utiliza flexbox */
             justify-content: left; /* Alinea el contenido a la izquierda */
             align-items: center; /* Centra verticalmente */
-            margin-left: 200px; /* Espacio a la izquierda para la barra lateral */
             padding-left: 4cm; /* Añade espacio a la izquierda */
         }
 
@@ -31,6 +30,7 @@
             color: black; /* Color del texto */
             margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
             font-weight: 300; /* Hace la fuente más delgada */
+            text-align: left; /* Alinea el texto a la izquierda */
         }
 
         /* Estilos para la barra lateral */
@@ -67,8 +67,8 @@
 
         /* Contenedor de publicaciones */
         .publications-container {
-            margin: 2cm auto; /* Centrado horizontal */
-            padding: 2cm 3cm; /* Añade espaciado alrededor */
+            margin: 1.5cm auto; /* Reduce el margen superior */
+            padding: 1cm 2cm; /* Reduce el espaciado alrededor */
             max-width: 1000px; /* Ancho máximo del contenedor */
         }
 
@@ -80,7 +80,7 @@
         .publications-item {
             display: flex; /* Utiliza flexbox para alinear imagen y texto */
             align-items: center; /* Centra los elementos verticalmente */
-            margin-bottom: 20px; /* Espaciado entre publicaciones */
+            margin-bottom: 15px; /* Reduce el espaciado entre publicaciones */
         }
 
         /* Alternar imagen izquierda o derecha */
@@ -95,7 +95,7 @@
         .publications-item img {
             width: 260px; /* Tamaño de la imagen pequeña */
             height: auto; /* Tamaño de la imagen pequeña */
-            margin: 0 15px; /* Espaciado entre la imagen y el texto */
+            margin: 0 10px; /* Reduce el espaciado entre la imagen y el texto */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para la imagen */
         }
 
@@ -107,12 +107,12 @@
         /* Estilo del recuadro centrado */
         .curriculum-box {
             border: 2px solid #333; /* Borde del recuadro */
-            padding: 20px; /* Espaciado interno */
+            padding: 15px; /* Reduce el espaciado interno */
             border-radius: 10px; /* Bordes redondeados */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para darle un poco de profundidad */
             text-align: center; /* Centra el texto */
             max-width: 300px; /* Ancho máximo del recuadro */
-            margin: 2cm auto; /* Centrado horizontal */
+            margin: 1.5cm auto; /* Reduce el margen superior */
             background-color: #f9f9f9; /* Fondo del recuadro */
         }
 
@@ -130,11 +130,12 @@
                 height: 200px; /* Reduce la altura */
                 width: 100%; /* Ancho completo */
                 margin-left: 0; /* Sin margen izquierdo */
+                padding-left: 10px; /* Añade padding horizontal */
             }
 
             .header h1 {
                 font-size: 2.5em; /* Tamaño de fuente más pequeño */
-                text-align: center; /* Centra el texto */
+                text-align: left; /* Mantiene el texto alineado a la izquierda */
                 margin: 0; /* Elimina márgenes */
             }
 
@@ -144,26 +145,27 @@
                 height: auto; /* Altura automática */
                 position: relative; /* Posición relativa */
                 display: flex; /* Flex para colocar enlaces horizontalmente */
+                flex-wrap: wrap; /* Permite que las pestañas se ajusten */
                 justify-content: space-around; /* Distribuye los enlaces */
                 padding: 10px;
                 box-shadow: none; /* Elimina la sombra */
             }
 
             .sidebar ul {
-                display: flex;
                 flex-direction: row;
-                justify-content: space-around;
+                flex-wrap: wrap; /* Permite que los elementos se ajusten a múltiples líneas */
+                justify-content: center;
                 padding: 0;
             }
 
             .sidebar li {
-                margin: 0; /* Elimina el margen */
+                flex: 1 1 50%; /* Permite que cada pestaña ocupe hasta el 50% del ancho */
+                margin: 5px 0; /* Ajusta el margen */
             }
 
             /* Ajustes para el contenedor de publicaciones */
             .publications-container {
-                margin-left: 0; /* Elimina margen izquierdo */
-                padding: 2cm 1cm; /* Ajusta el espaciado */
+                padding: 1cm 1cm; /* Reduce el espaciado */
             }
 
             /* Publicaciones en columna en pantallas pequeñas */
@@ -191,7 +193,7 @@
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About Me</a></li>
-            <li><a href="publications">Publications & CV</a></li>
+            <li><a href="publications.html">Publications & CV</a></li>
             <li><a href="teaching.html">Teaching & Advising</a></li>
             <li><a href="cosas.html">Cosas en Español</a></li>
         </ul>
