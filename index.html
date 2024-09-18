@@ -17,13 +17,14 @@
             background-image: url('icosa1.jpg'); /* Ruta de la imagen */
             background-size: cover; /* Ajusta el tamaño de la imagen */
             background-repeat: no-repeat; /* Evita que la imagen se repita */
-            background-position: bottom; /* Ajusta la posición para subir la imagen */
+            background-position: center; /* Centra la imagen */
             height: 300px; /* Ajusta la altura de la sección superior */
             display: flex; /* Utiliza flexbox */
             justify-content: flex-end; /* Alinea el contenido a la derecha */
             align-items: center; /* Centra verticalmente */
-            margin-left: 200px; /* Espacio a la izquierda para la barra lateral */
-            padding-right: 4cm; /* Añade espacio a la derecha */
+            padding-right: 50px; /* Reduce el padding a la derecha */
+            margin-left: 200px; /* Añade margen izquierdo para evitar superposición con la barra lateral */
+            box-sizing: border-box; /* Incluye el padding en el tamaño del elemento */
         }
 
         .header h1 {
@@ -32,6 +33,7 @@
             color: black; /* Color del texto */
             margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
             font-weight: 300; /* Hace la fuente más delgada */
+            text-align: right; /* Alinea el texto a la derecha */
         }
 
         /* Estilos para la barra lateral */
@@ -44,6 +46,7 @@
             background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */
             padding-top: 20px; /* Espacio superior */
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */
+            z-index: 10; /* Asegura que la barra lateral esté por encima del contenido */
         }
 
         /* Estilos para los elementos de la barra lateral */
@@ -71,10 +74,10 @@
             display: flex; /* Utiliza flexbox para alinear la imagen y el texto */
             justify-content: center; /* Centra los elementos horizontalmente */
             align-items: flex-start; /* Alinea los elementos al inicio */
-            margin: 0 auto; /* Centra el contenedor */
+            margin: 3cm auto 0 auto; /* Centra el contenedor y añade margen superior */
             padding: 20px;
-            margin-top: 3cm; /* Añade un margen superior de 3 cm */
             max-width: 800px; /* Ancho máximo del contenedor */
+            margin-left: 220px; /* Añade margen izquierdo para no solaparse con la barra lateral */
         }
 
         .image-text-container img {
@@ -108,38 +111,37 @@
 
         /* Estilo del contenido principal */
         .main-content {
-            margin-left: 200px; /* Desplaza el contenido hacia la derecha para que no quede debajo de la barra lateral */
+            margin-left: 220px; /* Desplaza el contenido hacia la derecha para que no quede debajo de la barra lateral */
             padding: 20px;
         }
 
         /* Estilo de la sección de contacto */
         .contact-section {
-    text-align: center; /* Centra el contenido */
-    margin: 2cm auto; /* Margen superior e inferior y centrado horizontal */
-    max-width: 600px; /* Ancho máximo de la sección */
-}
+            text-align: center; /* Centra el contenido */
+            margin: 2cm auto; /* Margen superior e inferior y centrado horizontal */
+            max-width: 600px; /* Ancho máximo de la sección */
+        }
 
-.contact-box {
-    border: 1px solid #333; /* Borde alrededor del recuadro */
-    padding: 20px; /* Espaciado interno */
-    border-radius: 5px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Sombra para darle un poco de profundidad */
-    background-color: #f9f9f9; /* Color de fondo */
-}
+        .contact-box {
+            border: 1px solid #333; /* Borde alrededor del recuadro */
+            padding: 20px; /* Espaciado interno */
+            border-radius: 5px; /* Bordes redondeados */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /* Sombra para darle un poco de profundidad */
+            background-color: #f9f9f9; /* Color de fondo */
+        }
 
-.contact-section h2 {
-    font-size: 2em; /* Tamaño de la leyenda de contacto */
-    margin-bottom: 10px; /* Espacio debajo de "Contacto" */
-}
+        .contact-section h2 {
+            font-size: 2em; /* Tamaño de la leyenda de contacto */
+            margin-bottom: 10px; /* Espacio debajo de "Contacto" */
+        }
 
-.contact-section a {
-    text-decoration: none; /* Elimina el subrayado */
-    color: black; /* Color del texto */
-    font-size: 1.2em; /* Tamaño de la fuente para el correo y teléfono */
-    display: block; /* Hace que cada enlace esté en una línea separada */
-    margin: 5px 0; /* Añade un poco de margen entre las líneas */
-}
-
+        .contact-section a {
+            text-decoration: none; /* Elimina el subrayado */
+            color: black; /* Color del texto */
+            font-size: 1.2em; /* Tamaño de la fuente para el correo y teléfono */
+            display: block; /* Hace que cada enlace esté en una línea separada */
+            margin: 5px 0; /* Añade un poco de margen entre las líneas */
+        }
 
         /* Estilos responsivos */
         @media (max-width: 768px) {
@@ -148,6 +150,8 @@
                 height: 200px; /* Reduce la altura */
                 width: 100%; /* Ancho completo */
                 margin-left: 0; /* Sin margen izquierdo */
+                padding-right: 10px; /* Reduce el padding derecho */
+                background-size: contain; /* Ajusta la imagen al contenedor sin desbordar */
             }
 
             .header h1 {
@@ -162,20 +166,22 @@
                 height: auto; /* Altura automática */
                 position: relative; /* Posición relativa */
                 display: flex; /* Flex para colocar enlaces horizontalmente */
+                flex-wrap: wrap; /* Permite que las pestañas se ajusten */
                 justify-content: space-around; /* Distribuye los enlaces */
                 padding: 10px;
                 box-shadow: none; /* Elimina la sombra */
             }
 
             .sidebar ul {
-                display: flex;
                 flex-direction: row;
-                justify-content: space-around;
+                flex-wrap: wrap; /* Permite que los elementos se ajusten a múltiples líneas */
+                justify-content: center;
                 padding: 0;
             }
 
             .sidebar li {
-                margin: 0; /* Elimina el margen */
+                flex: 1 1 50%; /* Permite que cada pestaña ocupe hasta el 50% del ancho */
+                margin: 5px 0; /* Ajusta el margen */
             }
 
             /* Ajustes para el contenedor de imagen y texto */
@@ -245,15 +251,15 @@
 
     <!-- Sección de contacto -->
     <div class="contact-section">
-    <div class="contact-box">
-        <h2>Contact</h2>
-        <!-- Correo electrónico -->
-        <a href="mailto:antor@ucdavis.edu"><i class="fas fa-envelope"></i> antor@ucdavis.edu</a>
-        <!-- Línea divisoria -->
-        <br>
-        <!-- Número de teléfono -->
-        <a href="tel:+123456789"><i class="fas fa-phone"></i> +1 (234) 567-890</a>
+        <div class="contact-box">
+            <h2>Contact</h2>
+            <!-- Correo electrónico -->
+            <a href="mailto:antor@ucdavis.edu"><i class="fas fa-envelope"></i> antor@ucdavis.edu</a>
+            <!-- Línea divisoria -->
+            <br>
+            <!-- Número de teléfono -->
+            <a href="tel:+123456789"><i class="fas fa-phone"></i> +1 (234) 567-890</a>
+        </div>
     </div>
-</div>
 </body>
 </html>
