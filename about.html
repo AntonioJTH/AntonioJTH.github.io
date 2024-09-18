@@ -73,7 +73,6 @@
             margin: 2cm auto; /* Centra el contenedor horizontalmente y añade margen superior */
             padding: 20px;
             display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
-            flex-wrap: wrap; /* Permite que el contenido se ajuste a múltiples líneas */
             justify-content: center; /* Centra el contenido horizontalmente */
             align-items: center; /* Alinea los elementos al centro */
         }
@@ -100,13 +99,13 @@
 
         /* Clases para alternar la posición de las imágenes */
         .image-left {
-            order: 1; /* Alinea la imagen a la izquierda */
-            margin-right: 1cm; /* Añade espacio entre la imagen y el texto */
+            order: 2; /* Alinea la imagen a la derecha */
+            margin-left: 1cm; /* Añade espacio entre el texto y la imagen */
         }
 
         .image-right {
-            order: 2; /* Alinea la imagen a la derecha */
-            margin-left: 1cm; /* Añade espacio entre la imagen y el texto */
+            order: 1; /* Alinea la imagen a la izquierda */
+            margin-right: 1cm; /* Añade espacio entre la imagen y el texto */
         }
 
         /* Nuevo contenedor para "About Me" */
@@ -115,7 +114,6 @@
             margin: 2cm auto; /* Centra el contenedor horizontalmente */
             padding: 20px;
             display: flex; /* Utiliza flexbox para alinear el texto y la imagen */
-            flex-wrap: wrap; /* Permite que el contenido se ajuste a múltiples líneas */
             justify-content: center; /* Centra el contenido horizontalmente */
             align-items: center; /* Alinea los elementos al centro */
         }
@@ -198,6 +196,7 @@
             .about-image {
                 width: 100%; /* Ancho completo */
                 margin: 0 auto; /* Centra la imagen */
+                order: unset; /* Resetea el orden para evitar problemas de posición en dispositivos móviles */
             }
         }
     </style>
@@ -226,17 +225,17 @@
             <h2 class="underline">Education</h2>
             <p>I earned my bachelor's degree at the Autonomous University of Querétaro (UAQ), followed by my master's degree at the Autonomous University of San Luis Potosí (UASLP). Later, I completed my Ph.D. at the National Autonomous University of Mexico (UNAM). Currently, I hold a postdoctoral position in the Department of Mathematics at the University of California, Davis.</p>
         </div>
-        <img src="quere.jpg" alt="About Me" class="about-image image-right">
+        <img src="quere.jpg" alt="About Me" class="about-image image-left">
     </div>
 
     <!-- Nuevo Contenedor de About Me -->
     <div class="about-me-container">
-        <!-- Imagen a la izquierda y texto a la derecha -->
-        <img src="sofi_1.jpg" alt="About Me" class="about-image image-left">
+        <!-- Texto a la izquierda y imagen a la derecha -->
         <div class="about-me-text">
             <h2>Math Interests</h2>
             <p>My research interests encompass discrete geometry, combinatorics, graph theory, data analysis, and algorithm theory. I am especially drawn to problems involving the structure and properties of point sets, lines, and polytopes. While these areas are my primary focus, my curiosity often extends to related topics within these fields.</p>
         </div>
+        <img src="sofi_1.jpg" alt="About Me" class="about-image image-right">
     </div>
 
     <!-- Contenedor para Other Interest -->
@@ -246,7 +245,7 @@
             <h2 class="underline">Other Things</h2>
             <p>I am originally from the city of Querétaro, though I've also lived in San Luis and now in Davis, both cities that I hold dear. I enjoy reading, playing with my dogs, traveling, and exploring new cultures, especially new cuisines. I appreciate many forms of artistic expression, although I wouldn't consider myself an expert. I value a good conversation, perhaps accompanied by a beer or a bit of mezcal.</p>
         </div>
-        <img src="davis.jpg" alt="About Me" class="about-image image-right">
+        <img src="davis.jpg" alt="About Me" class="about-image image-left">
     </div>
 </body>
 </html>
