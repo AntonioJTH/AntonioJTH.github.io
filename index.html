@@ -74,10 +74,16 @@
             display: flex; /* Utiliza flexbox para alinear la imagen y el texto */
             justify-content: center; /* Centra los elementos horizontalmente */
             align-items: flex-start; /* Alinea los elementos al inicio */
-            margin: 3cm auto 0 auto; /* Centra el contenedor y añade margen superior */
+            margin: 2cm auto; /* Añade un margen superior e inferior */
             padding: 20px;
             max-width: 800px; /* Ancho máximo del contenedor */
-            margin-left: 220px; /* Añade margen izquierdo para no solaparse con la barra lateral */
+        }
+
+        .image-text-wrapper {
+            display: flex; /* Crea un nuevo contenedor flex */
+            justify-content: center; /* Centra el contenido */
+            align-items: flex-start; /* Alinea el contenido al inicio */
+            margin-left: 220px; /* Añade margen izquierdo para evitar superposición con la barra lateral */
         }
 
         .image-text-container img {
@@ -230,22 +236,24 @@
     </div>
 
     <!-- Contenedor de la imagen y el texto -->
-    <div class="image-text-container">
-        <img src="foto.jpg" alt="Descripción de la imagen">
-        <div class="text-content">
-            <h2>Antonio J. Torres</h2>
-            <p>Postdoctoral Position<br>
-            Department of Mathematics<br>
-            U.C. Davis CA.</p>
+    <div class="image-text-wrapper">
+        <div class="image-text-container">
+            <img src="foto.jpg" alt="Descripción de la imagen">
+            <div class="text-content">
+                <h2>Antonio J. Torres</h2>
+                <p>Postdoctoral Position<br>
+                Department of Mathematics<br>
+                U.C. Davis CA.</p>
 
-            <!-- Espacio entre el primer y segundo bloque -->
-            <div class="section-spacer"></div>
-            <div class="section-spacer"></div>
+                <!-- Espacio entre el primer y segundo bloque -->
+                <div class="section-spacer"></div>
+                <div class="section-spacer"></div>
 
-            <h2>Research Interest</h2>
-            <p>I'm interested in areas such as<br>
-            combinatorics, discrete geometry,<br>
-            probability, and data analysis.</p>
+                <h2>Research Interest</h2>
+                <p>I'm interested in areas such as<br>
+                combinatorics, discrete geometry,<br>
+                probability, and data analysis.</p>
+            </div>
         </div>
     </div>
 
