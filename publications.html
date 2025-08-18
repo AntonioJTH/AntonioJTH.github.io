@@ -8,10 +8,10 @@
     <style>
         body {
             margin: 1; 
-            font-family: Arial, sans-serif;
+            font-family: Arial, sans-serif; 
         }
 
-        /* Cabecera con la imagen (no modificada) */
+        /* Sección superior con la imagen de fondo y el título */
         .header {
             background-image: url('dode_5.jpg'); 
             background-size: cover; 
@@ -37,7 +37,7 @@
             background-color: transparent; 
         }
 
-        /* Barra lateral */
+        /* Estilos para la barra lateral */
         .sidebar {
             width: 200px; 
             height: 100vh; 
@@ -88,7 +88,7 @@
             margin-bottom: 2.5em; /* 👈 separación mayor entre publicaciones */
         }
 
-        /* Alternar imagen a la izq/der */
+        /* Alternar imagen izquierda o derecha */
         .publications-item:nth-child(odd) {
             flex-direction: row; 
         }
@@ -109,7 +109,7 @@
             font-size: 1.2em; 
         }
 
-        /* Recuadro CV */
+        /* Estilo del recuadro centrado */
         .curriculum-box {
             border: 2px solid #333; 
             padding: 15px; 
@@ -127,6 +127,70 @@
             font-size: 1.5em; 
             font-weight: bold; 
         }
+
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            .header {
+                height: 200px; 
+                width: 100%; 
+                margin-left: 0; 
+                padding-left: 10px; 
+                background-size: contain; 
+                justify-content: center; 
+            }
+
+            .header h1 {
+                font-size: 2.5em; 
+                text-align: center; 
+                margin: 0; 
+                background-color: white; 
+                width: 100%; 
+                padding: 10px 0; 
+            }
+
+            .sidebar {
+                width: 100%; 
+                height: auto; 
+                position: relative; 
+                display: flex; 
+                flex-wrap: wrap; 
+                justify-content: space-around; 
+                padding: 10px;
+                box-shadow: none; 
+            }
+
+            .sidebar ul {
+                flex-direction: row;
+                flex-wrap: wrap; 
+                justify-content: center;
+                padding: 0;
+            }
+
+            .sidebar li {
+                flex: 1 1 50%; 
+                margin: 5px 0; 
+            }
+
+            .publications-container {
+                padding: 1cm 1cm; 
+                margin-left: 0; 
+            }
+
+            .publications-item {
+                flex-direction: column; 
+                align-items: center; 
+                text-align: center; 
+            }
+
+            .publications-item img {
+                margin: 0 0 10px 0; 
+            }
+
+            .curriculum-box {
+                max-width: 80%; 
+                padding: 10px; 
+            }
+        }
     </style>
 </head>
 <body>
@@ -141,12 +205,12 @@
         </ul>
     </div>
 
-    <!-- Cabecera (se queda como estaba) -->
+    <!-- Sección superior con la imagen de fondo y el título -->
     <div class="header">
         <h1>Publications & CV</h1>
     </div>
 
-    <!-- Publicaciones -->
+    <!-- Contenedor de publicaciones -->
     <div class="publications-container">
         <ul class="publications-list">
             <li class="publications-item">
@@ -172,7 +236,7 @@
         </ul>
     </div>
 
-    <!-- Recuadro CV -->
+    <!-- Recuadro de Curriculum -->
     <div class="curriculum-box">
         <a href="Resume.pdf" target="_blank">CV</a>
     </div>
