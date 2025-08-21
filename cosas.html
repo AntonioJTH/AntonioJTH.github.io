@@ -3,134 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cosas en Español</title>
+    <title>Media & More</title>
     <style>
         body {
-            margin: 0; /* Elimina márgenes por defecto */
-            font-family: Arial, sans-serif; /* Fuente de la página */
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
 
-        /* Sección superior con la imagen de fondo y el título */
         .header {
-            background-image: url('dode_10.jpg'); /* Ruta de la imagen */
-            background-size: cover; /* Ajusta el tamaño de la imagen */
-            background-repeat: no-repeat; /* Evita que la imagen se repita */
-            background-position: center; /* Centra la imagen */
-            height: 300px; /* Ajusta la altura de la sección superior */
-            display: flex; /* Utiliza flexbox */
-            justify-content: flex-end; /* Alinea el contenido a la derecha */
-            align-items: center; /* Centra verticalmente */
-            padding-right: 50px; /* Reduce el padding a la derecha */
-            margin-left: 200px; /* Añade margen izquierdo para evitar superposición con la barra lateral */
-            box-sizing: border-box; /* Incluye el padding en el tamaño del elemento */
+            background-image: url('dode_10.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 300px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-right: 50px;
+            margin-left: 200px;
+            box-sizing: border-box;
         }
 
         .header h1 {
-            font-family: 'Arial', sans-serif; /* Cambia la fuente a Arial */
-            font-size: 5em; /* Ajusta el tamaño del título */
-            color: black; /* Color del texto */
-            margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */
-            font-weight: 300; /* Hace la fuente más delgada */
-            text-align: right; /* Alinea el texto a la derecha */
+            font-family: 'Arial', sans-serif;
+            font-size: 5em;
+            color: black;
+            margin: -0.5cm 0 0 0;
+            font-weight: 300;
+            text-align: right;
             padding-right: 4cm;
-            background-color: transparent; /* Fondo transparente por defecto */
+            background-color: transparent;
         }
 
-        /* Estilos para la barra lateral */
         .sidebar {
-            width: 200px; /* Ancho de la barra lateral */
-            height: 100vh; /* Altura completa de la ventana */
-            position: fixed; /* Fija la barra lateral en la parte izquierda */
+            width: 200px;
+            height: 100vh;
+            position: fixed;
             top: 0;
             left: 0;
-            background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */
-            padding-top: 20px; /* Espacio superior */
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */
-            z-index: 10; /* Asegura que la barra lateral esté por encima del contenido */
+            background-color: rgba(0, 0, 0, 0.7);
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+            z-index: 10;
         }
 
-        /* Estilos para los elementos de la barra lateral */
         .sidebar ul {
-            list-style: none; /* Elimina los puntos de lista */
+            list-style: none;
             padding: 0;
             margin: 0;
         }
 
         .sidebar li {
-            margin: 20px 0; /* Margen entre los elementos */
+            margin: 20px 0;
         }
 
         .sidebar a {
-            text-decoration: none; /* Elimina el subrayado */
-            color: white; /* Color del texto */
-            font-size: 1.2em; /* Tamaño del texto */
-            display: block; /* Hace que el enlace ocupe toda la anchura del contenedor */
-            padding: 10px; /* Añade espaciado alrededor del texto */
-            text-align: center; /* Centra el texto de las pestañas */
+            text-decoration: none;
+            color: white;
+            font-size: 1.2em;
+            display: block;
+            padding: 10px;
+            text-align: center;
         }
 
-        /* Estilo para el mensaje de construcción */
-        .construction-message {
-            max-width: 1000px; /* Ancho máximo del contenedor */
-            margin: 3cm auto; /* Centra el contenedor horizontalmente y añade margen superior */
-            text-align: center; /* Centra el texto */
-            font-size: 2em; /* Tamaño de la fuente */
-            color: #555; /* Color del texto */
+        .talks {
+            max-width: 900px;
+            margin: 3cm auto;
+            text-align: left;
+            font-size: 1.2em;
+            color: #333;
             padding: 20px;
-            border: 1px solid #ccc; /* Borde del contenedor */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra del recuadro */
-            background-color: #f9f9f9; /* Fondo claro */
         }
 
-        /* Estilos responsivos */
+        .talks h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .talks ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .talks li {
+            margin: 15px 0;
+        }
+
+        .talks a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .talks a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 768px) {
-            /* Ajustes para la cabecera */
             .header {
-                height: 200px; /* Reduce la altura */
-                width: 100%; /* Ancho completo */
-                margin-left: 0; /* Sin margen izquierdo */
-                padding-right: 10px; /* Reduce el padding derecho */
-                background-size: contain; /* Ajusta la imagen al contenedor sin desbordar */
-                justify-content: center; /* Centra el contenido en dispositivos móviles */
+                height: 200px;
+                width: 100%;
+                margin-left: 0;
+                padding-right: 10px;
+                background-size: contain;
+                justify-content: center;
             }
 
             .header h1 {
-                font-size: 2.5em; /* Tamaño de fuente más pequeño */
-                text-align: center; /* Centra el texto */
-                margin: 0; /* Elimina márgenes */
-                background-color: white; /* Fondo blanco para el título en dispositivos móviles */
-                width: 100%; /* Ancho completo del título */
-                padding: 10px 0; /* Añade padding alrededor del título */
+                font-size: 2.5em;
+                text-align: center;
+                margin: 0;
+                background-color: white;
+                width: 100%;
+                padding: 10px 0;
             }
 
-            /* Ajustes para la barra lateral */
             .sidebar {
-                width: 100%; /* Ancho completo */
-                height: auto; /* Altura automática */
-                position: relative; /* Posición relativa */
-                display: flex; /* Flex para colocar enlaces horizontalmente */
-                flex-wrap: wrap; /* Permite que las pestañas se ajusten */
-                justify-content: space-around; /* Distribuye los enlaces */
+                width: 100%;
+                height: auto;
+                position: relative;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
                 padding: 10px;
-                box-shadow: none; /* Elimina la sombra */
+                box-shadow: none;
             }
 
             .sidebar ul {
                 flex-direction: row;
-                flex-wrap: wrap; /* Permite que los elementos se ajusten a múltiples líneas */
+                flex-wrap: wrap;
                 justify-content: center;
                 padding: 0;
             }
 
             .sidebar li {
-                flex: 1 1 50%; /* Permite que cada pestaña ocupe hasta el 50% del ancho */
-                margin: 5px 0; /* Ajusta el margen */
+                flex: 1 1 50%;
+                margin: 5px 0;
             }
 
-            /* Ajustes para el mensaje de construcción */
-            .construction-message {
-                margin: 2cm auto; /* Ajusta el margen superior */
-                font-size: 1.5em; /* Reduce el tamaño de la fuente en pantallas pequeñas */
+            .talks {
+                margin: 2cm auto;
+                font-size: 1em;
             }
         }
     </style>
@@ -139,22 +153,36 @@
     <!-- Barra lateral -->
     <div class="sidebar">
         <ul>
-            <li><a href="index.html">Home</a></li> <!-- Agrega un enlace de vuelta a la página principal -->
+            <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About Me</a></li>
             <li><a href="publications.html">Publications & CV</a></li>
             <li><a href="teaching.html">Teaching & Advising</a></li>
-            <li><a href="cosas.html">Cosas en Español</a></li>
+            <li><a href="media.html">Media & More</a></li>
         </ul>
     </div>
 
-    <!-- Sección superior con la imagen de fondo y el título -->
+    <!-- Sección superior -->
     <div class="header">
-        <h1>Cosas en Español</h1>
+        <h1>Media & More</h1>
     </div>
 
-    <!-- Mensaje de construcción -->
-    <div class="construction-message">
-        En construcción!!
+    <!-- Sección de charlas -->
+    <div class="talks">
+        <h2>Selected Talks</h2>
+        <ul>
+            <li><a href="https://www.birs.ca/events/2023/5-day-workshops/23w5023/videos/watch/202306081240-Torres.html" target="_blank">
+                From Word Representable Graphs to Altered Tverberg-type Results (BIRS 2023)
+            </a></li>
+            <li><a href="ENLACE_AQUI" target="_blank">
+                Title of Talk 2 (Lugar y Año)
+            </a></li>
+            <li><a href="ENLACE_AQUI" target="_blank">
+                Title of Talk 3 (Lugar y Año)
+            </a></li>
+            <li><a href="ENLACE_AQUI" target="_blank">
+                Title of Talk 4 (Lugar y Año)
+            </a></li>
+        </ul>
     </div>
 </body>
 </html>
