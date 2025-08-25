@@ -1,261 +1,294 @@
-<!DOCTYPE html> 
-<html lang="es"> 
-<head> 
-<meta charset="UTF-8"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-<title>Publications & CV</title> 
-<style> 
-body { 
-    margin: 0; /* Elimina márgenes por defecto */ 
-    font-family: Arial, sans-serif; /* Fuente de la página */ 
-} 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publications & CV</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
 
         /* Sección superior con la imagen de fondo y el título */
         .header {
-            background-image: url('dode_5.jpg'); /* Ruta de la imagen */
-            background-size: cover; /* Ajusta el tamaño de la imagen */
-            background-repeat: no-repeat; /* Evita que la imagen se repita */
-            background-position: center; /* Centra la imagen */
-            height: 300px; /* Ajusta la altura de la sección superior */
-            display: flex; /* Utiliza flexbox */
-            justify-content: flex-start; /* Alinea el contenido a la izquierda */
-            align-items: center; /* Centra verticalmente */
-            padding-left: 25px; /* Reduce el padding a la izquierda */
-            margin-left: 199px; /* Añade margen izquierdo para evitar superposición con la barra lateral */
-            box-sizing: border-box; /* Incluye el padding en el tamaño del elemento */
+            background-image: url('dode_5.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 300px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding-left: 25px;
+            margin-left: 199px;
+            box-sizing: border-box;
         }
 
+        .header h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 5em;
+            color: black;
+            margin: -0.5cm 0 0 0;
+            font-weight: 300;
+            text-align: left;
+            padding-left: 3.5cm;
+            background-color: transparent;
+        }
 
+        /* Estilos para la barra lateral */
+        .sidebar {
+            width: 200px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
 
+        /* Estilos para los elementos de la barra lateral */
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
+        .sidebar li {
+            margin: 20px 0;
+        }
 
-    
-.header h1 { 
-    font-family: 'Arial', sans-serif; /* Cambia la fuente a Arial */ 
-    font-size: 5em; /* Ajusta el tamaño del título */ 
-    color: black; /* Color del texto */ 
-    margin: -0.5cm 0 0 0; /* Sube el título medio centímetro */ 
-    font-weight: 300; /* Hace la fuente más delgada */ 
-    text-align: left; /* Alinea el texto a la izquierda */ 
-    padding-left: 3.5cm; 
-    background-color: transparent; /* Fondo transparente por defecto */ 
-} 
+        .sidebar a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.2em;
+            display: block;
+            padding: 10px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
 
-/* Estilos para la barra lateral */ 
-.sidebar { 
-    width: 200px; /* Ancho de la barra lateral */ 
-    height: 100vh; /* Altura completa de la ventana */ 
-    position: fixed; /* Fija la barra lateral en la parte izquierda */ 
-    top: 0; 
-    left: 0; 
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo con opacidad */ 
-    padding-top: 20px; /* Espacio superior */ 
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Sombra */ 
-    z-index: 10; /* Asegura que la barra lateral esté por encima del contenido */ 
-} 
+        .sidebar a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
 
-/* Estilos para los elementos de la barra lateral */ 
-.sidebar ul { 
-    list-style: none; /* Elimina los puntos de lista */ 
-    padding: 0; 
-    margin: 0; 
-} 
+        /* Contenedor principal centrado */
+        .main-content {
+            margin-left: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
 
-.sidebar li { 
-    margin: 20px 0; /* Margen entre los elementos */ 
-} 
+        /* Contenedor de publicaciones centrado */
+        .publications-container {
+            width: 100%;
+            max-width: 900px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin: 20px 0;
+        }
 
-.sidebar a { 
-    text-decoration: none; /* Elimina el subrayado */ 
-    color: white; /* Color del texto */ 
-    font-size: 1.2em; /* Tamaño del texto */ 
-    display: block; /* Hace que el enlace ocupe toda la anchura del contenedor */ 
-    padding: 10px; /* Añade espaciado alrededor del texto */ 
-    text-align: center; /* Centra el texto de las pestañas */ 
-} 
+        .publications-list {
+            list-style: none;
+            padding: 0;
+        }
 
-/* Contenedor de publicaciones */ 
-.publications-container { 
-    margin: 1.5cm auto; /* Reduce el margen superior */ 
-    padding: 1cm 2cm; /* Reduce el espaciado alrededor */ 
-    max-width: 1000px; /* Ancho máximo del contenedor */ 
-    margin-left: 12cm; /* Añade margen izquierdo para no solaparse con la barra lateral */ 
-} 
+        .publications-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
 
-.publications-list { 
-    list-style: none; /* Elimina los puntos de lista */ 
-    padding: 0; 
-} 
+        .publications-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
 
-.publications-item { 
-    display: flex; /* Utiliza flexbox para alinear imagen y texto */ 
-    align-items: center; /* Centra los elementos verticalmente */ 
-    margin-bottom: 15px; /* Reduce el espaciado entre publicaciones */ 
-} 
+        .publications-item img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-/* Alternar imagen izquierda o derecha */ 
-.publications-item:nth-child(odd) { 
-    flex-direction: row; /* Imagen a la izquierda */ 
-} 
+        .publications-item p {
+            flex: 1;
+            margin: 0;
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
 
-.publications-item:nth-child(even) { 
-    flex-direction: row-reverse; /* Imagen a la derecha */ 
-} 
+        .publications-item a {
+            color: #2c3e50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
 
-.publications-item img { 
-    width: 260px; /* Tamaño de la imagen pequeña */ 
-    height: auto; /* Tamaño de la imagen pequeña */ 
-    margin: 0 10px; /* Reduce el espaciado entre la imagen y el texto */ 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para la imagen */ 
-} 
+        .publications-item a:hover {
+            color: #3498db;
+            text-decoration: underline;
+        }
 
-.publications-item p { 
-    margin: 0; 
-    font-size: 1.2em; /* Tamaño de la fuente */ 
-} 
+        /* Estilo del recuadro centrado */
+        .curriculum-box {
+            border: 2px solid #333;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 300px;
+            margin: 20px auto;
+            background-color: #f9f9f9;
+        }
 
-/* Estilo del recuadro centrado */ 
-.curriculum-box { 
-    border: 2px solid #333; /* Borde del recuadro */ 
-    padding: 15px; /* Reduce el espaciado interno */ 
-    border-radius: 10px; /* Bordes redondeados */ 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para darle un poco de profundidad */ 
-    text-align: center; /* Centra el texto */ 
-    max-width: 300px; /* Ancho máximo del recuadro */ 
-    margin: 1.5cm auto; /* Reduce el margen superior */ 
-    background-color: #f9f9f9; /* Fondo del recuadro */ 
-} 
+        .curriculum-box a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
 
-.curriculum-box a { 
-    text-decoration: none; /* Elimina el subrayado */ 
-    color: #333; /* Color del texto */ 
-    font-size: 1.5em; /* Tamaño de la fuente */ 
-    font-weight: bold; /* Negrita */ 
-} 
+        .curriculum-box:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
 
-/* Estilos responsivos */ 
-@media (max-width: 768px) { 
-    /* Ajustes para la cabecera */ 
-    .header { 
-        height: 200px; /* Reduce la altura */ 
-        width: 100%; /* Ancho completo */ 
-        margin-left: 0; /* Sin margen izquierdo */ 
-        padding-left: 10px; /* Ajusta el padding izquierdo */ 
-        background-size: contain; /* Ajusta la imagen al contenedor sin desbordar */ 
-        justify-content: center; /* Centra el contenido en dispositivos móviles */ 
-    } 
+        /* Estilos responsivos */
+        @media (max-width: 968px) {
+            .header {
+                margin-left: 0;
+                height: 200px;
+                justify-content: center;
+                padding-left: 0;
+            }
+            
+            .header h1 {
+                font-size: 3em;
+                padding-left: 0;
+                text-align: center;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                display: flex;
+                justify-content: center;
+            }
+            
+            .sidebar ul {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .sidebar li {
+                margin: 10px;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
 
-    .header h1 { 
-        font-size: 2.5em; /* Tamaño de fuente más pequeño */ 
-        text-align: center; /* Centra el texto */ 
-        margin: 0; /* Elimina márgenes */ 
-        background-color: white; /* Fondo blanco para el título en dispositivos móviles */ 
-        width: 100%; /* Ancho completo del título */ 
-        padding: 10px 0; /* Añade padding alrededor del título */ 
-    } 
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .publications-item {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .publications-item img {
+                margin-right: 0;
+                margin-bottom: 15px;
+                width: 100%;
+                max-width: 200px;
+                height: auto;
+            }
+            
+            .publications-item p {
+                font-size: 1em;
+            }
+            
+            .curriculum-box {
+                max-width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
 
-    /* Ajustes para la barra lateral */ 
-    .sidebar { 
-        width: 100%; /* Ancho completo */ 
-        height: auto; /* Altura automática */ 
-        position: relative; /* Posición relativa */ 
-        display: flex; /* Flex para colocar enlaces horizontalmente */ 
-        flex-wrap: wrap; /* Permite que las pestañas se ajusten */ 
-        justify-content: space-around; /* Distribuye los enlaces */ 
-        padding: 10px; 
-        box-shadow: none; /* Elimina la sombra */ 
-    } 
-
-    .sidebar ul { 
-        flex-direction: row; 
-        flex-wrap: wrap; /* Permite que los elementos se ajusten a múltiples líneas */ 
-        justify-content: center; 
-        padding: 0; 
-    } 
-
-    .sidebar li { 
-        flex: 1 1 50%; /* Permite que cada pestaña ocupe hasta el 50% del ancho */ 
-        margin: 5px 0; /* Ajusta el margen */ 
-    } 
-
-    /* Ajustes para el contenedor de publicaciones */ 
-    .publications-container { 
-        padding: 1cm 1cm; /* Reduce el espaciado */ 
-        margin-left: 0; /* Elimina el margen izquierdo */ 
-    } 
-
-    /* Publicaciones en columna en pantallas pequeñas */ 
-    .publications-item { 
-        flex-direction: column; /* Coloca imagen y texto en columna */ 
-        align-items: center; /* Centra los elementos */ 
-        text-align: center; /* Centra el texto */ 
-    } 
-
-    .publications-item img { 
-        margin: 0 0 10px 0; /* Ajusta el margen para la vista móvil */ 
-    } 
-
-    /* Ajustes para el recuadro centrado */ 
-    .curriculum-box { 
-        max-width: 80%; /* Ancho máximo del recuadro en pantallas pequeñas */ 
-        padding: 10px; /* Ajusta el espaciado interno */ 
-    } 
-} 
-</style> 
-</head> 
-<body> 
-
-<!-- Barra lateral --> 
-<div class="sidebar"> 
-    <ul> 
-        <li><a href="index.html">Home</a></li> 
-        <li><a href="about.html">About Me</a></li> 
-        <li><a href="publications.html">Publications & CV</a></li> 
-        <li><a href="teaching.html">Teaching & Advising</a></li> 
+<!-- Barra lateral -->
+<div class="sidebar">
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Me</a></li>
+        <li><a href="publications.html">Publications & CV</a></li>
+        <li><a href="teaching.html">Teaching & Advising</a></li>
         <li><a href="media.html">Media & More</a></li>
-    </ul> 
-</div> 
+    </ul>
+</div>
 
-<!-- Sección superior con la imagen de fondo y el título --> 
-<div class="header"> 
-    <h1>Publications & CV</h1> 
-</div> 
+<!-- Contenido principal -->
+<div class="main-content">
+    <!-- Sección superior con la imagen de fondo y el título -->
+    <div class="header">
+        <h1>Publications & CV</h1>
+    </div>
 
-<!-- Contenedor de publicaciones --> 
-<div class="publications-container"> 
-    <ul class="publications-list"> 
-        <li class="publications-item"> 
-            <img src="paper1.png" alt="Imagen 1"> 
-            <p><a href="https://www.academia.edu/104363276/A_Model_for_Birdwatching_and_other_Chronological_Sampling_Activities" target="_blank">1. A Model for Birdwatching and other Chronological Sampling Activities. Jesús A. De Loera, Edgar Jaramillo-Rodriguez, Deborah Oliveros, Antonio J. Torres. 2022. The American Mathematical Monthly vol 30 issue 6.</a></p> 
-        </li> 
-        
-        <li class="publications-item"> 
-            <img src="paper2.png" alt="Imagen 2"> 
-            <p><a href="https://link.springer.com/article/10.1007/s00454-025-00718-5" target="_blank">2. From word-representable graphs to altered Tverberg-type theorems. Deborah Oliveros, Antonio J. Torres. 2025. Discrete & Computational Geometry. </a></p> 
-        </li> 
+    <!-- Contenedor de publicaciones -->
+    <div class="publications-container">
+        <ul class="publications-list">
+            <li class="publications-item">
+                <img src="paper1.png" alt="Imagen 1">
+                <p><a href="https://www.academia.edu/104363276/A_Model_for_Birdwatching_and_other_Chronological_Sampling_Activities" target="_blank">1. A Model for Birdwatching and other Chronological Sampling Activities. Jesús A. De Loera, Edgar Jaramillo-Rodriguez, Deborah Oliveros, Antonio J. Torres. 2022. The American Mathematical Monthly vol 30 issue 6.</a></p>
+            </li>
+            
+            <li class="publications-item">
+                <img src="paper2.png" alt="Imagen 2">
+                <p><a href="https://link.springer.com/article/10.1007/s00454-025-00718-5" target="_blank">2. From word-representable graphs to altered Tverberg-type theorems. Deborah Oliveros, Antonio J. Torres. 2025. Discrete & Computational Geometry.</a></p>
+            </li>
 
-        <li class="publications-item"> 
-            <img src="paper3.png" alt="Imagen 3"> 
-            <p><a href="https://epubs.siam.org/doi/epdf/10.1137/23M1610938" target="_blank">3. Tverberg Partition Graphs. Deborah Oliveros, Érika Roldán, Pablo Soberón, Antonio J. Torres. 2024. SIAM Journal on Discrete Mathematics, 39(2), 863–880.</a></p> 
-        </li> 
-        
-        <li class="publications-item"> 
-            <img src="paper4.0.png" alt="Imagen 4"> 
-            <p><a href="https://arxiv.org/abs/2412.12419" target="_blank">4. On the Number of Vertices in a Hyperplane Section of a Polytope. Jesús A. De Loera, Gyivan López-Campos, Antonio J. Torres 2024. arxiv preprint.</a></p> 
-        </li> 
-        
-        <li class="publications-item"> 
-            <img src="paper5.png" alt="Imagen 5"> 
-            <p><a href="https://arxiv.org/abs/2412.12419" target="_blank">5. On Lattice Diameter Segments and a Discrete Borsuk Partition Problem. Anouk E. Brose, Jesús A. De Loera, Gyivan López-Campos, Antonio J. Torres 2024. arxiv preprint.</a></p> 
-        </li> 
-    
-    </ul> 
-</div> 
+            <li class="publications-item">
+                <img src="paper3.png" alt="Imagen 3">
+                <p><a href="https://epubs.siam.org/doi/epdf/10.1137/23M1610938" target="_blank">3. Tverberg Partition Graphs. Deborah Oliveros, Érika Roldán, Pablo Soberón, Antonio J. Torres. 2024. SIAM Journal on Discrete Mathematics, 39(2), 863–880.</a></p>
+            </li>
+            
+            <li class="publications-item">
+                <img src="paper4.0.png" alt="Imagen 4">
+                <p><a href="https://arxiv.org/abs/2412.12419" target="_blank">4. On the Number of Vertices in a Hyperplane Section of a Polytope. Jesús A. De Loera, Gyivan López-Campos, Antonio J. Torres 2024. arxiv preprint.</a></p>
+            </li>
+            
+            <li class="publications-item">
+                <img src="paper5.png" alt="Imagen 5">
+                <p><a href="https://arxiv.org/abs/2412.12419" target="_blank">5. On Lattice Diameter Segments and a Discrete Borsuk Partition Problem. Anouk E. Brose, Jesús A. De Loera, Gyivan López-Campos, Antonio J. Torres 2024. arxiv preprint.</a></p>
+            </li>
+        </ul>
+    </div>
 
-<!-- Recuadro de Curriculum --> 
-<div class="curriculum-box"> 
-    <a href="Resume.pdf" target="_blank">CV</a> 
-</div> 
+    <!-- Recuadro de Curriculum -->
+    <div class="curriculum-box">
+        <a href="Resume.pdf" target="_blank">CV</a>
+    </div>
+</div>
 
-</body> 
+</body>
 </html>
