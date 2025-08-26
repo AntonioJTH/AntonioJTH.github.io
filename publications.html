@@ -73,7 +73,7 @@ body {
 .publications-container { 
     margin: 1.5cm auto; /* Centra el contenedor horizontalmente */
     padding: 1cm 2cm; /* Espaciado interno */
-    max-width: 1000px; /* Ancho máximo del contenedor */
+    max-width: 1200px; /* Ancho máximo del contenedor */
     /* Eliminado el margen izquierdo para centrar correctamente */
 } 
 
@@ -90,14 +90,18 @@ body {
     align-items: center; /* Centra los elementos verticalmente */ 
     margin-bottom: 30px; /* Espaciado entre publicaciones */ 
     width: 100%; /* Ocupa todo el ancho disponible */
-    max-width: 900px; /* Ancho máximo para cada publicación */
+    max-width: 1000px; /* Ancho máximo para cada publicación */
 } 
 
-/* MODIFICACIÓN: Eliminamos la alternancia izquierda/derecha para centrar */
-.publications-item:nth-child(odd),
+/* MODIFICACIÓN: Alternancia izquierda/derecha preservada pero centrada */
+.publications-item:nth-child(odd) { 
+    flex-direction: row; /* Imagen a la izquierda */ 
+    justify-content: flex-start; /* Alinea a la izquierda dentro del contenedor centrado */
+} 
+
 .publications-item:nth-child(even) { 
-    flex-direction: row; /* Todas las publicaciones con imagen a la izquierda */
-    justify-content: center; /* Centra el contenido dentro de cada publicación */
+    flex-direction: row-reverse; /* Imagen a la derecha */ 
+    justify-content: flex-start; /* Alinea a la izquierda (pero con row-reverse) */
 } 
 
 .publications-item img { 
@@ -105,6 +109,7 @@ body {
     height: auto; /* Mantiene la proporción */ 
     margin: 0 20px; /* Espaciado entre la imagen y el texto */ 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para la imagen */ 
+    flex-shrink: 0; /* Evita que la imagen se reduzca */
 } 
 
 .publications-item p { 
@@ -189,6 +194,12 @@ body {
         align-items: center; /* Centra los elementos */ 
         text-align: center; /* Centra el texto */ 
     } 
+
+    .publications-item:nth-child(odd),
+    .publications-item:nth-child(even) { 
+        flex-direction: column; /* Fuerza columna en móviles */
+        justify-content: center; /* Centra contenido */
+    }
 
     .publications-item img { 
         margin: 0 0 15px 0; /* Ajusta el margen para la vista móvil */ 
