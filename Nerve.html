@@ -60,7 +60,7 @@
         height: fit-content;
         box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
         font-size: 14px;
-        margin-top: 230px;   /* ⬅⬅ DESPLAZA LA CAJA HACIA ABAJO */
+        margin-top: 230px;
     }
 
     .instructions-box h3 {
@@ -73,7 +73,28 @@
     .instructions-box ul {
         padding-left: 60px;
     }
+    
+    
+    
+    
+    #colorMenu {
+    position: absolute;
+    background: white;
+    border: 1px solid #aaa;
+    padding: 5px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 20;
+
+    /* Grid limpio */
+    display: grid;
+    grid-template-columns: repeat(4, 24px);
+    column-gap: 1px;
+    row-gap: 1px;
+}
+
 </style>
+
 </head>
 
 <body>
@@ -85,7 +106,7 @@
     <input type="number" id="inputN" value="10" min="1" max="200">
     &nbsp;&nbsp;
     <label>Number of colors:</label>
-    <input type="number" id="inputK" value="4" min="1" max="10">
+    <input type="number" id="inputK" value="4" min="1" max="30">
     &nbsp;&nbsp;
     <button onclick="generar()">Compute</button>
 </div>
@@ -106,25 +127,50 @@
         <h3>Instructions</h3>
         <ul>
             <li><b>Left-click</b> a point to move it.</li>
-            <li><b>Right-click</b> a point to change its color.</li>
-            <li>Convex hull is created per color.</li>
+            <li><b>Right-click</b> a point to pick its color.</li>
+            <li>Convex hull per color.</li>
             <li>Nerve vertices are draggable.</li>
         </ul>
     </div>
 
 </div>
 
+<!-- ======== MENÚ FLOTANTE PARA COLORES ======== -->
+
+
+<div id="colorMenu" style="display:none;"></div>
+
+
+
+
+
 <script>
 // =========================================================
-// VARIABLES
+// VARIABLES GLOBALES
 // =========================================================
 let points = [];
 let nervioPoints = [];
 let palette = [];
 
 let fullPalette = [
-    "gray", "red", "blue", "green", "orange",
-    "purple", "cyan", "brown", "pink", "yellow"
+    "gray",
+
+    // Colores base
+    "red", "blue", "green", "orange", "purple",
+    "cyan", "brown", "pink", "yellow",
+
+    // Colores adicionales
+    "magenta", "teal", "olive", "navy", "maroon",
+    "lime", "gold", "coral", "turquoise", "indigo",
+
+    // Colores suaves distinguibles
+    "salmon", "plum", "khaki", "darkcyan", "darkorange",
+    "lightseagreen", "dodgerblue", "mediumslateblue",
+
+    // Colores brillantes
+    "chartreuse", "deeppink", "mediumvioletred",
+    "springgreen", "tomato", "steelblue",
+    "darkviolet", "mediumorchid", "firebrick"
 ];
 
 let draggedPointLeft = null;
@@ -136,10 +182,63 @@ const ctxLeft = canvasLeft.getContext("2d");
 const canvasRight = document.getElementById("canvasRight");
 const ctxRight = canvasRight.getContext("2d");
 
+// Desactivar menú normal del click derecho
 canvasLeft.oncontextmenu = () => false;
 
 // =========================================================
-// UTILIDADES
+// MENÚ FLOTANTE PARA SELECCIONAR COLOR
+// =========================================================
+let selectedPointForColor = null;
+
+function showColorMenu(px, py, point) {
+    selectedPointForColor = point;
+
+    let menu = document.getElementById("colorMenu");
+    menu.innerHTML = "";
+
+
+    // Crear los cuadrados de color
+    palette.forEach((col, idx) => {
+        let cdiv = document.createElement("div");
+        cdiv.style.width = "18px";
+        cdiv.style.height = "18px";
+        cdiv.style.borderRadius = "2px";
+        cdiv.style.background = col;
+        cdiv.style.border = "2px solid black";
+        cdiv.style.cursor = "pointer";
+
+        cdiv.onclick = () => {
+            selectedPointForColor.colorIndex = idx + 1;
+            hideColorMenu();
+            drawLeft();
+            drawRight();
+        };
+
+        menu.appendChild(cdiv);
+    });
+
+    
+    
+    menu.style.left = px + "px";
+    menu.style.top = py + "px";
+    menu.style.display = "grid";
+
+ 
+}
+
+
+function hideColorMenu() {
+    document.getElementById("colorMenu").style.display = "none";
+    selectedPointForColor = null;
+}
+
+document.addEventListener("click", function(e){
+    let menu = document.getElementById("colorMenu");
+    if (!menu.contains(e.target)) hideColorMenu();
+});
+
+// =========================================================
+// FUNCIONES DE UTILIDAD
 // =========================================================
 function cssToRGB(colorName) {
     let temp = document.createElement("div");
@@ -147,8 +246,7 @@ function cssToRGB(colorName) {
     document.body.appendChild(temp);
     let rgb = window.getComputedStyle(temp).color;
     document.body.removeChild(temp);
-    let parts = rgb.match(/\d+/g).map(Number);
-    return parts;
+    return rgb.match(/\d+/g).map(Number);
 }
 
 function distance(a, b) {
@@ -170,7 +268,7 @@ function distancePointToSegment(p, a, b) {
 }
 
 // =========================================================
-// CONVEX HULL (Jarvis)
+// CONVEX HULL (Jarvis march)
 // =========================================================
 function convexHull(pts) {
     if (pts.length < 3) return pts.slice();
@@ -199,7 +297,7 @@ function convexHull(pts) {
 }
 
 // =========================================================
-// REGIONES safeRegion (JS version)
+// REGIONES POR COLOR
 // =========================================================
 function buildRegionsByColor() {
     let regions = [];
@@ -346,7 +444,7 @@ function hayInterseccionMultiple(regions,[i,j,k]){
 }
 
 // =========================================================
-// GENERAR PUNTOS Y COLORES
+// GENERAR PUNTOS
 // =========================================================
 function generar() {
     let n = parseInt(document.getElementById("inputN").value);
@@ -355,24 +453,25 @@ function generar() {
     if (isNaN(n)||n<1) n=10;
     if (isNaN(k)||k<1) k=4;
 
+    // Escoger k colores
     palette = fullPalette.slice(1, k+1);
 
+    // Generar puntos en la izquierda
     points = [];
     for (let i=0;i<n;i++){
         points.push({
             x: Math.random()*500+50,
             y: Math.random()*500+50,
             r: 12,
-            colorIndex: 0
+            colorIndex: 0 // gris
         });
     }
 
-              
-    // puntos del nervio en posición convexa (círculo)
+    // Generar puntos del nervio en círculo (posición convexa)
     nervioPoints = [];
     let cx = 300, cy = 300, R = 230;
     for (let i = 0; i < k; i++) {
-    let angle = 2 * Math.PI * i / k;
+        let angle = 2 * Math.PI * i / k;
         nervioPoints.push({
             x: cx + R * Math.cos(angle),
             y: cy + R * Math.sin(angle),
@@ -380,7 +479,6 @@ function generar() {
             color: palette[i]
         });
     }
-
 
     drawLeft();
     drawRight();
@@ -392,7 +490,7 @@ function getColor(p){
 }
 
 // =========================================================
-// DIBUJAR IZQUIERDA
+// DIBUJAR LA IZQUIERDA
 // =========================================================
 function drawLeft() {
     ctxLeft.clearRect(0,0,600,600);
@@ -442,7 +540,7 @@ function drawLeft() {
 }
 
 // =========================================================
-// DIBUJAR NERVIO
+// DIBUJAR EL NERVIO
 // =========================================================
 function drawRight(){
     ctxRight.clearRect(0,0,600,600);
@@ -451,12 +549,14 @@ function drawRight(){
 
     let regions=buildRegionsByColor();
 
+    // Edges por pares
     let edgesPairs=[];
     for (let i=0;i<palette.length;i++)
         for (let j=i+1;j<palette.length;j++)
             if (regionesSeIntersectan(regions[i],regions[j]))
                 edgesPairs.push([i,j]);
 
+    // Simplices triples
     let triples=[];
     for (let i=0;i<palette.length;i++)
         for (let j=i+1;j<palette.length;j++)
@@ -464,6 +564,7 @@ function drawRight(){
                 if (hayInterseccionMultiple(regions,[i,j,k]))
                     triples.push([i,j,k]);
 
+    // Dibujar tríos
     for (let t of triples){
         let A=nervioPoints[t[0]];
         let B=nervioPoints[t[1]];
@@ -480,6 +581,7 @@ function drawRight(){
         ctxRight.stroke();
     }
 
+    // Dibujar aristas
     ctxRight.strokeStyle="gray";
     ctxRight.lineWidth=3;
     for (let [i,j] of edgesPairs){
@@ -491,6 +593,7 @@ function drawRight(){
         ctxRight.stroke();
     }
 
+    // Dibujar vértices del nervio
     nervioPoints.forEach(p=>{
         ctxRight.beginPath();
         ctxRight.fillStyle=p.color;
@@ -503,26 +606,27 @@ function drawRight(){
 }
 
 // =========================================================
-// INTERACCIÓN IZQUIERDA
+// INTERACCIÓN: CANVAS IZQUIERDO
 // =========================================================
 canvasLeft.addEventListener("mousedown", e=>{
     let rect=canvasLeft.getBoundingClientRect();
     let mx=e.clientX-rect.left;
     let my=e.clientY-rect.top;
 
-    if (e.button===2){
+    // CLICK DERECHO — ABRIR MENÚ DE COLORES
+    if (e.button === 2) {
         for (let p of points){
-            if (distance(p,{x:mx,y:my})<p.r+3){
-                p.colorIndex=(p.colorIndex+1)%(palette.length+1);
-                drawLeft();
-                drawRight();
+            if (distance(p,{x:mx,y:my}) < p.r+3){
+                showColorMenu(e.clientX, e.clientY, p);
                 return;
             }
         }
         return;
     }
 
+    // CLICK IZQUIERDO — MOVER PUNTO
     if (e.button===0){
+        hideColorMenu();
         for (let p of points){
             if (distance(p,{x:mx,y:my})<p.r+3){
                 draggedPointLeft=p;
@@ -545,7 +649,7 @@ canvasLeft.addEventListener("mouseup", ()=>draggedPointLeft=null);
 canvasLeft.addEventListener("mouseleave", ()=>draggedPointLeft=null);
 
 // =========================================================
-// INTERACCIÓN DERECHA (NERVIO)
+// INTERACCIÓN: CANVAS DERECHO (NERVIO)
 // =========================================================
 canvasRight.addEventListener("mousedown", e=>{
     let rect=canvasRight.getBoundingClientRect();
@@ -553,6 +657,7 @@ canvasRight.addEventListener("mousedown", e=>{
     let my=e.clientY-rect.top;
 
     if (e.button===0){
+        hideColorMenu();
         for (let p of nervioPoints){
             if (distance(p,{x:mx,y:my})<p.r+5){
                 draggedNervio=p;
@@ -574,7 +679,7 @@ canvasRight.addEventListener("mouseup", ()=>draggedNervio=null);
 canvasRight.addEventListener("mouseleave", ()=>draggedNervio=null);
 
 // =========================================================
-// START
+// EJECUCIÓN INICIAL
 // =========================================================
 generar();
 
@@ -582,4 +687,3 @@ generar();
 
 </body>
 </html>
-
