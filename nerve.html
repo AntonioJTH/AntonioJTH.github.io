@@ -52,7 +52,9 @@
     }
 
     .instructions-box {
-        width: 260px;
+        margin-top: 0px;   /* Ya no empuja hacia abajo */
+        align-self: flex-start;  /* Se queda a la izquierda del contenedor */
+       
         background: #eef5ff;
         border: 1px solid #88aadd;
         padding: 15px;
@@ -149,13 +151,16 @@
         </ul>
     </div>
 
-<!-- Botón fuera del cuadro de instrucciones -->
-<div style="margin-top: 20px; text-align: center; width: 100%;">
-    <button class="back-button"
+    </div> <!-- cierre de main-container -->
+
+    <!-- Botón centrado, fuera del layout de canvases -->
+    <div style="margin-top: 40px; text-align: center;">
+        <button class="back-button"
             onclick="window.location.href='https://antoniojth.github.io/media.html'">
-        ⬅ Back to Media & More
-    </button>
-</div>
+            ⬅ Back to Media & More
+        </button>
+    </div>
+
 
 
 
