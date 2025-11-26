@@ -66,61 +66,77 @@
             text-align: center;
         }
 
-        /* ESTILO DE LAS SECCIONES CENTRADAS */
-        .talks,
-        .apps {
-            max-width: 900px;
-            margin: 3cm auto;
-            text-align: left;
-            font-size: 1.2em;
-            color: #333;
-            padding: 20px;
+        /* ------------------------------ */
+        /*   NUEVO ESTILO TIPO PUBLICACIONES */
+        /* ------------------------------ */
+
+        .media-container {
+            margin: 2cm auto;
+            padding: 1cm 2cm;
+            max-width: 1200px;
         }
 
-        .talks h2,
-        .apps h2 {
+        .media-section-title {
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 2em;
+            font-size: 2.3em;
+            margin-bottom: 0.8cm;
+            font-weight: 300;
         }
 
-        .talks ul,
-        .apps ul {
+        .media-list {
             list-style: none;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .talks li,
-        .apps li {
-            margin: 15px 0;
+        .media-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 35px;
+            width: 100%;
+            max-width: 1000px;
         }
 
-        .talks a,
-        .apps a {
-            color: #0066cc;
+        /* Alternancia */
+        .media-item:nth-child(odd) {
+            flex-direction: row;  
+        }
+
+        .media-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .media-item img {
+            width: 260px;
+            height: auto;
+            margin: 0 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+            border-radius: 4px;
+        }
+
+        .media-item p {
+            margin: 0;
+            font-size: 1.3em;
+            line-height: 1.4em;
+            flex: 1;
+        }
+
+        .media-item a {
             text-decoration: none;
+            color: #0066cc;
             font-weight: normal;
         }
 
-        .talks a:hover,
-        .apps a:hover {
+        .media-item a:hover {
             text-decoration: underline;
         }
 
-        /* 🔵 CUADRO CON LA IMAGEN — ÚNICO CSS NUEVO AÑADIDO */
-        .icon-box {
-            display: inline-block;
-            width: 35px;
-            height: 35px;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-
-        .icon-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        /* ------------------------------ */
+        /* Responsive */
+        /* ------------------------------ */
 
         @media (max-width: 768px) {
             .header {
@@ -161,18 +177,22 @@
                 margin: 5px 0;
             }
 
-            .talks,
-            .apps {
-                margin: 2cm auto;
-                font-size: 1em;
+            .media-item {
+                flex-direction: column !important;
+                text-align: center;
+            }
+
+            .media-item img {
+                margin-bottom: 20px;
             }
         }
+
     </style>
 </head>
 
 <body>
 
-    <!-- Barra lateral -->
+    <!-- Sidebar -->
     <div class="sidebar">
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -183,38 +203,56 @@
         </ul>
     </div>
 
-    <!-- Sección superior -->
+    <!-- Header -->
     <div class="header">
         <h1>Media & More</h1>
     </div>
 
-    <!-- Interactive Apps Section -->
-    <div class="apps">
-        <h2>Interactive Apps</h2>
-        <ul>
-            <li>
-                <a href="nerve.html" target="_blank">
-                    Interactive Nerve Complex App
-                </a>
-                <span class="icon-box">
-                    <img src="nerveApp.png" alt="app preview">
-                </span>
+    <!-- ============================ -->
+    <!--   APPS SECTION (tipo publicaciones) -->
+    <!-- ============================ -->
+
+    <div class="media-container">
+        <h2 class="media-section-title">Interactive Apps</h2>
+
+        <ul class="media-list">
+
+            <li class="media-item">
+                <img src="nerveApp.png" alt="Nerve App">
+                <p>
+                    <a href="nerve.html" target="_blank">
+                        Interactive Nerve Complex App
+                    </a>
+                </p>
             </li>
+
+            <!-- Aquí puedes añadir más apps copiando este bloque -->
         </ul>
     </div>
 
-    <!-- Talks Section -->
-    <div class="talks">
-        <h2>Selected Talks</h2>
-        <ul>
-            <li>
-                <a href="https://www.birs.ca/events/2023/5-day-workshops/23w5023/videos/watch/202306081240-Torres.html" target="_blank">
-                    From Word Representable Graphs to Altered Tverberg-type Results (BIRS 2023)
-                </a>
+
+    <!-- ============================ -->
+    <!--   TALKS SECTION (tipo publicaciones) -->
+    <!-- ============================ -->
+
+    <div class="media-container">
+        <h2 class="media-section-title">Selected Talks</h2>
+
+        <ul class="media-list">
+
+            <li class="media-item">
+                <img src="talkIcon.png" alt="Talk Image">
+                <p>
+                    <a href="https://www.birs.ca/events/2023/5-day-workshops/23w5023/videos/watch/202306081240-Torres.html" target="_blank">
+                        From Word Representable Graphs to Altered Tverberg-type Results (BIRS 2023)
+                    </a>
+                </p>
             </li>
+
+            <!-- Más charlas aquí si quieres -->
+
         </ul>
     </div>
 
 </body>
 </html>
-
