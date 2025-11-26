@@ -94,10 +94,14 @@
         .media-item {
             display: flex;
             align-items: center;
+            justify-content: center;   /* ⭐ CENTRA imagen + texto ⭐ */
             margin-bottom: 35px;
             width: 100%;
-            max-width: 1000px;
-        }
+           max-width: 1100px;          /* ⭐ Opcional: haz más ancho el bloque */
+           margin-left: auto;          /* ⭐ Centrado horizontal */
+           margin-right: auto;
+    }
+
 
         /* Alternancia */
         .media-item:nth-child(odd) {
@@ -109,7 +113,7 @@
         }
 
         .media-item img {
-            width: 260px;
+            width: 190px;
             height: auto;
             margin: 0 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
