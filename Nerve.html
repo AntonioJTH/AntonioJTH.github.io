@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Nerve Complex of a Colored Point Set</title>
+
+<style>
+    body {
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0;
+        padding: 20px;
+        background: #fafafa;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .panel {
+        margin-bottom: 20px;
+        background: #f0f0f0;
+        padding: 10px 20px;
+        border-radius: 6px;
+        width: 900px;
+        text-align: center;
+        border: 1px solid #ccc;
+    }
+
+    label { font-weight: bold; }
+
+    .main-container {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 20px;
+    }
+
+    .canvas-box {
+        text-align: center;
+    }
+
+    canvas {
+        border: 1px solid #888;
+        background: #fff;
+        cursor: crosshair;
+        margin-top: 10px;
+        border-radius: 6px;
+    }
+
+    .instructions-box {
+        width: 260px;
+        background: #eef5ff;
+        border: 1px solid #88aadd;
+        padding: 15px;
+        border-radius: 10px;
+        height: fit-content;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+        font-size: 14px;
+        margin-top: 230px;   /* ⬅⬅ DESPLAZA LA CAJA HACIA ABAJO */
+    }
+
+    .instructions-box h3 {
+        margin-top: 0;
+        color: #224488;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .instructions-box ul {
+        padding-left: 60px;
+    }
+</style>
+</head>
+
+<body>
+
+<h2>Nerve Complex of a Colored Point Set</h2>
+
+<div class="panel">
+    <label>Number of points:</label>
+    <input type="number" id="inputN" value="10" min="1" max="200">
+    &nbsp;&nbsp;
+    <label>Number of colors:</label>
+    <input type="number" id="inputK" value="4" min="1" max="10">
+    &nbsp;&nbsp;
+    <button onclick="generar()">Compute</button>
+</div>
+
+<div class="main-container">
+
+    <div class="canvas-box">
+        <h3>Point Set</h3>
+        <canvas id="canvasLeft" width="600" height="600"></canvas>
+    </div>
+
+    <div class="canvas-box">
+        <h3>Nerve Complex</h3>
+        <canvas id="canvasRight" width="600" height="600"></canvas>
+    </div>
+
+    <div class="instructions-box">
+        <h3>Instructions</h3>
+        <ul>
+            <li><b>Left-click</b> a point to move it.</li>
+            <li><b>Right-click</b> a point to change its color.</li>
+            <li>Convex hull is created per color.</li>
+            <li>Nerve vertices are draggable.</li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+// =========================================================
+// VARIABLES
+// =========================================================
+let points = [];
+let nervioPoints = [];
+let palette = [];
+
+let fullPalette = [
+    "gray", "red", "blue", "green", "orange",
+    "purple", "cyan", "brown", "pink", "yellow"
+];
+
+let draggedPointLeft = null;
+let draggedNervio = null;
+
+const canvasLeft = document.getElementById("canvasLeft");
+const ctxLeft = canvasLeft.getContext("2d");
+
+const canvasRight = document.getElementById("canvasRight");
+const ctxRight = canvasRight.getContext("2d");
+
+canvasLeft.oncontextmenu = () => false;
+
+// =========================================================
+// UTILIDADES
+// =========================================================
+function cssToRGB(colorName) {
+    let temp = document.createElement("div");
+    temp.style.color = colorName;
+    document.body.appendChild(temp);
+    let rgb = window.getComputedStyle(temp).color;
+    document.body.removeChild(temp);
+    let parts = rgb.match(/\d+/g).map(Number);
+    return parts;
+}
+
+function distance(a, b) {
+    return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
+function distancePointToSegment(p, a, b) {
+    let vx = b.x - a.x, vy = b.y - a.y;
+    let wx = p.x - a.x, wy = p.y - a.y;
+
+    let c1 = vx * wx + vy * wy;
+    if (c1 <= 0) return distance(p, a);
+    let c2 = vx*vx + vy*vy;
+    if (c2 <= c1) return distance(p, b);
+    let t = c1 / c2;
+
+    let proj = { x: a.x + t*vx, y: a.y + t*vy };
+    return distance(p, proj);
+}
+
+// =========================================================
+// CONVEX HULL (Jarvis)
+// =========================================================
+function convexHull(pts) {
+    if (pts.length < 3) return pts.slice();
+    let left = 0;
+    for (let i = 1; i < pts.length; i++)
+        if (pts[i].x < pts[left].x) left = i;
+
+    let hull = [];
+    let p = left;
+
+    do {
+        hull.push(pts[p]);
+        let q = (p+1) % pts.length;
+
+        for (let r = 0; r < pts.length; r++) {
+            let orient =
+                (pts[q].x - pts[p].x)*(pts[r].y - pts[p].y) -
+                (pts[q].y - pts[p].y)*(pts[r].x - pts[p].x);
+            if (orient < 0) q = r;
+        }
+
+        p = q;
+    } while (p !== left);
+
+    return hull;
+}
+
+// =========================================================
+// REGIONES safeRegion (JS version)
+// =========================================================
+function buildRegionsByColor() {
+    let regions = [];
+    for (let c = 0; c < palette.length; c++) {
+        let ptsColor = points.filter(p => p.colorIndex === c+1)
+            .map(p => ({x:p.x, y:p.y}));
+
+        if (ptsColor.length === 0) regions.push(null);
+        else if (ptsColor.length === 1)
+            regions.push({type:"point", p:ptsColor[0]});
+        else if (ptsColor.length === 2)
+            regions.push({type:"segment", p1:ptsColor[0], p2:ptsColor[1]});
+        else
+            regions.push({type:"polygon", verts:convexHull(ptsColor)});
+    }
+    return regions;
+}
+
+// =========================================================
+// INTERSECCIONES
+// =========================================================
+function segmentIntersectionPoint(a,b,c,d) {
+    let x1=a.x, y1=a.y, x2=b.x, y2=b.y;
+    let x3=c.x, y3=c.y, x4=d.x, y4=d.y;
+
+    let denom = (x1-x2)*(y3-y4)-(y1-y2)*(x3-x4);
+    if (Math.abs(denom) < 1e-9) return null;
+
+    let px = ((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4)) / denom;
+    let py = ((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4)) / denom;
+
+    function inRange(x,a,b){
+        return x>=Math.min(a,b)-1e-9 && x<=Math.max(a,b)+1e-9;
+    }
+    if (!inRange(px,x1,x2) || !inRange(py,y1,y2)) return null;
+    if (!inRange(px,x3,x4) || !inRange(py,y3,y4)) return null;
+    return {x:px,y:py};
+}
+
+function regionEdges(region) {
+    if (!region) return [];
+    if (region.type==="segment")
+        return [{p1:region.p1, p2:region.p2}];
+    if (region.type==="polygon") {
+        let edges = [];
+        let v = region.verts;
+        for (let i=0;i<v.length;i++){
+            edges.push({p1:v[i], p2:v[(i+1)%v.length]});
+        }
+        return edges;
+    }
+    return [];
+}
+
+function intersectionPointsRegions(r1,r2){
+    let res=[];
+    let e1=regionEdges(r1);
+    let e2=regionEdges(r2);
+
+    for (let a of e1)
+        for (let b of e2) {
+            let ip=segmentIntersectionPoint(a.p1,a.p2,b.p1,b.p2);
+            if (ip) res.push(ip);
+        }
+    return res;
+}
+
+function pointInPolygon(pt, poly) {
+    let v=poly.verts;
+    if (!v || v.length < 3) return false;
+    let sign = 0;
+
+    for (let i=0;i<v.length;i++){
+        let j=(i+1)%v.length;
+        let dx1=v[j].x-v[i].x, dy1=v[j].y-v[i].y;
+        let dx2=pt.x-v[i].x, dy2=pt.y-v[i].y;
+        let cross=dx1*dy2 - dy1*dx2;
+
+        if (Math.abs(cross) < 1e-9) continue;
+        if (sign===0) sign=Math.sign(cross);
+        else if (Math.sign(cross)!==sign) return false;
+    }
+    return true;
+}
+
+function pointInRegion(pt, r){
+    if (!r) return false;
+    if (r.type==="point") return distance(pt,r.p)<1e-6;
+    if (r.type==="segment")
+        return distancePointToSegment(pt,r.p1,r.p2)<1e-6;
+    if (r.type==="polygon")
+        return pointInPolygon(pt,r);
+    return false;
+}
+
+function samplePointsRegion(r){
+    if (!r) return [];
+    if (r.type==="point") return [r.p];
+    if (r.type==="segment") {
+        let mid={x:(r.p1.x+r.p2.x)/2, y:(r.p1.y+r.p2.y)/2};
+        return [r.p1,r.p2,mid];
+    }
+    if (r.type==="polygon") {
+        let v=r.verts;
+        let cx=0,cy=0;
+        v.forEach(p=>{cx+=p.x;cy+=p.y;});
+        cx/=v.length; cy/=v.length;
+        return v.concat([{x:cx,y:cy}]);
+    }
+    return [];
+}
+
+function regionesSeIntersectan(r1,r2){
+    if (!r1 || !r2) return false;
+
+    for (let p of samplePointsRegion(r1))
+        if (pointInRegion(p,r2)) return true;
+    for (let p of samplePointsRegion(r2))
+        if (pointInRegion(p,r1)) return true;
+
+    return intersectionPointsRegions(r1,r2).length > 0;
+}
+
+function hayInterseccionMultiple(regions,[i,j,k]){
+    let r1=regions[i], r2=regions[j], r3=regions[k];
+    if (!r1||!r2||!r3) return false;
+
+    let cand = []
+        .concat(samplePointsRegion(r1))
+        .concat(samplePointsRegion(r2))
+        .concat(samplePointsRegion(r3));
+
+    for (let a of intersectionPointsRegions(r1,r2)) cand.push(a);
+    for (let a of intersectionPointsRegions(r1,r3)) cand.push(a);
+    for (let a of intersectionPointsRegions(r2,r3)) cand.push(a);
+
+    for (let p of cand)
+        if (pointInRegion(p,r1) &&
+            pointInRegion(p,r2) &&
+            pointInRegion(p,r3))
+            return true;
+
+    return false;
+}
+
+// =========================================================
+// GENERAR PUNTOS Y COLORES
+// =========================================================
+function generar() {
+    let n = parseInt(document.getElementById("inputN").value);
+    let k = parseInt(document.getElementById("inputK").value);
+
+    if (isNaN(n)||n<1) n=10;
+    if (isNaN(k)||k<1) k=4;
+
+    palette = fullPalette.slice(1, k+1);
+
+    points = [];
+    for (let i=0;i<n;i++){
+        points.push({
+            x: Math.random()*500+50,
+            y: Math.random()*500+50,
+            r: 12,
+            colorIndex: 0
+        });
+    }
+
+              
+    // puntos del nervio en posición convexa (círculo)
+    nervioPoints = [];
+    let cx = 300, cy = 300, R = 230;
+    for (let i = 0; i < k; i++) {
+    let angle = 2 * Math.PI * i / k;
+        nervioPoints.push({
+            x: cx + R * Math.cos(angle),
+            y: cy + R * Math.sin(angle),
+            r: 20,
+            color: palette[i]
+        });
+    }
+
+
+    drawLeft();
+    drawRight();
+}
+
+function getColor(p){
+    if (p.colorIndex===0) return "gray";
+    return palette[p.colorIndex-1];
+}
+
+// =========================================================
+// DIBUJAR IZQUIERDA
+// =========================================================
+function drawLeft() {
+    ctxLeft.clearRect(0,0,600,600);
+    ctxLeft.fillStyle="#fff";
+    ctxLeft.fillRect(0,0,600,600);
+
+    for (let c=0;c<palette.length;c++){
+        let color=palette[c];
+        let ptsColor=points.filter(p=>p.colorIndex===c+1);
+
+        if (ptsColor.length===2){
+            ctxLeft.strokeStyle=color;
+            ctxLeft.lineWidth=3;
+            ctxLeft.beginPath();
+            ctxLeft.moveTo(ptsColor[0].x,ptsColor[0].y);
+            ctxLeft.lineTo(ptsColor[1].x,ptsColor[1].y);
+            ctxLeft.stroke();
+        }
+        else if (ptsColor.length>=3){
+            let hull=convexHull(ptsColor);
+            let [r,g,b]=cssToRGB(color);
+            ctxLeft.fillStyle=`rgba(${r},${g},${b},0.25)`;
+            ctxLeft.strokeStyle=color;
+            ctxLeft.lineWidth=3;
+
+            ctxLeft.beginPath();
+            ctxLeft.moveTo(hull[0].x,hull[0].y);
+            for (let p of hull) ctxLeft.lineTo(p.x,p.y);
+            ctxLeft.closePath();
+            ctxLeft.fill();
+            ctxLeft.stroke();
+        }
+    }
+
+    points.forEach((p,i)=>{
+        ctxLeft.beginPath();
+        ctxLeft.fillStyle=getColor(p);
+        ctxLeft.strokeStyle="black";
+        ctxLeft.lineWidth=2;
+        ctxLeft.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctxLeft.fill();
+        ctxLeft.stroke();
+        ctxLeft.fillStyle="white";
+        ctxLeft.font="12px Arial";
+        ctxLeft.fillText(i+1,p.x-4,p.y+4);
+    });
+}
+
+// =========================================================
+// DIBUJAR NERVIO
+// =========================================================
+function drawRight(){
+    ctxRight.clearRect(0,0,600,600);
+    ctxRight.fillStyle="#fff";
+    ctxRight.fillRect(0,0,600,600);
+
+    let regions=buildRegionsByColor();
+
+    let edgesPairs=[];
+    for (let i=0;i<palette.length;i++)
+        for (let j=i+1;j<palette.length;j++)
+            if (regionesSeIntersectan(regions[i],regions[j]))
+                edgesPairs.push([i,j]);
+
+    let triples=[];
+    for (let i=0;i<palette.length;i++)
+        for (let j=i+1;j<palette.length;j++)
+            for (let k=j+1;k<palette.length;k++)
+                if (hayInterseccionMultiple(regions,[i,j,k]))
+                    triples.push([i,j,k]);
+
+    for (let t of triples){
+        let A=nervioPoints[t[0]];
+        let B=nervioPoints[t[1]];
+        let C=nervioPoints[t[2]];
+        ctxRight.beginPath();
+        ctxRight.moveTo(A.x,A.y);
+        ctxRight.lineTo(B.x,B.y);
+        ctxRight.lineTo(C.x,C.y);
+        ctxRight.closePath();
+        ctxRight.fillStyle="rgba(150,150,150,0.3)";
+        ctxRight.strokeStyle="gray";
+        ctxRight.lineWidth=2;
+        ctxRight.fill();
+        ctxRight.stroke();
+    }
+
+    ctxRight.strokeStyle="gray";
+    ctxRight.lineWidth=3;
+    for (let [i,j] of edgesPairs){
+        let A=nervioPoints[i];
+        let B=nervioPoints[j];
+        ctxRight.beginPath();
+        ctxRight.moveTo(A.x,A.y);
+        ctxRight.lineTo(B.x,B.y);
+        ctxRight.stroke();
+    }
+
+    nervioPoints.forEach(p=>{
+        ctxRight.beginPath();
+        ctxRight.fillStyle=p.color;
+        ctxRight.strokeStyle="black";
+        ctxRight.lineWidth=2;
+        ctxRight.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctxRight.fill();
+        ctxRight.stroke();
+    });
+}
+
+// =========================================================
+// INTERACCIÓN IZQUIERDA
+// =========================================================
+canvasLeft.addEventListener("mousedown", e=>{
+    let rect=canvasLeft.getBoundingClientRect();
+    let mx=e.clientX-rect.left;
+    let my=e.clientY-rect.top;
+
+    if (e.button===2){
+        for (let p of points){
+            if (distance(p,{x:mx,y:my})<p.r+3){
+                p.colorIndex=(p.colorIndex+1)%(palette.length+1);
+                drawLeft();
+                drawRight();
+                return;
+            }
+        }
+        return;
+    }
+
+    if (e.button===0){
+        for (let p of points){
+            if (distance(p,{x:mx,y:my})<p.r+3){
+                draggedPointLeft=p;
+                break;
+            }
+        }
+    }
+});
+
+canvasLeft.addEventListener("mousemove", e=>{
+    if (!draggedPointLeft) return;
+    let rect=canvasLeft.getBoundingClientRect();
+    draggedPointLeft.x=e.clientX-rect.left;
+    draggedPointLeft.y=e.clientY-rect.top;
+    drawLeft();
+    drawRight();
+});
+
+canvasLeft.addEventListener("mouseup", ()=>draggedPointLeft=null);
+canvasLeft.addEventListener("mouseleave", ()=>draggedPointLeft=null);
+
+// =========================================================
+// INTERACCIÓN DERECHA (NERVIO)
+// =========================================================
+canvasRight.addEventListener("mousedown", e=>{
+    let rect=canvasRight.getBoundingClientRect();
+    let mx=e.clientX-rect.left;
+    let my=e.clientY-rect.top;
+
+    if (e.button===0){
+        for (let p of nervioPoints){
+            if (distance(p,{x:mx,y:my})<p.r+5){
+                draggedNervio=p;
+                break;
+            }
+        }
+    }
+});
+
+canvasRight.addEventListener("mousemove", e=>{
+    if (!draggedNervio) return;
+    let rect=canvasRight.getBoundingClientRect();
+    draggedNervio.x=e.clientX-rect.left;
+    draggedNervio.y=e.clientY-rect.top;
+    drawRight();
+});
+
+canvasRight.addEventListener("mouseup", ()=>draggedNervio=null);
+canvasRight.addEventListener("mouseleave", ()=>draggedNervio=null);
+
+// =========================================================
+// START
+// =========================================================
+generar();
+
+</script>
+
+</body>
+</html>
+
