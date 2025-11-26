@@ -107,6 +107,21 @@
             text-decoration: underline;
         }
 
+        /* 🔵 CUADRO CON LA IMAGEN — ÚNICO CSS NUEVO AÑADIDO */
+        .icon-box {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         @media (max-width: 768px) {
             .header {
                 height: 200px;
@@ -133,15 +148,12 @@
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: space-around;
-                padding: 10px;
-                box-shadow: none;
             }
 
             .sidebar ul {
                 flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: center;
-                padding: 0;
             }
 
             .sidebar li {
@@ -157,7 +169,9 @@
         }
     </style>
 </head>
+
 <body>
+
     <!-- Barra lateral -->
     <div class="sidebar">
         <ul>
@@ -178,11 +192,14 @@
     <div class="apps">
         <h2>Interactive Apps</h2>
         <ul>
-            <li><a href="nerve.html" target="_blank">
-                Interactive Nerve Complex App
-            </a></li>
-
-            
+            <li>
+                <a href="nerve.html" target="_blank">
+                    Interactive Nerve Complex App
+                </a>
+                <span class="icon-box">
+                    <img src="nerveApp.png" alt="app preview">
+                </span>
+            </li>
         </ul>
     </div>
 
@@ -190,12 +207,14 @@
     <div class="talks">
         <h2>Selected Talks</h2>
         <ul>
-            <li><a href="https://www.birs.ca/events/2023/5-day-workshops/23w5023/videos/watch/202306081240-Torres.html" target="_blank">
-                From Word Representable Graphs to Altered Tverberg-type Results (BIRS 2023)
-            </a></li>
-            
+            <li>
+                <a href="https://www.birs.ca/events/2023/5-day-workshops/23w5023/videos/watch/202306081240-Torres.html" target="_blank">
+                    From Word Representable Graphs to Altered Tverberg-type Results (BIRS 2023)
+                </a>
+            </li>
         </ul>
     </div>
 
 </body>
 </html>
+
