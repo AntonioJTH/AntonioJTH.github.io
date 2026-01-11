@@ -94,18 +94,17 @@
         .media-item {
             display: flex;
             align-items: center;
-            justify-content: center;   /* ⭐ CENTRA imagen + texto ⭐ */
+            justify-content: center;
             margin-bottom: 35px;
             width: 100%;
-           max-width: 1100px;          /* ⭐ Opcional: haz más ancho el bloque */
-           margin-left: auto;          /* ⭐ Centrado horizontal */
-           margin-right: auto;
-    }
-
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
         /* Alternancia */
         .media-item:nth-child(odd) {
-            flex-direction: row;  
+            flex-direction: row;
         }
 
         .media-item:nth-child(even) {
@@ -115,7 +114,7 @@
         .media-item img {
             width: 170px;
             height: auto;
-            margin: 0 8px;
+            margin: 0 8px;     /* 🔹 antes 20px */
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             flex-shrink: 0;
             border-radius: 4px;
@@ -125,7 +124,7 @@
             margin: 0;
             font-size: 1.3em;
             line-height: 1.4em;
-            flex: 1;
+            flex: 0;          /* 🔹 antes 1 */
         }
 
         .media-item a {
@@ -190,13 +189,11 @@
                 margin-bottom: 20px;
             }
         }
-
     </style>
 </head>
 
 <body>
 
-    <!-- Sidebar -->
     <div class="sidebar">
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -207,51 +204,27 @@
         </ul>
     </div>
 
-    <!-- Header -->
     <div class="header">
         <h1>Media & More</h1>
     </div>
 
-    <!-- ============================ -->
-    <!--   APPS SECTION (tipo publicaciones) -->
-    <!-- ============================ -->
-
     <div class="media-container">
         <h2 class="media-section-title">Interactive Apps</h2>
-
         <ul class="media-list">
-
             <li class="media-item">
                 <img src="nerveApp.png" alt="Nerve App">
-                <p>
-                    <a href="nerve.html" target="_blank">
-                        Interactive Nerve Complex App
-                    </a>
-                </p>
+                <p><a href="nerve.html" target="_blank">Interactive Nerve Complex App</a></p>
             </li>
-
             <li class="media-item">
-                <img src="TGraphs.png" alt="Nerve App">
-                <p>
-                    <a href="TverbergGraphs.html" target="_blank">
-                        Tverberg Partition Graphs App
-                    </a>
-                </p>
+                <img src="TGraphs.png" alt="Tverberg App">
+                <p><a href="TverbergGraphs.html" target="_blank">Tverberg Partition Graphs App</a></p>
             </li>
-            <!-- Aquí puedes añadir más apps copiando este bloque -->
         </ul>
     </div>
 
-
-    <!-- ============================ -->
-    <!--   TALKS SECTION (tipo publicaciones) -->
-    <!-- ============================ -->
-
     <div class="media-container">
         <h2 class="media-section-title">Selected Talks</h2>
-
         <ul class="media-list">
-
             <li class="media-item">
                 <img src="talk1.png" alt="Talk Image">
                 <p>
@@ -260,11 +233,9 @@
                     </a>
                 </p>
             </li>
-
-            <!-- Más charlas aquí si quieres -->
-
         </ul>
     </div>
 
 </body>
 </html>
+
