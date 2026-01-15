@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crossing-Free Partition Graphs</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+      padding: 20px;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-container { display: flex; gap: 30px; flex-wrap: wrap; }
+    .content-wrapper { flex: 1; min-width: 300px; }
+
+    .info-panel {
+      width: 350px;
+      background-color: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+      width: 100%;
+    }
+
+    h1 { color: #2c3e50; margin-bottom: 10px; }
+    h2 { color: #2c3e50; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #3498db; }
+    h3 { color: #2c3e50; margin-bottom: 10px; }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: white;
+      padding: 15px 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    select {
+      padding: 10px 15px;
+      border-radius: 5px;
+      border: 2px solid #3498db;
+      font-size: 1rem;
+      background-color: white;
+      cursor: pointer;
+      min-width: 80px;
+    }
+
+    .count-display {
+      background-color: #2c3e50;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 30px auto;
+      max-width: 500px;
+    }
+
+    .top-plots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .plot-wrapper {
+      flex: 1;
+      min-width: 300px;
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .plot-wrapper-wide { max-width: 600px; margin: 0 auto; }
+
+    .chart-container {
+      width: 100%;
+      height: 400px;
+      position: relative;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+      cursor: pointer;
+    }
+
+    .partition-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    button:hover { background-color: #2980b9; }
+    button:disabled { background-color: #95a5a6; cursor: not-allowed; }
+
+    .save-btn { background-color: #27ae60; }
+    .save-btn:hover { background-color: #219653; }
+
+    .back-btn { background-color: #9b59b6; }
+    .back-btn:hover { background-color: #8e44ad; }
+
+    .buttons-after-plots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin: 30px auto;
+      flex-wrap: wrap;
+    }
+
+    .info-section { margin-bottom: 25px; }
+    .info-section h3 { color: #3498db; margin-bottom: 8px; font-size: 1.1rem; }
+    .info-section p, .info-section ul { color: #555; font-size: 0.95rem; line-height: 1.5; }
+    .info-section ul { padding-left: 20px; margin-top: 5px; }
+    .info-section li { margin-bottom: 5px; }
+
+    .highlight {
+      background-color: #e3f2fd;
+      padding: 10px;
+      border-radius: 5px;
+      border-left: 4px solid #3498db;
+      margin: 10px 0;
+    }
+
+    .note {
+      background-color: #fff8e1;
+      padding: 10px;
+      border-radius: 5px;
+      border-left: 4px solid #ffc107;
+      margin: 10px 0;
+      font-size: 0.9rem;
+    }
+
+    /* Graph Properties Section */
+    .graph-properties {
+      background-color: white;
+      border-radius: 10px;
+      padding: 25px;
+      margin-top: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .properties-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .property-card {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      border-left: 4px solid #3498db;
+    }
+
+    .property-value { font-size: 1.8rem; font-weight: bold; color: #2c3e50; margin: 10px 0; }
+    .property-label { font-size: 0.9rem; color: #666; }
+
+    .adjacency-matrix {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+
+    .matrix-table { border-collapse: collapse; margin: 10px auto; font-family: monospace; }
+    .matrix-table td { width: 30px; height: 30px; text-align: center; border: 1px solid #ddd; font-weight: bold; }
+    .matrix-table .matrix-header { background-color: #e3f2fd; font-weight: bold; }
+    .matrix-table .matrix-diagonal { background-color: #f0f0f0; }
+
+    @media (max-width: 1200px) {
+      .main-container { flex-direction: column; }
+      .info-panel { width: 100%; max-height: none; }
+    }
+
+    @media (max-width: 768px) {
+      .top-plots { flex-direction: column; }
+      .plot-wrapper { min-width: 100%; }
+      .properties-grid { grid-template-columns: repeat(2, 1fr); }
+      .buttons-after-plots { flex-direction: column; gap: 15px; }
+    }
+
+    /* Remove animation effects */
+    .chartjs-render-monitor { animation: none !important; }
+    .chartjs-size-monitor, .chartjs-size-monitor-expand, .chartjs-size-monitor-shrink { animation: none !important; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Crossing-Free Partition Graphs</h1>
+  </header>
+
+  <div class="main-container">
+    <div class="content-wrapper">
+      <div class="controls">
+        <div class="control-group">
+          <label>Number of points (n):</label>
+          <select id="n-select">
+            <option value="1">1</option><option value="2">2</option>
+            <option value="3" selected>3</option>
+            <option value="4">4</option><option value="5">5</option>
+            <option value="6">6</option><option value="7">7</option>
+            <option value="8">8</option><option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Number of parts (k):</label>
+          <select id="k-select">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option><option value="4">4</option><option value="5">5</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="top-plots">
+        <div class="plot-wrapper">
+          <h3>1. Point Set</h3>
+          <div class="chart-container">
+            <canvas id="points-plot"></canvas>
+          </div>
+          <p style="text-align:center; margin-top:10px; color:#666;">
+            Click and drag points (n=<span id="n-display">3</span>)
+          </p>
+        </div>
+
+        <div class="plot-wrapper">
+          <h3>2. Crossing-Free Partition Graph (drag nodes)</h3>
+          <div class="chart-container">
+            <canvas id="graph-plot"></canvas>
+          </div>
+          <p style="text-align:center; margin-top:10px; color:#666;">
+            Nodes: CFP (k=<span id="k-display">2</span>), Edges: differ by 1 element
+          </p>
+        </div>
+      </div>
+
+      <div class="buttons-after-plots">
+        <button id="save-pdf" class="save-btn">Save PDF with Graphs</button>
+        <button id="back-to-media" class="back-btn">Back to Media & More</button>
+      </div>
+
+      <div class="count-display">
+        Crossing-Free Partitions: <span id="partition-count">0</span>
+      </div>
+
+      <div class="plot-wrapper plot-wrapper-wide">
+        <h3>3. Current Partition</h3>
+        <div class="chart-container">
+          <canvas id="partitions-plot"></canvas>
+        </div>
+        <div class="partition-controls">
+          <button id="prev-partition" disabled>← Previous</button>
+          <span id="partition-indicator">Partition 0/0</span>
+          <button id="next-partition" disabled>Next →</button>
+        </div>
+      </div>
+
+      <div class="graph-properties">
+        <h2>Graph Properties</h2>
+
+        <div class="properties-grid">
+          <div class="property-card">
+            <div class="property-label">Connected Components</div>
+            <div class="property-value" id="components-count">0</div>
+          </div>
+
+          <div class="property-card">
+            <div class="property-label">Maximum Degree</div>
+            <div class="property-value" id="max-degree">0</div>
+          </div>
+
+          <div class="property-card">
+            <div class="property-label">Minimum Degree</div>
+            <div class="property-value" id="min-degree">0</div>
+          </div>
+
+          <div class="property-card">
+            <div class="property-label">Average Degree</div>
+            <div class="property-value" id="avg-degree">0.0</div>
+          </div>
+
+          <div class="property-card">
+            <div class="property-label">Clique Number</div>
+            <div class="property-value" id="clique-number">0</div>
+          </div>
+
+          <div class="property-card">
+            <div class="property-label">Diameter</div>
+            <div class="property-value" id="diameter">0</div>
+          </div>
+        </div>
+
+        <div class="adjacency-matrix">
+          <h3>Adjacency Matrix</h3>
+          <div id="matrix-container">
+            <p style="text-align:center; color:#666;">No graph to display</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-panel">
+      <h2>How It Works</h2>
+
+      <div class="info-section">
+        <h3>Crossing-Free Partitions</h3>
+        <p>A partition is "crossing-free" if the convex hulls of its parts do not intersect.</p>
+        <ul>
+          <li>Convex hulls are shown as polygons around each part</li>
+          <li>If two polygons overlap, the partition is NOT valid</li>
+          <li>Drag points to change valid partitions</li>
+        </ul>
+      </div>
+
+      <div class="info-section">
+        <h3>CFP Graph</h3>
+        <p>Each node represents a crossing-free partition. There is an edge between two nodes if their partitions:</p>
+        <ul>
+          <li>Have the same number of parts</li>
+          <li>Are identical except for one single element</li>
+          <li>Would be identical if that element were removed</li>
+        </ul>
+        <div class="note">
+          <strong>You can drag the graph nodes!</strong> This allows you to reorganize the visualization for better clarity.
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h3>Graph Properties</h3>
+        <ul>
+          <li><strong>Connected Components:</strong> Number of disconnected subgraphs</li>
+          <li><strong>Maximum/Minimum Degree:</strong> Highest/lowest number of edges connected to a node</li>
+          <li><strong>Average Degree:</strong> Average number of edges per node</li>
+          <li><strong>Clique Number:</strong> Size of the largest complete subgraph</li>
+          <li><strong>Diameter:</strong> Longest shortest path between any two nodes</li>
+          <li><strong>Adjacency Matrix:</strong> Matrix representation of graph connections</li>
+        </ul>
+      </div>
+
+      <div class="info-section">
+        <h3>Export to PDF</h3>
+        <p>The "Save PDF with Graphs" button generates a document that includes:</p>
+        <ul>
+          <li>Configuration information (n, k)</li>
+          <li>Coordinates of all points</li>
+          <li>Numbered list of all valid partitions</li>
+          <li>Graphs of all valid partitions (6 per page)</li>
+          <li>Graph properties and adjacency matrix</li>
+          <li>Graph connections</li>
+        </ul>
+      </div>
+
+      <div class="highlight">
+        <h3>Algorithm</h3>
+        <p>The system generates all possible partitions using a recursive algorithm, then filters those whose convex hulls do not intersect, and finally builds a graph of connections between similar partitions.</p>
+      </div>
+
+      <div class="note">
+        <p><strong>Note:</strong> For large values of n and k, calculations may take time due to the large number of possible partitions. Starting with small values is recommended.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // -------------------- Global state --------------------
+    let points = [];
+    let partitions = [];
+    let currentPartitionIndex = 0;
+
+    let pointsChart = null;
+    let partitionsChart = null;
+    let graphChart = null;
+
+    let isDragging = false;
+    let draggedPointIndex = -1;
+
+    let isDraggingNode = false;
+    let draggedNodeIndex = -1;
+
+    let dragEventListeners = {};
+    let graphDragEventListeners = {};
+
+    let nodePositions = [];
+    let isInitialLayout = true;
+
+    let adjacencyMatrix = [];
+
+    // Colors for different parts
+    const colors = [
+      '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+      '#FF9F40', '#C9CBCF', '#FF0000', '#00FF00', '#0000FF',
+      '#FF69B4', '#00CED1', '#FFD700', '#7B68EE', '#DC143C'
+    ];
+
+    // -------------------- Init --------------------
+    function initApp() {
+      updatePoints();
+      createCharts();
+      updatePartitions();
+      setupEventListeners();
+    }
+
+    // -------------------- Points --------------------
+    function updatePoints() {
+      const n = parseInt(document.getElementById('n-select').value, 10);
+      points = [];
+      document.getElementById('n-display').textContent = n;
+
+      for (let i = 0; i < n; i++) {
+        let x, y;
+        let validPosition = false;
+
+        for (let attempts = 0; attempts < 100 && !validPosition; attempts++) {
+          x = 20 + Math.random() * 60;
+          y = 20 + Math.random() * 60;
+
+          validPosition = true;
+          for (let j = 0; j < points.length; j++) {
+            const dx = x - points[j].x;
+            const dy = y - points[j].y;
+            if (Math.sqrt(dx * dx + dy * dy) < 8) {
+              validPosition = false;
+              break;
+            }
+          }
+        }
+
+        points.push({ x, y, id: i });
+      }
+    }
+
+    // -------------------- Charts --------------------
+    function createCharts() {
+      removeDragEvents();
+      removeGraphDragEvents();
+
+      if (pointsChart) { pointsChart.destroy(); pointsChart = null; }
+      if (partitionsChart) { partitionsChart.destroy(); partitionsChart = null; }
+      if (graphChart) { graphChart.destroy(); graphChart = null; }
+
+      // Points chart
+      const pointsCtx = document.getElementById('points-plot').getContext('2d');
+      pointsChart = new Chart(pointsCtx, {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: 'Points',
+            data: points.map(p => ({ x: p.x, y: p.y })),
+            backgroundColor: '#36A2EB',
+            borderColor: '#1E6EA7',
+            borderWidth: 2,
+            pointRadius: 8,
+            pointHoverRadius: 12
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          scales: {
+            x: { type: 'linear', min: 0, max: 100, grid: { display: false }, ticks: { display: false }, display: false },
+            y: { min: 0, max: 100, grid: { display: false }, ticks: { display: false }, display: false }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => `Point ${context.dataIndex}: (${context.parsed.x.toFixed(1)}, ${context.parsed.y.toFixed(1)})`
+              }
+            }
+          }
+        }
+      });
+      setupDragEvents(pointsCtx.canvas);
+
+      // Partitions chart
+      const partitionsCtx = document.getElementById('partitions-plot').getContext('2d');
+      partitionsChart = new Chart(partitionsCtx, {
+        type: 'scatter',
+        data: { datasets: [] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          scales: {
+            x: { type: 'linear', min: 0, max: 100, grid: { display: false }, ticks: { display: false }, display: false },
+            y: { min: 0, max: 100, grid: { display: false }, ticks: { display: false }, display: false }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: { label: (context) => `Point ${context.dataIndex}` }
+            }
+          }
+        }
+      });
+
+      // Graph chart
+      const graphCtx = document.getElementById('graph-plot').getContext('2d');
+      graphChart = new Chart(graphCtx, {
+        type: 'scatter',
+        data: { datasets: [] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          scales: {
+            x: { type: 'linear', min: 0, max: 100, grid: { display: false }, ticks: { display: false }, display: false },
+            y: { min: 0, max: 100, grid: { display: false }, ticks: { display: false }, display: false }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const dataset = context.dataset;
+                  if (dataset.label && dataset.label.startsWith('Node ')) {
+                    const nodeNum = dataset.label.split(' ')[1];
+                    return `Partition ${nodeNum}`;
+                  }
+                  return '';
+                }
+              }
+            }
+          }
+        }
+      });
+      setupGraphDragEvents(graphCtx.canvas);
+    }
+
+    // -------------------- Drag events (points) --------------------
+    function setupDragEvents(canvas) {
+      dragEventListeners.mousedown = handleMouseDown;
+      dragEventListeners.mousemove = handleMouseMove;
+      dragEventListeners.mouseup = handleMouseUp;
+      dragEventListeners.mouseleave = handleMouseUp;
+
+      canvas.addEventListener('mousedown', dragEventListeners.mousedown);
+      canvas.addEventListener('mousemove', dragEventListeners.mousemove);
+      canvas.addEventListener('mouseup', dragEventListeners.mouseup);
+      canvas.addEventListener('mouseleave', dragEventListeners.mouseleave);
+    }
+
+    function removeDragEvents() {
+      const canvas = document.getElementById('points-plot');
+      if (canvas && dragEventListeners.mousedown) {
+        canvas.removeEventListener('mousedown', dragEventListeners.mousedown);
+        canvas.removeEventListener('mousemove', dragEventListeners.mousemove);
+        canvas.removeEventListener('mouseup', dragEventListeners.mouseup);
+        canvas.removeEventListener('mouseleave', dragEventListeners.mouseleave);
+        dragEventListeners = {};
+      }
+    }
+
+    function handleMouseDown(event) {
+      const rect = event.target.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const xValue = pointsChart.scales.x.getValueForPixel(x);
+      const yValue = pointsChart.scales.y.getValueForPixel(y);
+
+      let minDist = Infinity;
+      let closestIndex = -1;
+
+      for (let i = 0; i < points.length; i++) {
+        const dist = Math.hypot(points[i].x - xValue, points[i].y - yValue);
+        if (dist < 15 && dist < minDist) {
+          minDist = dist;
+          closestIndex = i;
+        }
+      }
+
+      if (closestIndex !== -1) {
+        isDragging = true;
+        draggedPointIndex = closestIndex;
+        event.preventDefault();
+      }
+    }
+
+    function handleMouseMove(event) {
+      if (!isDragging) return;
+
+      const rect = event.target.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const xValue = Math.max(0, Math.min(100, pointsChart.scales.x.getValueForPixel(x)));
+      const yValue = Math.max(0, Math.min(100, pointsChart.scales.y.getValueForPixel(y)));
+
+      points[draggedPointIndex].x = xValue;
+      points[draggedPointIndex].y = yValue;
+
+      pointsChart.data.datasets[0].data = points.map(p => ({ x: p.x, y: p.y }));
+      pointsChart.update('none');
+
+      updatePartitions();
+    }
+
+    function handleMouseUp() {
+      isDragging = false;
+      draggedPointIndex = -1;
+    }
+
+    // -------------------- Drag events (graph nodes) --------------------
+    function setupGraphDragEvents(canvas) {
+      graphDragEventListeners.mousedown = handleGraphMouseDown;
+      graphDragEventListeners.mousemove = handleGraphMouseMove;
+      graphDragEventListeners.mouseup = handleGraphMouseUp;
+      graphDragEventListeners.mouseleave = handleGraphMouseUp;
+
+      canvas.addEventListener('mousedown', graphDragEventListeners.mousedown);
+      canvas.addEventListener('mousemove', graphDragEventListeners.mousemove);
+      canvas.addEventListener('mouseup', graphDragEventListeners.mouseup);
+      canvas.addEventListener('mouseleave', graphDragEventListeners.mouseleave);
+    }
+
+    function removeGraphDragEvents() {
+      const canvas = document.getElementById('graph-plot');
+      if (canvas && graphDragEventListeners.mousedown) {
+        canvas.removeEventListener('mousedown', graphDragEventListeners.mousedown);
+        canvas.removeEventListener('mousemove', graphDragEventListeners.mousemove);
+        canvas.removeEventListener('mouseup', graphDragEventListeners.mouseup);
+        canvas.removeEventListener('mouseleave', graphDragEventListeners.mouseleave);
+        graphDragEventListeners = {};
+      }
+    }
+
+    function handleGraphMouseDown(event) {
+      if (partitions.length === 0) return;
+
+      const rect = event.target.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const xValue = graphChart.scales.x.getValueForPixel(x);
+      const yValue = graphChart.scales.y.getValueForPixel(y);
+
+      let minDist = Infinity;
+      let closestIndex = -1;
+
+      for (let i = 0; i < nodePositions.length; i++) {
+        const node = nodePositions[i];
+        const dist = Math.hypot(node.x - xValue, node.y - yValue);
+        if (dist < 20 && dist < minDist) {
+          minDist = dist;
+          closestIndex = i;
+        }
+      }
+
+      if (closestIndex !== -1) {
+        isDraggingNode = true;
+        draggedNodeIndex = closestIndex;
+        isInitialLayout = false;
+        event.preventDefault();
+        return;
+      }
+
+      handleGraphClick(xValue, yValue);
+    }
+
+    function handleGraphMouseMove(event) {
+      if (!isDraggingNode || draggedNodeIndex === -1) return;
+
+      const rect = event.target.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      const xValue = Math.max(10, Math.min(90, graphChart.scales.x.getValueForPixel(x)));
+      const yValue = Math.max(10, Math.min(90, graphChart.scales.y.getValueForPixel(y)));
+
+      nodePositions[draggedNodeIndex].x = xValue;
+      nodePositions[draggedNodeIndex].y = yValue;
+
+      updateGraphChart();
+    }
+
+    function handleGraphMouseUp() {
+      isDraggingNode = false;
+      draggedNodeIndex = -1;
+    }
+
+    function handleGraphClick(xValue, yValue) {
+      let minDist = Infinity;
+      let closestIndex = -1;
+
+      for (let i = 0; i < nodePositions.length; i++) {
+        const node = nodePositions[i];
+        const dist = Math.hypot(node.x - xValue, node.y - yValue);
+        if (dist < 25 && dist < minDist) {
+          minDist = dist;
+          closestIndex = i;
+        }
+      }
+
+      if (closestIndex !== -1 && closestIndex !== currentPartitionIndex) {
+        currentPartitionIndex = closestIndex;
+        updatePartitionsChart();
+        updatePartitionControls();
+        updateGraphChart();
+      }
+    }
+
+    // -------------------- Partitions generation + filtering --------------------
+    function updatePartitions() {
+      const n = parseInt(document.getElementById('n-select').value, 10);
+      const k = parseInt(document.getElementById('k-select').value, 10);
+
+      document.getElementById('k-display').textContent = k;
+
+      if (k > n) {
+        document.getElementById('k-select').value = n;
+        updatePartitions();
+        return;
+      }
+
+      partitions = generateAllPartitionsCorrect(n, k);
+
+      const crossingFreePartitions = [];
+      for (let i = 0; i < partitions.length; i++) {
+        if (isCrossingFree(partitions[i])) crossingFreePartitions.push(partitions[i]);
+      }
+      partitions = crossingFreePartitions;
+
+      document.getElementById('partition-count').textContent = partitions.length;
+
+      currentPartitionIndex = partitions.length > 0 ? 0 : -1;
+
+      isInitialLayout = true;
+      nodePositions = [];
+
+      updatePartitionControls();
+      updatePartitionsChart();
+      updateGraphChart();
+      updateGraphProperties();
+    }
+
+    // Generates ALL partitions of n elements into k non-empty parts
+    function generateAllPartitionsCorrect(n, k) {
+      if (k <= 0 || k > n) return [];
+
+      const result = [];
+      const assignment = new Array(n).fill(0);
+
+      function generateAssignments(index, partsUsed) {
+        if (index === n) {
+          if (partsUsed !== k) return;
+
+          const partition = Array.from({ length: k }, () => []);
+          for (let i = 0; i < n; i++) partition[assignment[i]].push(i);
+
+          if (partition.every(part => part.length > 0)) result.push(partition);
+          return;
+        }
+
+        for (let part = 0; part <= Math.min(partsUsed, k - 1); part++) {
+          assignment[index] = part;
+          const newPartsUsed = Math.max(partsUsed, part + 1);
+          generateAssignments(index + 1, newPartsUsed);
+        }
+      }
+
+      generateAssignments(0, 0);
+
+      // Deduplicate partitions (up to block labeling)
+      const uniquePartitions = [];
+      const seen = new Set();
+
+      for (const partition of result) {
+        const sortedPartition = partition
+          .map(part => [...part].sort((a, b) => a - b))
+          .sort((a, b) => {
+            if (a.length !== b.length) return a.length - b.length;
+            const m = Math.min(a.length, b.length);
+            for (let i = 0; i < m; i++) if (a[i] !== b[i]) return a[i] - b[i];
+            return 0;
+          });
+
+        const key = JSON.stringify(sortedPartition);
+        if (!seen.has(key)) {
+          seen.add(key);
+          uniquePartitions.push(sortedPartition);
+        }
+      }
+
+      return uniquePartitions;
+    }
+
+    function partitionToString(partition) {
+      return partition.map(part => `{${part.join(',')}}`).join(' ');
+    }
+
+    // -------------------- Adjacency (ROBUST for any k) --------------------
+    function lexCompare(A, B) {
+      const m = Math.min(A.length, B.length);
+      for (let i = 0; i < m; i++) {
+        if (A[i] !== B[i]) return A[i] - B[i];
+      }
+      return A.length - B.length;
+    }
+
+    function canonicalizePartition(partition) {
+      const parts = partition
+        .map(block => [...block].sort((a, b) => a - b))
+        .filter(block => block.length > 0);
+
+      parts.sort((A, B) => (A.length - B.length) || lexCompare(A, B));
+      return parts;
+    }
+
+    function signatureAfterRemoving(partition, x) {
+      const removed = partition.map(block => block.filter(e => e !== x));
+      return JSON.stringify(canonicalizePartition(removed));
+    }
+
+    // Edge iff there exists EXACTLY ONE element x such that removing x makes partitions equal
+    function differByOneElementSimple(p1, p2) {
+      const c1 = JSON.stringify(canonicalizePartition(p1));
+      const c2 = JSON.stringify(canonicalizePartition(p2));
+      if (c1 === c2) return false;
+
+      const s1 = new Set(p1.flat());
+      const s2 = new Set(p2.flat());
+
+      if (s1.size !== s2.size) return false;
+      for (const e of s1) if (!s2.has(e)) return false;
+
+      let matches = 0;
+      for (const x of s1) {
+        if (signatureAfterRemoving(p1, x) === signatureAfterRemoving(p2, x)) {
+          matches++;
+          if (matches > 1) return false;
+        }
+      }
+      return matches === 1;
+    }
+
+    // -------------------- Crossing-free test --------------------
+    function isCrossingFree(partition) {
+      if (partition.length <= 1) return true;
+
+      for (let i = 0; i < partition.length; i++) {
+        for (let j = i + 1; j < partition.length; j++) {
+          const pointsI = partition[i].map(idx => points[idx]);
+          const pointsJ = partition[j].map(idx => points[idx]);
+
+          const hullI = convexHull(pointsI);
+          const hullJ = convexHull(pointsJ);
+
+          if (doConvexHullsIntersect(hullI, hullJ)) return false;
+        }
+      }
+      return true;
+    }
+
+    function convexHull(pts) {
+      if (pts.length < 3) return [...pts];
+
+      let pivot = pts[0];
+      for (let i = 1; i < pts.length; i++) {
+        if (pts[i].y < pivot.y || (pts[i].y === pivot.y && pts[i].x < pivot.x)) pivot = pts[i];
+      }
+
+      const sorted = pts.slice().sort((a, b) => {
+        if (a === pivot) return -1;
+        if (b === pivot) return 1;
+
+        const angleA = Math.atan2(a.y - pivot.y, a.x - pivot.x);
+        const angleB = Math.atan2(b.y - pivot.y, b.x - pivot.x);
+
+        if (angleA < angleB) return -1;
+        if (angleA > angleB) return 1;
+
+        const distA = (a.x - pivot.x) ** 2 + (a.y - pivot.y) ** 2;
+        const distB = (b.x - pivot.x) ** 2 + (b.y - pivot.y) ** 2;
+        return distA - distB;
+      });
+
+      const hull = [sorted[0], sorted[1]];
+      for (let i = 2; i < sorted.length; i++) {
+        while (hull.length >= 2) {
+          const a = hull[hull.length - 2];
+          const b = hull[hull.length - 1];
+          const c = sorted[i];
+          const cross = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+          if (cross <= 0) hull.pop();
+          else break;
+        }
+        hull.push(sorted[i]);
+      }
+      return hull;
+    }
+
+    function doConvexHullsIntersect(hull1, hull2) {
+      if (hull1.length === 0 || hull2.length === 0) return false;
+
+      if (hull1.length === 1 && hull2.length === 1) {
+        return hull1[0].x === hull2[0].x && hull1[0].y === hull2[0].y;
+      }
+
+      for (const p of hull1) if (isPointInPolygon(p, hull2)) return true;
+      for (const p of hull2) if (isPointInPolygon(p, hull1)) return true;
+
+      for (let i = 0; i < hull1.length; i++) {
+        const a1 = hull1[i];
+        const a2 = hull1[(i + 1) % hull1.length];
+
+        for (let j = 0; j < hull2.length; j++) {
+          const b1 = hull2[j];
+          const b2 = hull2[(j + 1) % hull2.length];
+
+          if (doSegmentsIntersect(a1, a2, b1, b2)) return true;
+        }
+      }
+      return false;
+    }
+
+    function isPointInPolygon(point, polygon) {
+      if (polygon.length < 3) return false;
+
+      let inside = false;
+      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i].x, yi = polygon[i].y;
+        const xj = polygon[j].x, yj = polygon[j].y;
+
+        const intersect = ((yi > point.y) !== (yj > point.y)) &&
+          (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi);
+
+        if (intersect) inside = !inside;
+      }
+      return inside;
+    }
+
+    function doSegmentsIntersect(a1, a2, b1, b2) {
+      const ccw = (p1, p2, p3) =>
+        (p3.y - p1.y) * (p2.x - p1.x) > (p2.y - p1.y) * (p3.x - p1.x);
+
+      return ccw(a1, b1, b2) !== ccw(a2, b1, b2) &&
+             ccw(a1, a2, b1) !== ccw(a1, a2, b2);
+    }
+
+    // -------------------- UI controls --------------------
+    function updatePartitionControls() {
+      const prevBtn = document.getElementById('prev-partition');
+      const nextBtn = document.getElementById('next-partition');
+      const indicator = document.getElementById('partition-indicator');
+
+      if (partitions.length === 0 || currentPartitionIndex < 0) {
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+        indicator.textContent = "Partition 0/0";
+        return;
+      }
+
+      prevBtn.disabled = currentPartitionIndex <= 0;
+      nextBtn.disabled = currentPartitionIndex >= partitions.length - 1;
+      indicator.textContent = `Partition ${currentPartitionIndex + 1}/${partitions.length}`;
+    }
+
+    function updatePartitionsChart() {
+      if (!partitionsChart || partitions.length === 0 || currentPartitionIndex < 0) {
+        partitionsChart.data.datasets = [];
+        partitionsChart.update();
+        return;
+      }
+
+      const currentPartition = partitions[currentPartitionIndex];
+      const datasets = [];
+
+      for (let i = 0; i < currentPartition.length; i++) {
+        const part = currentPartition[i];
+        const partPoints = part.map(idx => points[idx]);
+
+        if (partPoints.length >= 2) {
+          const hull = convexHull(partPoints);
+          if (hull.length > 0) {
+            const closedHull = [...hull];
+            if (hull.length > 2) closedHull.push(hull[0]);
+
+            datasets.push({
+              label: `Hull ${i + 1}`,
+              data: closedHull.map(p => ({ x: p.x, y: p.y })),
+              backgroundColor: colors[i] + '40',
+              borderColor: colors[i],
+              borderWidth: 2,
+              pointRadius: 0,
+              fill: hull.length > 2,
+              showLine: true,
+              lineTension: 0
+            });
+          }
+        }
+
+        datasets.push({
+          label: `Part ${i + 1}`,
+          data: partPoints.map(p => ({ x: p.x, y: p.y })),
+          backgroundColor: colors[i],
+          borderColor: colors[i],
+          borderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 10,
+          showLine: false
+        });
+      }
+
+      partitionsChart.data.datasets = datasets;
+      partitionsChart.update();
+    }
+
+    // -------------------- Graph chart --------------------
+    function updateGraphChart() {
+      if (!graphChart || partitions.length === 0) {
+        graphChart.data.datasets = [];
+        graphChart.update();
+        return;
+      }
+
+      if (isInitialLayout || nodePositions.length !== partitions.length) {
+        nodePositions = [];
+        const centerX = 50;
+        const centerY = 50;
+        const radius = Math.min(40, Math.max(25, 200 / partitions.length));
+
+        for (let i = 0; i < partitions.length; i++) {
+          const angle = (2 * Math.PI * i) / partitions.length;
+          const x = centerX + radius * Math.cos(angle);
+          const y = centerY + radius * Math.sin(angle);
+          nodePositions.push({ x, y, index: i });
+        }
+      }
+
+      const datasets = [];
+
+      // edges
+      const edges = [];
+      for (let i = 0; i < partitions.length; i++) {
+        for (let j = i + 1; j < partitions.length; j++) {
+          if (differByOneElementSimple(partitions[i], partitions[j])) {
+            edges.push({ from: i, to: j });
+          }
+        }
+      }
+
+      for (const edge of edges) {
+        datasets.push({
+          label: `Edge ${edge.from + 1}-${edge.to + 1}`,
+          data: [
+            { x: nodePositions[edge.from].x, y: nodePositions[edge.from].y },
+            { x: nodePositions[edge.to].x, y: nodePositions[edge.to].y }
+          ],
+          backgroundColor: '#CCCCCC',
+          borderColor: '#999999',
+          borderWidth: 1,
+          pointRadius: 0,
+          showLine: true,
+          lineTension: 0
+        });
+      }
+
+      // nodes
+      for (const node of nodePositions) {
+        const isCurrent = node.index === currentPartitionIndex;
+
+        datasets.push({
+          label: `Node ${node.index + 1}`,
+          data: [{ x: node.x, y: node.y }],
+          backgroundColor: isCurrent ? '#FF0000' : '#36A2EB',
+          borderColor: isCurrent ? '#CC0000' : '#1E6EA7',
+          borderWidth: 3,
+          pointRadius: 12,
+          pointHoverRadius: 18,
+          showLine: false
+        });
+      }
+
+      graphChart.data.datasets = datasets;
+      graphChart.update();
+
+      setTimeout(drawNodeNumbers, 100);
+    }
+
+    function drawNodeNumbers() {
+      const canvas = document.getElementById('graph-plot');
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d');
+      ctx.save();
+      ctx.font = 'bold 14px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#FFFFFF';
+
+      for (let i = 0; i < partitions.length; i++) {
+        const node = nodePositions[i];
+        ctx.fillText((i + 1).toString(), node.x, node.y);
+      }
+
+      ctx.restore();
+    }
+
+    // -------------------- Graph properties --------------------
+    function updateGraphProperties() {
+      if (partitions.length === 0) {
+        document.getElementById('components-count').textContent = '0';
+        document.getElementById('max-degree').textContent = '0';
+        document.getElementById('min-degree').textContent = '0';
+        document.getElementById('avg-degree').textContent = '0.0';
+        document.getElementById('clique-number').textContent = '0';
+        document.getElementById('diameter').textContent = '0';
+        document.getElementById('matrix-container').innerHTML = '<p style="text-align: center; color: #666;">No graph to display</p>';
+        adjacencyMatrix = [];
+        return;
+      }
+
+      const n = partitions.length;
+      adjacencyMatrix = Array.from({ length: n }, () => Array(n).fill(0));
+
+      let edgeCount = 0;
+      for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+          if (differByOneElementSimple(partitions[i], partitions[j])) {
+            adjacencyMatrix[i][j] = 1;
+            adjacencyMatrix[j][i] = 1;
+            edgeCount++;
+          }
+        }
+      }
+
+      const degrees = adjacencyMatrix.map(row => row.reduce((sum, val) => sum + val, 0));
+      const maxDegree = Math.max(...degrees);
+      const minDegree = Math.min(...degrees);
+      const avgDegree = (degrees.reduce((sum, val) => sum + val, 0) / n).toFixed(2);
+
+      // Connected components (BFS)
+      const visited = Array(n).fill(false);
+      let componentCount = 0;
+
+      for (let i = 0; i < n; i++) {
+        if (!visited[i]) {
+          componentCount++;
+          const queue = [i];
+          visited[i] = true;
+
+          while (queue.length > 0) {
+            const current = queue.shift();
+            for (let j = 0; j < n; j++) {
+              if (adjacencyMatrix[current][j] === 1 && !visited[j]) {
+                visited[j] = true;
+                queue.push(j);
+              }
+            }
+          }
+        }
+      }
+
+      // Diameter (only if connected)
+      let diameter = 0;
+      if (componentCount === 1 && n > 1) {
+        const dist = Array.from({ length: n }, () => Array(n).fill(Infinity));
+
+        for (let i = 0; i < n; i++) {
+          dist[i][i] = 0;
+          for (let j = 0; j < n; j++) if (adjacencyMatrix[i][j] === 1) dist[i][j] = 1;
+        }
+
+        for (let k = 0; k < n; k++) {
+          for (let i = 0; i < n; i++) {
+            for (let j = 0; j < n; j++) {
+              if (dist[i][j] > dist[i][k] + dist[k][j]) dist[i][j] = dist[i][k] + dist[k][j];
+            }
+          }
+        }
+
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < n; j++) {
+            if (dist[i][j] !== Infinity && dist[i][j] > diameter) diameter = dist[i][j];
+          }
+        }
+      }
+
+      // Clique number (greedy approximation)
+      let cliqueNumber = 1;
+      for (let i = 0; i < n; i++) {
+        const currentClique = [i];
+        for (let j = 0; j < n; j++) {
+          if (i === j) continue;
+          let isClique = true;
+          for (const v of currentClique) {
+            if (adjacencyMatrix[v][j] !== 1) { isClique = false; break; }
+          }
+          if (isClique) currentClique.push(j);
+        }
+        cliqueNumber = Math.max(cliqueNumber, currentClique.length);
+      }
+
+      document.getElementById('components-count').textContent = componentCount;
+      document.getElementById('max-degree').textContent = maxDegree;
+      document.getElementById('min-degree').textContent = minDegree;
+      document.getElementById('avg-degree').textContent = avgDegree;
+      document.getElementById('clique-number').textContent = cliqueNumber;
+      document.getElementById('diameter').textContent = diameter;
+
+      updateAdjacencyMatrixDisplay();
+    }
+
+    function updateAdjacencyMatrixDisplay() {
+      const container = document.getElementById('matrix-container');
+
+      if (adjacencyMatrix.length === 0) {
+        container.innerHTML = '<p style="text-align:center; color:#666;">No graph to display</p>';
+        return;
+      }
+
+      const n = adjacencyMatrix.length;
+      let html = '<table class="matrix-table">';
+
+      html += '<tr><td class="matrix-header"></td>';
+      for (let i = 0; i < n; i++) html += `<td class="matrix-header">${i + 1}</td>`;
+      html += '</tr>';
+
+      for (let i = 0; i < n; i++) {
+        html += `<tr><td class="matrix-header">${i + 1}</td>`;
+        for (let j = 0; j < n; j++) {
+          const cellClass = i === j ? 'matrix-diagonal' : '';
+          html += `<td class="${cellClass}">${adjacencyMatrix[i][j]}</td>`;
+        }
+        html += '</tr>';
+      }
+
+      html += '</table>';
+      container.innerHTML = html;
+    }
+
+    // -------------------- PDF export --------------------
+    async function generatePartitionImages() {
+      if (!partitionsChart || partitions.length === 0) return [];
+
+      const images = [];
+      const originalIndex = currentPartitionIndex;
+      const container = document.getElementById('partitions-plot');
+      const originalDatasets = [...partitionsChart.data.datasets];
+
+      for (let i = 0; i < partitions.length; i++) {
+        const partition = partitions[i];
+        const datasets = [];
+
+        for (let j = 0; j < partition.length; j++) {
+          const part = partition[j];
+          const partPoints = part.map(idx => points[idx]);
+
+          if (partPoints.length >= 2) {
+            const hull = convexHull(partPoints);
+            if (hull.length > 0) {
+              const closedHull = [...hull];
+              if (hull.length > 2) closedHull.push(hull[0]);
+
+              datasets.push({
+                label: `Hull ${j + 1}`,
+                data: closedHull.map(p => ({ x: p.x, y: p.y })),
+                backgroundColor: colors[j] + '40',
+                borderColor: colors[j],
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: hull.length > 2,
+                showLine: true,
+                lineTension: 0
+              });
+            }
+          }
+
+          datasets.push({
+            label: `Part ${j + 1}`,
+            data: partPoints.map(p => ({ x: p.x, y: p.y })),
+            backgroundColor: colors[j],
+            borderColor: colors[j],
+            borderWidth: 2,
+            pointRadius: 5,
+            pointHoverRadius: 10,
+            showLine: false
+          });
+        }
+
+        partitionsChart.data.datasets = datasets;
+        partitionsChart.update();
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        try {
+          const canvas = await html2canvas(container);
+          const imgData = canvas.toDataURL('image/png');
+          images.push({ index: i, imgData, partition });
+        } catch (error) {
+          console.error('Error capturing image:', error);
+        }
+      }
+
+      partitionsChart.data.datasets = originalDatasets;
+      partitionsChart.update();
+      currentPartitionIndex = originalIndex;
+      updatePartitionControls();
+
+      return images;
+    }
+
+    async function savePDFWithPlots() {
+      if (partitions.length === 0) {
+        alert("No partitions to save.");
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const margin = 15;
+      let yPos = margin;
+      const pageWidth = doc.internal.pageSize.width;
+      const pageHeight = doc.internal.pageSize.height;
+
+      doc.setFontSize(18);
+      doc.setTextColor(40, 40, 40);
+      doc.text("Crossing-Free Partition Graphs", pageWidth / 2, yPos, { align: 'center' });
+      yPos += 15;
+
+      doc.setFontSize(12);
+      doc.setTextColor(80, 80, 80);
+      const n = parseInt(document.getElementById('n-select').value, 10);
+      const k = parseInt(document.getElementById('k-select').value, 10);
+      doc.text(`Configuration: n = ${n} points, k = ${k} parts`, pageWidth / 2, yPos, { align: 'center' });
+      yPos += 10;
+      doc.text(`Total valid partitions: ${partitions.length}`, pageWidth / 2, yPos, { align: 'center' });
+      yPos += 20;
+
+      doc.setFontSize(14);
+      doc.setTextColor(30, 30, 30);
+      doc.text("Point coordinates:", margin, yPos);
+      yPos += 10;
+
+      doc.setFontSize(11);
+      points.forEach((point, index) => {
+        const text = `Point ${index}: (${point.x.toFixed(2)}, ${point.y.toFixed(2)})`;
+        doc.text(text, margin, yPos);
+        yPos += 7;
+      });
+
+      yPos += 10;
+
+      doc.setFontSize(14);
+      doc.setTextColor(30, 30, 30);
+      doc.text("Graph Properties:", margin, yPos);
+      yPos += 10;
+
+      doc.setFontSize(11);
+      const props = [
+        `Connected Components: ${document.getElementById('components-count').textContent}`,
+        `Maximum Degree: ${document.getElementById('max-degree').textContent}`,
+        `Minimum Degree: ${document.getElementById('min-degree').textContent}`,
+        `Average Degree: ${document.getElementById('avg-degree').textContent}`,
+        `Clique Number: ${document.getElementById('clique-number').textContent}`,
+        `Diameter: ${document.getElementById('diameter').textContent}`
+      ];
+
+      props.forEach(prop => {
+        if (yPos > pageHeight - margin) { doc.addPage(); yPos = margin; }
+        doc.text(prop, margin, yPos);
+        yPos += 7;
+      });
+
+      yPos += 10;
+
+      if (adjacencyMatrix.length > 0) {
+        doc.setFontSize(14);
+        doc.setTextColor(30, 30, 30);
+        doc.text("Adjacency Matrix:", margin, yPos);
+        yPos += 10;
+
+        doc.setFontSize(9);
+        const matrixSize = adjacencyMatrix.length;
+        const cellSize = 5;
+        const startX = margin + 10;
+        const startY = yPos;
+
+        for (let i = 0; i <= matrixSize; i++) {
+          for (let j = 0; j <= matrixSize; j++) {
+            const x = startX + j * cellSize;
+            const y = startY + i * cellSize;
+
+            if (i === 0 && j === 0) {
+              // corner
+            } else if (i === 0) {
+              doc.text(j.toString(), x + cellSize / 2, y - 2);
+            } else if (j === 0) {
+              doc.text(i.toString(), x - 2, y + cellSize / 2);
+            } else {
+              doc.text(adjacencyMatrix[i - 1][j - 1].toString(), x + cellSize / 2, y + cellSize / 2);
+            }
+          }
+        }
+
+        yPos += matrixSize * cellSize + 10;
+      }
+
+      yPos += 10;
+
+      doc.setFontSize(14);
+      doc.setTextColor(30, 30, 30);
+      doc.text("List of valid partitions:", margin, yPos);
+      yPos += 10;
+
+      doc.setFontSize(11);
+      partitions.forEach((partition, index) => {
+        const partitionText = `${index + 1}. ${partitionToString(partition)}`;
+        if (yPos > pageHeight - margin) { doc.addPage(); yPos = margin; }
+        doc.text(partitionText, margin, yPos);
+        yPos += 7;
+      });
+
+      yPos += 10;
+
+      doc.setFontSize(14);
+      doc.setTextColor(30, 30, 30);
+      doc.text("Graph connections (differ by 1 element):", margin, yPos);
+      yPos += 10;
+
+      doc.setFontSize(11);
+      const connections = [];
+      for (let i = 0; i < partitions.length; i++) {
+        for (let j = i + 1; j < partitions.length; j++) {
+          if (differByOneElementSimple(partitions[i], partitions[j])) connections.push(`${i + 1} ↔ ${j + 1}`);
+        }
+      }
+
+      if (connections.length > 0) {
+        const connectionText = connections.join(', ');
+        const lines = doc.splitTextToSize(connectionText, pageWidth - 2 * margin);
+        lines.forEach(line => {
+          if (yPos > pageHeight - margin) { doc.addPage(); yPos = margin; }
+          doc.text(line, margin, yPos);
+          yPos += 7;
+        });
+      } else {
+        doc.text("No connections between partitions.", margin, yPos);
+        yPos += 7;
+      }
+
+      doc.addPage();
+      yPos = margin;
+
+      doc.setFontSize(16);
+      doc.setTextColor(30, 30, 30);
+      doc.text("Partition Graphs", pageWidth / 2, yPos, { align: 'center' });
+      yPos += 20;
+
+      try {
+        const images = await generatePartitionImages();
+        const imgWidth = (pageWidth - 3 * margin) / 2;
+        const imgHeight = 60;
+        const imagesPerPage = 6;
+
+        for (let i = 0; i < images.length; i++) {
+          const image = images[i];
+          const positionInPage = i % imagesPerPage;
+
+          if (positionInPage === 0 && i > 0) {
+            doc.addPage();
+            yPos = margin;
+          }
+
+          const col = positionInPage % 2;
+          const row = Math.floor(positionInPage / 2);
+
+          const x = margin + col * (imgWidth + margin);
+          const y = yPos + row * (imgHeight + 15);
+
+          doc.addImage(image.imgData, 'PNG', x, y, imgWidth, imgHeight);
+
+          doc.setFontSize(10);
+          doc.setTextColor(30, 30, 30);
+          doc.text(`Partition ${image.index + 1}`, x + imgWidth / 2, y + imgHeight + 5, { align: 'center' });
+        }
+      } catch (error) {
+        console.error('Error generating images:', error);
+        doc.text("Error generating partition graphs", margin, yPos);
+      }
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+      doc.setFontSize(10);
+      doc.setTextColor(100, 100, 100);
+      doc.text(`Generated: ${dateStr}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
+
+      doc.save(`partition_graphs_n${n}_k${k}_${now.getTime()}.pdf`);
+    }
+
+    // -------------------- Event listeners --------------------
+    function setupEventListeners() {
+      document.getElementById('n-select').addEventListener('change', function () {
+        const n = parseInt(this.value, 10);
+        const k = parseInt(document.getElementById('k-select').value, 10);
+        if (k > n) document.getElementById('k-select').value = n;
+
+        updatePoints();
+        createCharts();
+        updatePartitions();
+      });
+
+      document.getElementById('k-select').addEventListener('change', function () {
+        const n = parseInt(document.getElementById('n-select').value, 10);
+        const k = parseInt(this.value, 10);
+        if (k > n) {
+          document.getElementById('k-select').value = n;
+          updatePartitions();
+          return;
+        }
+        updatePartitions();
+      });
+
+      document.getElementById('prev-partition').addEventListener('click', function () {
+        if (currentPartitionIndex > 0) {
+          currentPartitionIndex--;
+          updatePartitionsChart();
+          updatePartitionControls();
+          updateGraphChart();
+        }
+      });
+
+      document.getElementById('next-partition').addEventListener('click', function () {
+        if (currentPartitionIndex < partitions.length - 1) {
+          currentPartitionIndex++;
+          updatePartitionsChart();
+          updatePartitionControls();
+          updateGraphChart();
+        }
+      });
+
+      document.getElementById('save-pdf').addEventListener('click', savePDFWithPlots);
+
+      document.getElementById('back-to-media').addEventListener('click', function () {
+        window.location.href = 'https://antoniojth.github.io/media.html';
+      });
+    }
+
+    window.addEventListener('load', initApp);
+  </script>
+</body>
+</html>
+
