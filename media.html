@@ -1,15 +1,45 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media & More</title>
+    <title>Math Visualization & More</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'DM Sans', sans-serif;
+            background: #f7f5f2;
+            color: #1a1a1a;
         }
 
+        /* ── Sidebar ── */
+        .sidebar {
+            width: 200px;
+            height: 100vh;
+            position: fixed;
+            top: 0; left: 0;
+            background-color: rgba(0,0,0,0.7);
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        .sidebar ul { list-style: none; }
+        .sidebar li { margin: 20px 0; }
+        .sidebar a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.2em;
+            display: block;
+            padding: 10px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .sidebar a:hover { background: rgba(255,255,255,0.1); }
+
+        /* ── Header ── */
         .header {
             background-image: url('img/header-media-dodecahedron.jpg');
             background-size: cover;
@@ -19,180 +49,178 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            padding-right: 50px;
             margin-left: 200px;
-            box-sizing: border-box;
         }
-
         .header h1 {
-            font-family: 'Arial', sans-serif;
-            font-size: 5em;
+            font-family: Arial, sans-serif;
+            font-size: 3em;
             color: black;
-            margin: -0.5cm 0 0 0;
             font-weight: 300;
             text-align: right;
-            padding-right: 4cm;
-            background-color: transparent;
+            padding-right: 2cm;
         }
 
-        .sidebar {
-            width: 200px;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding-top: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-            z-index: 10;
+        /* ── Main ── */
+        .main {
+            margin-left: 200px;
+            padding: 60px 80px;
         }
 
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        /* ── Section label ── */
+        .section-label {
+            font-family: 'DM Serif Display', serif;
+            font-size: 0.78em;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 32px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #ddd;
         }
 
-        .sidebar li {
-            margin: 20px 0;
+        /* ── App cards ── */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            margin-bottom: 80px;
         }
 
-        .sidebar a {
+        .app-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
             text-decoration: none;
-            color: white;
-            font-size: 1.2em;
-            display: block;
-            padding: 10px;
-            text-align: center;
-        }
-
-        /* ------------------------------ */
-        /*   NUEVO ESTILO TIPO PUBLICACIONES */
-        /* ------------------------------ */
-
-        .media-container {
-            margin: 2cm auto;
-            padding: 1cm 2cm;
-            max-width: 1200px;
-        }
-
-        .media-section-title {
-            text-align: center;
-            font-size: 2.3em;
-            margin-bottom: 0.8cm;
-            font-weight: 300;
-        }
-
-        .media-list {
-            list-style: none;
-            padding: 0;
+            color: inherit;
             display: flex;
             flex-direction: column;
-            align-items: center;
         }
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.13);
+        }
+        .app-card-img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            display: block;
+            background: #eee;
+        }
+        .app-card-body {
+            padding: 22px 24px 26px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .app-card-tag {
+            font-size: 0.68em;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+        .app-card-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.18em;
+            line-height: 1.3;
+            margin-bottom: 10px;
+            color: #111;
+        }
+        .app-card-desc {
+            font-size: 0.88em;
+            color: #666;
+            line-height: 1.6;
+            flex: 1;
+        }
+        .app-card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 18px;
+            font-size: 0.82em;
+            font-weight: 500;
+            color: #333;
+            letter-spacing: 0.04em;
+        }
+        .app-card:hover .app-card-link { color: #000; }
 
-        .media-item {
+        /* ── Talks ── */
+        .talks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .talk-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 35px;
-            width: 100%;
-            max-width: 1100px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Alternancia */
-        .media-item:nth-child(odd) {
-            flex-direction: row;
-        }
-
-        .media-item:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-
-        .media-item img {
-            width: 170px;
-            height: auto;
-            margin: 0 8px;     /* 🔹 antes 20px */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-            border-radius: 4px;
-        }
-
-        .media-item p {
-            margin: 0 6pt;
-            font-size: 1.3em;
-            line-height: 1.4em;
-            flex: 0;          /* 🔹 antes 1 */
-             white-space: nowrap;   /* ← fuerza una sola línea */
-        }
-
-        .media-item a {
+            gap: 28px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px 28px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
             text-decoration: none;
-            color: #0066cc;
-            font-weight: normal;
+            color: inherit;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .talk-item:hover {
+            box-shadow: 0 8px 28px rgba(0,0,0,0.11);
+            transform: translateX(4px);
+        }
+        .talk-thumb {
+            width: 130px;
+            min-width: 130px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+            background: #eee;
+        }
+        .talk-info { flex: 1; }
+        .talk-venue {
+            font-size: 0.7em;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #aaa;
+            margin-bottom: 6px;
+        }
+        .talk-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.05em;
+            color: #111;
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+        .talk-desc {
+            font-size: 0.83em;
+            color: #777;
+        }
+        .talk-arrow {
+            font-size: 1.1em;
+            color: #bbb;
+            transition: color 0.2s, transform 0.2s;
+        }
+        .talk-item:hover .talk-arrow {
+            color: #333;
+            transform: translateX(3px);
         }
 
-        .media-item a:hover {
-            text-decoration: underline;
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .apps-grid { grid-template-columns: 1fr 1fr; }
         }
-
-        /* ------------------------------ */
-        /* Responsive */
-        /* ------------------------------ */
-
         @media (max-width: 768px) {
-            .header {
-                height: 200px;
-                width: 100%;
-                margin-left: 0;
-                padding-right: 10px;
-                background-size: contain;
-                justify-content: center;
-            }
-
-            .header h1 {
-                font-size: 2.5em;
-                text-align: center;
-                margin: 0;
-                background-color: white;
-                width: 100%;
-                padding: 10px 0;
-            }
-
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around;
-            }
-
-            .sidebar ul {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .sidebar li {
-                flex: 1 1 50%;
-                margin: 5px 0;
-            }
-
-            .media-item {
-                flex-direction: column !important;
-                text-align: center;
-            }
-
-            .media-item img {
-                margin-bottom: 20px;
-            }
+            .header { margin-left: 0; height: 200px; justify-content: center; }
+            .header h1 { font-size: 2em; padding-right: 0; text-align: center; background: white; width: 100%; padding: 10px 0; }
+            .sidebar { width: 100%; height: auto; position: relative; display: flex; flex-wrap: wrap; justify-content: space-around; }
+            .sidebar li { flex: 1 1 50%; margin: 5px 0; }
+            .main { margin-left: 0; padding: 40px 24px; }
+            .apps-grid { grid-template-columns: 1fr; }
+            .talk-item { flex-direction: column; }
+            .talk-thumb { width: 100%; min-width: unset; height: 120px; }
         }
     </style>
 </head>
-
 <body>
 
     <div class="sidebar">
@@ -201,46 +229,67 @@
             <li><a href="about.html">About Me</a></li>
             <li><a href="publications.html">Publications & CV</a></li>
             <li><a href="teaching.html">Teaching & Advising</a></li>
-            <li><a href="media.html">Media & More</a></li>
+            <li><a href="media.html">Math Visualization & More</a></li>
         </ul>
     </div>
 
     <div class="header">
-        <h1>Media & More</h1>
+        <h1>Math Visualization & More</h1>
     </div>
 
-    <div class="media-container">
-        <h2 class="media-section-title">Interactive Apps</h2>
-        <ul class="media-list">
-            <li class="media-item">
-                <img src="img/app-preview-nerve.png" alt="Nerve App">
-                <p><a href="apps/nerve.html" target="_blank">Interactive Nerve Complex App</a></p>
-            </li>
-            <li class="media-item">
-                <img src="img/app-preview-tverberg.png" alt="Tverberg App">
-                <p><a href="apps/TverbergGraphs.html" target="_blank">Tverberg Partition Graphs App</a></p>
-            </li>
-             <li class="media-item">
-                <img src="img/app-preview-cfp.png" alt="CFP App">
-                <p><a href="apps/CFPGraphs.html" target="_blank">Crossing-Free Partition Graphs App</a></p>
-            </li>
-        </ul>
-    </div>
+    <div class="main">
 
-    <div class="media-container">
-        <h2 class="media-section-title">Selected Talks</h2>
-        <ul class="media-list">
-            <li class="media-item">
-                <img src="img/talk-birs-2023.png" alt="Talk Image">
-                <p>
-                    <a href="https://www.birs.ca/events/2023/5-day-workshops/23w5023/videos/watch/202306081240-Torres.html" target="_blank">
-                        From Word Representable Graphs to Altered Tverberg-type Results (BIRS 2023)
-                    </a>
-                </p>
-            </li>
-        </ul>
+        <p class="section-label">Interactive Apps</p>
+        <div class="apps-grid">
+
+            <a class="app-card" href="apps/nerve.html" target="_blank">
+                <img class="app-card-img" src="img/app-preview-nerve.png" alt="Nerve Complex App">
+                <div class="app-card-body">
+                    <p class="app-card-tag">Topology</p>
+                    <h2 class="app-card-title">Nerve Complex Explorer</h2>
+                    <p class="app-card-desc">Explore nerve complexes of convex sets interactively — visualize how overlapping regions give rise to topological structure.</p>
+                    <span class="app-card-link"><i class="fas fa-arrow-right"></i> Launch app</span>
+                </div>
+            </a>
+
+            <a class="app-card" href="apps/TverbergGraphs.html" target="_blank">
+                <img class="app-card-img" src="img/app-preview-tverberg.png" alt="Tverberg App">
+                <div class="app-card-body">
+                    <p class="app-card-tag">Discrete Geometry</p>
+                    <h2 class="app-card-title">Tverberg Partition Graphs</h2>
+                    <p class="app-card-desc">Visualize partition graphs arising from Tverberg-type theorems — explore the combinatorial structure behind classical results.</p>
+                    <span class="app-card-link"><i class="fas fa-arrow-right"></i> Launch app</span>
+                </div>
+            </a>
+
+            <a class="app-card" href="apps/CFPGraphs.html" target="_blank">
+                <img class="app-card-img" src="img/app-preview-cfp.png" alt="CFP App">
+                <div class="app-card-body">
+                    <p class="app-card-tag">Combinatorics</p>
+                    <h2 class="app-card-title">Crossing-Free Partition Graphs</h2>
+                    <p class="app-card-desc">Explore crossing-free partition structures on point sets — an interactive tool for studying graph-theoretic properties of geometric partitions.</p>
+                    <span class="app-card-link"><i class="fas fa-arrow-right"></i> Launch app</span>
+                </div>
+            </a>
+
+        </div>
+
+        <p class="section-label">Selected Talks</p>
+        <div class="talks-list">
+
+            <a class="talk-item" href="https://www.birs.ca/events/2023/5-day-workshops/23w5023/videos/watch/202306081240-Torres.html" target="_blank">
+                <img class="talk-thumb" src="img/talk-birs-2023.png" alt="BIRS 2023">
+                <div class="talk-info">
+                    <p class="talk-venue">BIRS Workshop · 2023</p>
+                    <p class="talk-title">From Word-Representable Graphs to Altered Tverberg-type Results</p>
+                    <p class="talk-desc">New Trends from Classical Theorems in Geometry, Combinatorics, and Topology</p>
+                </div>
+                <i class="fas fa-arrow-right talk-arrow"></i>
+            </a>
+
+        </div>
+
     </div>
 
 </body>
 </html>
-
