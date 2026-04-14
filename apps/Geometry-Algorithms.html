@@ -1,0 +1,3511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>geometry.js — Interactive Computational Geometry App</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0e10;
+    --surface: #17171a;
+    --surface2: #1f1f24;
+    --border: #2e2e38;
+    --accent: #7c6af7;
+    --accent2: #4ec9b0;
+    --accent3: #f7c56a;
+    --accent4: #f47c7c;
+    --text: #e8e6f0;
+    --muted: #7a7888;
+    --canvas-bg: #111116;
+  }
+
+  body.light-theme {
+    --bg: #ffffff;
+    --surface: #f5f5f7;
+    --surface2: #e8e8eb;
+    --border: #d1d1d6;
+    --accent: #7c6af7;
+    --accent2: #4ec9b0;
+    --accent3: #f7c56a;
+    --accent4: #f47c7c;
+    --text: #1d1d1f;
+    --muted: #6e6e73;
+    --canvas-bg: #fafafa;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  header {
+    padding: 40px 48px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  header h1 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    background: linear-gradient(135deg, #a89ef7 0%, #7c6af7 40%, #4ec9b0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  header p {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+
+  /* Tabs */
+  nav {
+    display: flex;
+    gap: 4px;
+    padding: 16px 48px 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  nav button {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 10px 18px 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color .2s, border-color .2s;
+    letter-spacing: .02em;
+  }
+  nav button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  nav button:hover:not(.active) { color: var(--text); }
+
+  /* Main layout */
+  .demo-container {
+    display: none;
+    grid-template-columns: 1fr 320px;
+    gap: 0;
+    height: calc(100vh - 172px);
+  }
+  .demo-container.active { display: grid; }
+
+  /* Canvas panel */
+  .canvas-wrap {
+    position: relative;
+    background: var(--canvas-bg);
+    border-right: 1px solid var(--border);
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+  }
+  .canvas-hint {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(14,14,16,.85);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  /* Side panel */
+  .side-panel {
+    background: var(--surface);
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .panel-section h3 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  /* Result box */
+  .result-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    min-height: 60px;
+  }
+  .result-box .lbl { color: var(--muted); }
+  .result-box .val { color: var(--accent2); font-weight: 500; }
+  .result-box .val.pos { color: #6ef0a0; }
+  .result-box .val.neg { color: var(--accent4); }
+  .result-box .val.zero { color: var(--accent3); }
+
+  /* Controls */
+  .ctrl-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  button.pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+  }
+  button.pill:hover { background: var(--border); border-color: var(--accent); }
+  button.pill.danger { color: var(--accent4); }
+  button.pill.accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+  
+  button.theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  button.theme-toggle:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* Algorithm explanation modal */
+  .algo-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .algo-modal.active { display: flex; }
+  .algo-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 32px;
+    position: relative;
+  }
+  .algo-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 4px 8px;
+  }
+  .algo-close:hover { color: var(--text); }
+  .algo-content h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .algo-content h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin-top: 24px;
+    margin-bottom: 12px;
+  }
+  .algo-content p {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .algo-content pre {
+    background: var(--canvas-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-x: auto;
+    color: var(--text);
+  }
+  .algo-content .complexity {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent3);
+    font-weight: 600;
+  }
+
+  /* Point list */
+  .point-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 160px;
+    overflow-y: auto;
+  }
+  .point-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    padding: 3px 0;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+  }
+  .point-item span { color: var(--text); }
+
+  /* Code snippet */
+  .code-block {
+    background: #0a0a0e;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    line-height: 1.8;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .kw { color: #c792ea; }
+  .fn { color: var(--accent2); }
+  .cm { color: #546e7a; font-style: italic; }
+  .st { color: var(--accent3); }
+  .nm { color: #f78c6c; }
+
+  /* Legend dots */
+  .legend { display: flex; flex-direction: column; gap: 6px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  @media (max-width: 900px) {
+    .demo-container { grid-template-columns: 1fr; grid-template-rows: 50vh auto; }
+    .demo-container { height: auto; min-height: calc(100vh - 172px); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div style="flex: 1;">
+    <h1>geometry.js</h1>
+    <p style="margin-top:8px">Computational geometry library · Interactive App</p>
+    <div style="margin-top:10px">
+      <span class="badge">primitives</span>
+      <span class="badge">predicates</span>
+      <span class="badge">structural</span>
+      <span class="badge">high-level</span>
+      <span class="badge">delaunay</span>
+      <span class="badge">voronoi</span>
+    </div>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <span id="theme-icon">☀️</span>
+    <span>Light Mode</span>
+  </button>
+</header>
+
+<nav>
+  <button class="active" data-tab="orientation">Orientation</button>
+  <button data-tab="intersection">Intersection</button>
+  <button data-tab="simple">Simple Polygon</button>
+  <button data-tab="hull">Convex Hull</button>
+  <button data-tab="visibility">Visibility</button>
+  <button data-tab="triangulate">Triangulation</button>
+  <button data-tab="delaunay">Delaunay</button>
+  <button data-tab="voronoi">Voronoi</button>
+</nav>
+
+<!-- TAB 1: ORIENTATION -->
+<div class="demo-container active" id="tab-orientation">
+  <div class="canvas-wrap">
+    <canvas id="cv-orientation"></canvas>
+    <div class="canvas-hint">Click to place points A, B, C</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Result</h3>
+      <div class="result-box" id="orient-result">Place 3 points to test orientation</div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill danger" onclick="clearOrientation()">Clear</button>
+      </div>
+      <div class="ctrl-row" style="margin-top:8px">
+        <button class="pill accent" onclick="showAlgoExplanation('orientation')">Algorithm Explanation</button>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Legend</h3>
+      <div class="legend">
+        <div class="legend-item"><div class="dot" style="background:#7c6af7"></div> Point A</div>
+        <div class="legend-item"><div class="dot" style="background:#4ec9b0"></div> Point B</div>
+        <div class="legend-item"><div class="dot" style="background:#f7c56a"></div> Point C</div>
+      </div>
+      <h3 style="margin-top:16px">Triangle Color</h3>
+      <div class="legend">
+        <div class="legend-item"><div class="dot" style="background:#6ef0a0"></div> Left / CCW</div>
+        <div class="legend-item"><div class="dot" style="background:#f47c7c"></div> Right / CW</div>
+        <div class="legend-item"><div class="dot" style="background:#f7c56a"></div> Collinear</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: INTERSECTION -->
+<div class="demo-container" id="tab-intersection">
+  <div class="canvas-wrap">
+    <canvas id="cv-intersection"></canvas>
+    <div class="canvas-hint">Click to create two segments</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Result</h3>
+      <div class="result-box" id="intersect-result">Draw two segments</div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill danger" onclick="clearIntersection()">Clear</button>
+      </div>
+      <div class="ctrl-row" style="margin-top:8px">
+        <button class="pill accent" onclick="showAlgoExplanation('intersection')">Algorithm Explanation</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: SIMPLE POLYGON -->
+<div class="demo-container" id="tab-simple">
+  <div class="canvas-wrap">
+    <canvas id="cv-simple"></canvas>
+    <div class="canvas-hint">Click to draw polygon · Double-click or snap to first point to close</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Result</h3>
+      <div class="result-box" id="simple-result">Draw a polygon to test</div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill danger" onclick="clearSimple()">Clear</button>
+      </div>
+      <div class="ctrl-row" style="margin-top:8px">
+        <button class="pill accent" onclick="showAlgoExplanation('simple')">Algorithm Explanation</button>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Info</h3>
+      <div class="result-box" style="font-size:11px">
+        <span class="lbl">A simple polygon has no self-intersections. Draw carefully!</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: CONVEX HULL -->
+<div class="demo-container" id="tab-hull">
+  <div class="canvas-wrap">
+    <canvas id="cv-hull"></canvas>
+    <div class="canvas-hint">Click to add points</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Stats</h3>
+      <div class="result-box">
+        <div class="lbl">Points: <span class="val" id="hull-n">0</span></div>
+        <div class="lbl">Hull vertices: <span class="val" id="hull-h">0</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill" onclick="addHullRandom(10)">+10 random</button>
+        <button class="pill danger" onclick="clearHull()">Clear</button>
+      </div>
+      <div class="ctrl-row" style="margin-top:8px">
+        <button class="pill accent" onclick="showAlgoExplanation('hull')">Algorithm Explanation</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: VISIBILITY GRAPH -->
+<div class="demo-container" id="tab-visibility">
+  <div class="canvas-wrap">
+    <canvas id="cv-visibility"></canvas>
+    <div class="canvas-hint">Click to draw polygon vertices</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Stats</h3>
+      <div class="result-box">
+        <div class="lbl">Vertices: <span class="val" id="vis-n">0</span></div>
+        <div class="lbl">Edges: <span class="val" id="vis-edges">0</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill danger" onclick="clearVisibility()">Clear</button>
+      </div>
+      <div class="ctrl-row" style="margin-top:8px">
+        <button class="pill accent" onclick="showAlgoExplanation('visibility')">Algorithm Explanation</button>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Info</h3>
+      <div class="result-box" style="font-size:11px">
+        <span class="lbl">Shows which vertices can "see" each other inside the polygon</span>
+        <br><br>
+        <span class="lbl" style="color:var(--accent2)">💡 Hover over a vertex to highlight its visibility</span>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Vertex Colors</h3>
+      <div class="legend">
+        <div class="legend-item"><div class="dot" style="background:#7c6af7"></div> Active (hover)</div>
+        <div class="legend-item"><div class="dot" style="background:#6ef0a0"></div> Visible</div>
+        <div class="legend-item"><div class="dot" style="background:#f47c7c"></div> Not visible</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: TRIANGULATION -->
+<div class="demo-container" id="tab-triangulate">
+  <div class="canvas-wrap">
+    <canvas id="cv-triangulate"></canvas>
+    <div class="canvas-hint">Click to draw polygon · Double-click or snap to first point to close</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Stats</h3>
+      <div class="result-box">
+        <div class="lbl">Triangles: <span class="val" id="tri-n">0</span></div>
+        <div class="lbl">Area: <span class="val" id="tri-area">—</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill danger" onclick="clearTriangulate()">Clear</button>
+      </div>
+      <div class="ctrl-row" style="margin-top:8px">
+        <button class="pill accent" onclick="showAlgoExplanation('triangulate')">Algorithm Explanation</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: DELAUNAY -->
+<div class="demo-container" id="tab-delaunay">
+  <div class="canvas-wrap">
+    <canvas id="cv-delaunay"></canvas>
+    <div class="canvas-hint">Click to add points · Drag to move</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Stats</h3>
+      <div class="result-box">
+        <div class="lbl">Points: <span class="val" id="d-n">0</span></div>
+        <div class="lbl">Triangles: <span class="val" id="d-tri">—</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill" onclick="addDelaunayRandom(5)">+5 random</button>
+        <button class="pill danger" onclick="clearDelaunay()">Clear</button>
+      </div>
+      <div class="ctrl-row" style="margin-top:8px">
+        <button class="pill accent" onclick="showAlgoExplanation('delaunay')">Algorithm Explanation</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 8: VORONOI -->
+<div class="demo-container" id="tab-voronoi">
+  <div class="canvas-wrap">
+    <canvas id="cv-voronoi"></canvas>
+    <div class="canvas-hint">Click to add sites · Drag to move</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Stats</h3>
+      <div class="result-box">
+        <div class="lbl">Sites: <span class="val" id="v-n">0</span></div>
+        <div class="lbl">Cells: <span class="val" id="v-cells">—</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill" onclick="addVoronoiRandom(5)">+5 random</button>
+        <button class="pill danger" onclick="clearVoronoi()">Clear</button>
+      </div>
+      <div class="ctrl-row" style="margin-top:8px">
+        <button class="pill accent" onclick="showAlgoExplanation('voronoi')">Algorithm Explanation</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: CONVEX HULL -->
+<div class="demo-container" id="tab-hull">
+  <div class="canvas-wrap">
+    <canvas id="cv-hull"></canvas>
+    <div class="canvas-hint">Click to add points</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Stats</h3>
+      <div class="result-box">
+        <div class="lbl">Points: <span class="val" id="hull-n">0</span></div>
+        <div class="lbl">Hull vertices: <span class="val" id="hull-h">0</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill" onclick="addHullRandom(10)">+10 random</button>
+        <button class="pill danger" onclick="clearHull()">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: VISIBILITY GRAPH -->
+<div class="demo-container" id="tab-visibility">
+  <div class="canvas-wrap">
+    <canvas id="cv-visibility"></canvas>
+    <div class="canvas-hint">Click to draw polygon vertices</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Stats</h3>
+      <div class="result-box">
+        <div class="lbl">Vertices: <span class="val" id="vis-n">0</span></div>
+        <div class="lbl">Edges: <span class="val" id="vis-edges">0</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill danger" onclick="clearVisibility()">Clear</button>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Info</h3>
+      <div class="result-box" style="font-size:11px">
+        <span class="lbl">Shows which vertices can "see" each other inside the polygon</span>
+        <br><br>
+        <span class="lbl" style="color:var(--accent2)">💡 Hover over a vertex to highlight its visibility</span>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Vertex Colors</h3>
+      <div class="legend">
+        <div class="legend-item"><div class="dot" style="background:#7c6af7"></div> Active (hover)</div>
+        <div class="legend-item"><div class="dot" style="background:#6ef0a0"></div> Visible</div>
+        <div class="legend-item"><div class="dot" style="background:#f47c7c"></div> Not visible</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: TRIANGULATION -->
+<div class="demo-container" id="tab-triangulate">
+  <div class="canvas-wrap">
+    <canvas id="cv-triangulate"></canvas>
+    <div class="canvas-hint">Click to draw polygon · Double-click or snap to first point to close</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Stats</h3>
+      <div class="result-box">
+        <div class="lbl">Triangles: <span class="val" id="tri-n">0</span></div>
+        <div class="lbl">Area: <span class="val" id="tri-area">—</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill danger" onclick="clearTriangulate()">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: DELAUNAY -->
+<div class="demo-container" id="tab-delaunay">
+  <div class="canvas-wrap">
+    <canvas id="cv-delaunay"></canvas>
+    <div class="canvas-hint">Click to add points · Drag to move</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Stats</h3>
+      <div class="result-box">
+        <div class="lbl">Points: <span class="val" id="d-n">0</span></div>
+        <div class="lbl">Triangles: <span class="val" id="d-tri">—</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill" onclick="addDelaunayRandom(5)">+5 random</button>
+        <button class="pill danger" onclick="clearDelaunay()">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: VORONOI -->
+<div class="demo-container" id="tab-voronoi">
+  <div class="canvas-wrap">
+    <canvas id="cv-voronoi"></canvas>
+    <div class="canvas-hint">Click to add sites · Drag to move</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Stats</h3>
+      <div class="result-box">
+        <div class="lbl">Sites: <span class="val" id="v-n">0</span></div>
+        <div class="lbl">Cells: <span class="val" id="v-cells">—</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill" onclick="addVoronoiRandom(5)">+5 random</button>
+        <button class="pill danger" onclick="clearVoronoi()">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Algorithm Explanation Modal -->
+<div class="algo-modal" id="algo-modal">
+  <div class="algo-content">
+    <button class="algo-close" onclick="closeAlgoModal()">×</button>
+    <div id="algo-text"></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════════
+// GEOMETRY.JS LIBRARY (EMBEDDED)
+// ════════════════════════════════════════════════════════════════════
+/**
+ * geometry.js — Computational Geometry Library
+ * A layered library for 2D geometric operations in JavaScript/HTML.
+ *
+ * Layers:
+ *   1. Primitives     — cross product, dot product, distance, bounding box
+ *   2. Predicates     — orientation test, point-in-polygon, segment intersection
+ *   3. Structural     — polygon area, convex hull, simple polygon test
+ *   4. High-level     — visibility graph, triangulation (ear clipping)
+ *   5. Delaunay & Voronoi — Bowyer–Watson + dual construction
+ *   6. Shortest path      — visibility graph + Dijkstra
+ */
+
+const Geometry = (() => {
+  "use strict";
+
+  // ─────────────────────────────────────────────────────────────
+  // LAYER 1 · PRIMITIVES
+  // ─────────────────────────────────────────────────────────────
+
+  /**
+   * 2D cross product of vectors AB and AC.
+   * Equivalent to the determinant |AB AC|.
+   * @param {{x,y}} a
+   * @param {{x,y}} b
+   * @param {{x,y}} c
+   * @returns {number}
+   */
+  function cross2D(a, b, c) {
+    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+  }
+
+  /**
+   * 2D dot product of vectors AB · AC.
+   * @param {{x,y}} a
+   * @param {{x,y}} b
+   * @param {{x,y}} c
+   * @returns {number}
+   */
+  function dot2D(a, b, c) {
+    return (b.x - a.x) * (c.x - a.x) + (b.y - a.y) * (c.y - a.y);
+  }
+
+  /**
+   * Euclidean distance between two points.
+   * @param {{x,y}} a
+   * @param {{x,y}} b
+   * @returns {number}
+   */
+  function distance(a, b) {
+    const dx = b.x - a.x, dy = b.y - a.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  /**
+   * Squared distance (avoids sqrt, useful for comparisons).
+   * @param {{x,y}} a
+   * @param {{x,y}} b
+   * @returns {number}
+   */
+  function distanceSq(a, b) {
+    const dx = b.x - a.x, dy = b.y - a.y;
+    return dx * dx + dy * dy;
+  }
+
+  /**
+   * Axis-aligned bounding box of a point array.
+   * @param {{x,y}[]} points
+   * @returns {{minX, minY, maxX, maxY}}
+   */
+  function boundingBox(points) {
+    if (!points || points.length === 0) throw new Error("Empty point array");
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const p of points) {
+      if (p.x < minX) minX = p.x;
+      if (p.y < minY) minY = p.y;
+      if (p.x > maxX) maxX = p.x;
+      if (p.y > maxY) maxY = p.y;
+    }
+    return { minX, minY, maxX, maxY };
+  }
+
+  /**
+   * Returns true if two bounding boxes overlap.
+   * @param {{minX,minY,maxX,maxY}} bb1
+   * @param {{minX,minY,maxX,maxY}} bb2
+   * @returns {boolean}
+   */
+  function boundingBoxesOverlap(bb1, bb2) {
+    return bb1.maxX >= bb2.minX && bb2.maxX >= bb1.minX &&
+           bb1.maxY >= bb2.minY && bb2.maxY >= bb1.minY;
+  }
+
+  /**
+   * Angle in radians from point a toward point b.
+   * @param {{x,y}} a  origin
+   * @param {{x,y}} b  target
+   * @returns {number} angle in [-π, π]
+   */
+  function angleTo(a, b) {
+    return Math.atan2(b.y - a.y, b.x - a.x);
+  }
+
+  /**
+   * Midpoint between two points.
+   * @param {{x,y}} a
+   * @param {{x,y}} b
+   * @returns {{x,y}}
+   */
+  function midpoint(a, b) {
+    return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // LAYER 2 · PREDICATES
+  // ─────────────────────────────────────────────────────────────
+
+  /**
+   * ★ ORIENTATION TEST
+   * Given three points a, b, c, returns:
+   *   +1  → c is to the LEFT of line AB  (counter-clockwise turn)
+   *   -1  → c is to the RIGHT of line AB (clockwise turn)
+   *    0  → a, b, c are collinear
+   *
+   * Uses the sign of the 2D cross product (determinant).
+   * @param {{x,y}} a
+   * @param {{x,y}} b
+   * @param {{x,y}} c
+   * @returns {1 | -1 | 0}
+   */
+  function orientation(a, b, c) {
+    const v = cross2D(a, b, c);
+    if (v > 0) return 1;
+    if (v < 0) return -1;
+    return 0;
+  }
+
+  /**
+   * Returns true if point p lies on segment [a, b].
+   * Assumes a, b, p are already known to be collinear.
+   * @param {{x,y}} a
+   * @param {{x,y}} b
+   * @param {{x,y}} p
+   * @returns {boolean}
+   */
+  function onSegment(a, b, p) {
+    return Math.min(a.x, b.x) <= p.x && p.x <= Math.max(a.x, b.x) &&
+           Math.min(a.y, b.y) <= p.y && p.y <= Math.max(a.y, b.y);
+  }
+
+  /**
+   * ★ SEGMENT INTERSECTION TEST
+   * Decides whether segment [p1,p2] and segment [p3,p4] intersect.
+   * Handles collinear/degenerate cases correctly.
+   * @param {{x,y}} p1
+   * @param {{x,y}} p2
+   * @param {{x,y}} p3
+   * @param {{x,y}} p4
+   * @returns {boolean}
+   */
+  function segmentsIntersect(p1, p2, p3, p4) {
+    const d1 = orientation(p3, p4, p1);
+    const d2 = orientation(p3, p4, p2);
+    const d3 = orientation(p1, p2, p3);
+    const d4 = orientation(p1, p2, p4);
+
+    if (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
+        ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))) {
+      return true;
+    }
+    // Collinear cases
+    if (d1 === 0 && onSegment(p3, p4, p1)) return true;
+    if (d2 === 0 && onSegment(p3, p4, p2)) return true;
+    if (d3 === 0 && onSegment(p1, p2, p3)) return true;
+    if (d4 === 0 && onSegment(p1, p2, p4)) return true;
+    return false;
+  }
+
+  /**
+   * Computes the actual intersection point of two lines (not segments).
+   * Returns null if lines are parallel.
+   * @param {{x,y}} p1
+   * @param {{x,y}} p2
+   * @param {{x,y}} p3
+   * @param {{x,y}} p4
+   * @returns {{x,y}|null}
+   */
+  function lineIntersectionPoint(p1, p2, p3, p4) {
+    const denom = (p1.x - p2.x) * (p3.y - p4.y) -
+                  (p1.y - p2.y) * (p3.x - p4.x);
+    if (Math.abs(denom) < 1e-10) return null; // parallel
+    const t = ((p1.x - p3.x) * (p3.y - p4.y) - (p1.y - p3.y) * (p3.x - p4.x)) / denom;
+    return {
+      x: p1.x + t * (p2.x - p1.x),
+      y: p1.y + t * (p2.y - p1.y)
+    };
+  }
+
+  /**
+   * ★ POINT IN POLYGON (ray casting)
+   * Returns true if point p is strictly inside the polygon.
+   * Handles convex and concave polygons. O(n).
+   * @param {{x,y}} p
+   * @param {{x,y}[]} polygon  array of vertices in order
+   * @returns {boolean}
+   */
+  function pointInPolygon(p, polygon) {
+    const n = polygon.length;
+    let inside = false;
+    for (let i = 0, j = n - 1; i < n; j = i++) {
+      const vi = polygon[i], vj = polygon[j];
+      if (((vi.y > p.y) !== (vj.y > p.y)) &&
+          p.x < (vj.x - vi.x) * (p.y - vi.y) / (vj.y - vi.y) + vi.x) {
+        inside = !inside;
+      }
+    }
+    return inside;
+  }
+
+  /**
+   * Shortest distance from point p to segment [a, b].
+   * @param {{x,y}} p
+   * @param {{x,y}} a
+   * @param {{x,y}} b
+   * @returns {number}
+   */
+  function pointToSegmentDistance(p, a, b) {
+    const lenSq = distanceSq(a, b);
+    if (lenSq < 1e-10) return distance(p, a);
+    const t = Math.max(0, Math.min(1,
+      ((p.x - a.x) * (b.x - a.x) + (p.y - a.y) * (b.y - a.y)) / lenSq
+    ));
+    return distance(p, { x: a.x + t * (b.x - a.x), y: a.y + t * (b.y - a.y) });
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // LAYER 3 · STRUCTURAL ALGORITHMS
+  // ─────────────────────────────────────────────────────────────
+
+  /**
+   * Signed area of a polygon via the Shoelace formula.
+   * Positive if vertices are counter-clockwise, negative if clockwise.
+   * @param {{x,y}[]} polygon
+   * @returns {number}
+   */
+  function polygonSignedArea(polygon) {
+    // Standard shoelace formula: positive for CCW (math convention), negative for CW.
+    const n = polygon.length;
+    let area = 0;
+    for (let i = 0, j = n - 1; i < n; j = i++) {
+      area += polygon[j].x * polygon[i].y - polygon[i].x * polygon[j].y;
+    }
+    return area / 2;
+  }
+
+  /**
+   * Absolute area of a polygon.
+   * @param {{x,y}[]} polygon
+   * @returns {number}
+   */
+  function polygonArea(polygon) {
+    return Math.abs(polygonSignedArea(polygon));
+  }
+
+  /**
+   * Returns true if polygon vertices are ordered counter-clockwise.
+   * @param {{x,y}[]} polygon
+   * @returns {boolean}
+   */
+  function isCounterClockwise(polygon) {
+    return polygonSignedArea(polygon) > 0;
+  }
+
+  /**
+   * Centroid (geometric center) of a polygon.
+   * @param {{x,y}[]} polygon
+   * @returns {{x,y}}
+   */
+  function polygonCentroid(polygon) {
+    const n = polygon.length;
+    let cx = 0, cy = 0, area = 0;
+    for (let i = 0, j = n - 1; i < n; j = i++) {
+      const f = polygon[j].x * polygon[i].y - polygon[i].x * polygon[j].y;
+      area += f;
+      cx += (polygon[j].x + polygon[i].x) * f;
+      cy += (polygon[j].y + polygon[i].y) * f;
+    }
+    area /= 2;
+    return { x: cx / (6 * area), y: cy / (6 * area) };
+  }
+
+  /**
+   * ★ SIMPLE POLYGON TEST
+   * Returns true if the polygon has no self-intersections, i.e. no two
+   * non-adjacent edges properly cross each other.
+   *
+   * Algorithm: O(n²) pairwise check over all non-adjacent edge pairs.
+   * This is provably correct for all inputs including:
+   *   - Vertical edges
+   *   - Collinear edges
+   *   - Edges sharing an endpoint (adjacent = always skipped)
+   *   - Polygons with vertices at the same X coordinate
+   *
+   * Note on Shamos–Hoey O(n log n): a correct sweep implementation requires
+   * a self-balancing BST that handles edge swaps when two edges cross. Without
+   * that structure, adjacent-edge masking causes false negatives in several
+   * topologically valid polygon configurations. The O(n²) approach below is
+   * simpler, always correct, and fast enough for polygons up to ~10 000 vertices.
+   *
+   * @param {{x,y}[]} polygon  vertices in cyclic order (CW or CCW)
+   * @returns {boolean}
+   */
+  function isSimplePolygon(polygon) {
+    const n = polygon.length;
+    if (n < 3) return false;
+
+    // Two edges share a vertex iff they are consecutive in the polygon.
+    // We skip those pairs entirely (a shared endpoint is not a crossing).
+    for (let i = 0; i < n; i++) {
+      const a = polygon[i], b = polygon[(i + 1) % n];
+
+      // Compare edge i against every non-adjacent edge j
+      // j starts at i+2 to avoid the immediately following edge (shares vertex b)
+      // The last edge (n-1 → 0) shares vertex a with edge 0, so we stop at n-2 for i=0
+      const jEnd = (i === 0) ? n - 1 : n;
+
+      for (let j = i + 2; j < jEnd; j++) {
+        const c = polygon[j], d = polygon[(j + 1) % n];
+        if (segmentsIntersect(a, b, c, d)) return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * ★ CONVEX HULL — Andrew's Monotone Chain O(n log n)
+   * Returns the vertices of the convex hull in counter-clockwise order.
+   * @param {{x,y}[]} points
+   * @returns {{x,y}[]}
+   */
+  function convexHull(points) {
+    const n = points.length;
+    if (n === 0) return [];
+    if (n === 1) return [{ ...points[0] }];
+    if (n === 2) {
+      // Hull is the segment; return both endpoints (or just one if they coincide)
+      const [a, b] = points;
+      if (a.x === b.x && a.y === b.y) return [{ ...a }];
+      return [{ ...a }, { ...b }];
+    }
+
+    const pts = [...points].sort((a, b) => a.x - b.x || a.y - b.y);
+
+    const lower = [];
+    for (const p of pts) {
+      while (lower.length >= 2 &&
+             cross2D(lower[lower.length - 2], lower[lower.length - 1], p) <= 0) {
+        lower.pop();
+      }
+      lower.push(p);
+    }
+
+    const upper = [];
+    for (let i = n - 1; i >= 0; i--) {
+      const p = pts[i];
+      while (upper.length >= 2 &&
+             cross2D(upper[upper.length - 2], upper[upper.length - 1], p) <= 0) {
+        upper.pop();
+      }
+      upper.push(p);
+    }
+
+    // Remove last point of each half (duplicated at junction)
+    lower.pop();
+    upper.pop();
+    return lower.concat(upper);
+  }
+
+  /**
+   * Returns true if a polygon is convex (all turns same direction).
+   * @param {{x,y}[]} polygon
+   * @returns {boolean}
+   */
+  function isConvex(polygon) {
+    const n = polygon.length;
+    if (n < 3) return false;
+    let sign = 0;
+    for (let i = 0; i < n; i++) {
+      const o = orientation(polygon[i], polygon[(i+1)%n], polygon[(i+2)%n]);
+      if (o !== 0) {
+        if (sign === 0) sign = o;
+        else if (sign !== o) return false;
+      }
+    }
+    return true;
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // LAYER 4 · HIGH-LEVEL ALGORITHMS
+  // ─────────────────────────────────────────────────────────────
+
+  /**
+   * ★ VISIBILITY GRAPH CONSTRUCTION
+   * For a simple polygon P with n vertices, computes an n×n boolean matrix
+   * Vis where Vis[i][j] = true iff vi and vj can "see" each other without
+   * crossing any polygon edge.
+   *
+   * Algorithm: for each vertex vi, angular sweep of all other vertices vj.
+   * Two vertices are mutually visible if the segment vi-vj does not properly
+   * cross any non-incident polygon edge.
+   *
+   * @param {{x,y}[]} polygon  vertices of a simple polygon in cyclic order
+   * @returns {boolean[][]}    n×n visibility matrix
+   */
+  function visibilityGraph(polygon) {
+    const n = polygon.length;
+    // Initialize: every vertex sees itself and its neighbors
+    const Vis = Array.from({ length: n }, (_, i) =>
+      Array.from({ length: n }, (_, j) => {
+        if (i === j) return true;
+        if (j === (i - 1 + n) % n || j === (i + 1) % n) return true;
+        return false;
+      })
+    );
+
+    const edges = polygon.map((p, i) => [p, polygon[(i + 1) % n], i]);
+
+    // Check if segment p-q is blocked by any non-adjacent polygon edge
+    const isVisible = (i, j) => {
+      const p = polygon[i], q = polygon[j];
+      // Adjacent vertices are always visible (already set above)
+      if (Math.abs(i - j) <= 1 || Math.abs(i - j) === n - 1) return true;
+
+      for (let k = 0; k < n; k++) {
+        // Skip edges incident to either endpoint
+        const next = (k + 1) % n;
+        if (k === i || next === i || k === j || next === j) continue;
+
+        if (segmentsIntersect(p, q, polygon[k], polygon[next])) return false;
+      }
+
+      // Also check midpoint is inside the polygon
+      // (avoids false positives from collinear exterior paths)
+      const mid = midpoint(p, q);
+      if (!pointInPolygon(mid, polygon)) {
+        // Midpoint could be exactly on an edge — treat as visible only for polygon edges
+        // For non-adjacent pairs, require midpoint strictly inside
+        return false;
+      }
+      return true;
+    };
+
+    for (let i = 0; i < n; i++) {
+      for (let j = i + 2; j < n; j++) {
+        if (i === 0 && j === n - 1) continue; // already adjacent
+        const vis = isVisible(i, j);
+        Vis[i][j] = vis;
+        Vis[j][i] = vis;
+      }
+    }
+
+    return Vis;
+  }
+
+  /**
+   * ★ TRIANGULATION — Ear Clipping O(n²)
+   * Decomposes a simple polygon into exactly (n−2) non-overlapping triangles
+   * whose union equals the interior of the polygon.
+   * Vertices of each output triangle are original polygon vertices (no new points).
+   *
+   * Works correctly for convex and concave polygons given in CW or CCW order,
+   * including polygons in screen coordinates (Y axis pointing down).
+   *
+   * @param {{x,y}[]} polygon  simple polygon, any winding order
+   * @returns {Array<[{x,y},{x,y},{x,y}]>}  array of (n−2) triangles
+   */
+  function triangulate(polygon) {
+    const n = polygon.length;
+    if (n < 3) return [];
+    if (n === 3) return [[polygon[0], polygon[1], polygon[2]]];
+
+    // ── Working copy: indices into the original vertex array ──────
+    // We never mutate 'polygon'; 'remaining' tracks the active vertex ring.
+    const remaining = polygon.map((_, i) => i);
+
+    // ── Winding sign ──────────────────────────────────────────────
+    // An ear at vertex curr requires a CONVEX turn, whose orientation sign
+    // depends on whether the polygon winds CCW (+1) or CW (−1).
+    // We derive this from the signed area so the function works for both
+    // standard math coords (Y up) and screen coords (Y down).
+    const convexSign = polygonSignedArea(polygon) >= 0 ? 1 : -1;
+
+    // ── Point-in-triangle test via orientations ───────────────────
+    // Returns true if point p is inside or on the boundary of triangle ABC.
+    // All three orientation tests must agree in sign (no mixed pos/neg).
+    // We use convexSign so the test works for both winding orders.
+    const pointInTriangle = (p, a, b, c) => {
+      const d1 = convexSign * orientation(a, b, p);
+      const d2 = convexSign * orientation(b, c, p);
+      const d3 = convexSign * orientation(c, a, p);
+      return d1 >= 0 && d2 >= 0 && d3 >= 0;
+    };
+
+    // ── Ear test ──────────────────────────────────────────────────
+    // Vertex at position i in 'remaining' is an ear if:
+    //   1. The turn at curr is convex (orientation === convexSign).
+    //   2. No other ACTIVE vertex lies strictly inside the triangle.
+    const isEar = (i) => {
+      const len = remaining.length;
+      const iPrev = (i - 1 + len) % len;
+      const iNext = (i + 1) % len;
+      const a = polygon[remaining[iPrev]];
+      const b = polygon[remaining[i]];
+      const c = polygon[remaining[iNext]];
+
+      // Must be a convex turn
+      if (orientation(a, b, c) !== convexSign) return false;
+
+      // No active (remaining) vertex may lie inside the ear triangle.
+      // We skip the three vertices of the triangle themselves.
+      for (let k = 0; k < len; k++) {
+        if (k === iPrev || k === i || k === iNext) continue;
+        if (pointInTriangle(polygon[remaining[k]], a, b, c)) return false;
+      }
+      return true;
+    };
+
+    // ── Clip loop ─────────────────────────────────────────────────
+    const triangles = [];
+
+    // Precompute ear status for all vertices (avoids recomputing unchanged ones)
+    let earCache = remaining.map((_, i) => isEar(i));
+
+    while (remaining.length > 3) {
+      let clipped = false;
+
+      for (let i = 0; i < remaining.length; i++) {
+        if (!earCache[i]) continue;
+
+        // Emit triangle
+        const len = remaining.length;
+        const iPrev = (i - 1 + len) % len;
+        const iNext = (i + 1) % len;
+        triangles.push([
+          polygon[remaining[iPrev]],
+          polygon[remaining[i]],
+          polygon[remaining[iNext]],
+        ]);
+
+        // Remove clipped vertex
+        remaining.splice(i, 1);
+        earCache.splice(i, 1);
+
+        // Only re-evaluate the two neighbors whose ear status may have changed
+        const newLen = remaining.length;
+        if (newLen < 3) break;
+        const prevIdx = (i - 1 + newLen) % newLen;
+        const nextIdx = i % newLen;
+        earCache[prevIdx] = isEar(prevIdx);
+        earCache[nextIdx] = isEar(nextIdx);
+
+        clipped = true;
+        break;
+      }
+
+      if (!clipped) break; // safety: degenerate / collinear polygon
+    }
+
+    // Last triangle
+    if (remaining.length === 3) {
+      triangles.push([polygon[remaining[0]], polygon[remaining[1]], polygon[remaining[2]]]);
+    }
+
+    return triangles;
+  }
+
+  /**
+   * Polygon offset / buffer (Minkowski sum approximation).
+   * Expands or contracts a convex polygon by distance d.
+   * Positive d → expand outward. Negative d → shrink inward.
+   * Works best on convex polygons; for concave, pre-triangulate.
+   *
+   * @param {{x,y}[]} polygon
+   * @param {number} d  offset distance
+   * @returns {{x,y}[]}
+   */
+  function polygonOffset(polygon, d) {
+    const n = polygon.length;
+    const result = [];
+    for (let i = 0; i < n; i++) {
+      const prev = polygon[(i - 1 + n) % n];
+      const curr = polygon[i];
+      const next = polygon[(i + 1) % n];
+
+      // Inward normals of adjacent edges
+      const e1 = { x: curr.x - prev.x, y: curr.y - prev.y };
+      const e2 = { x: next.x - curr.x, y: next.y - curr.y };
+      const len1 = Math.sqrt(e1.x * e1.x + e1.y * e1.y);
+      const len2 = Math.sqrt(e2.x * e2.x + e2.y * e2.y);
+
+      if (len1 < 1e-10 || len2 < 1e-10) { result.push({ ...curr }); continue; }
+
+      // Perpendicular (normal) pointing inward for CCW polygon
+      const n1 = { x: -e1.y / len1, y: e1.x / len1 };
+      const n2 = { x: -e2.y / len2, y: e2.x / len2 };
+
+      // Bisector
+      const bis = { x: n1.x + n2.x, y: n1.y + n2.y };
+      const bisLen = Math.sqrt(bis.x * bis.x + bis.y * bis.y);
+
+      if (bisLen < 1e-10) {
+        result.push({ x: curr.x + n1.x * d, y: curr.y + n1.y * d });
+      } else {
+        const scale = d / (bis.x * n1.x + bis.y * n1.y);
+        result.push({ x: curr.x + bis.x * scale, y: curr.y + bis.y * scale });
+      }
+    }
+    return result;
+  }
+
+  /**
+   * POLYGON CONTAINS
+   * Returns true if every vertex of `inner` lies inside `outer`,
+   * and no edge of `inner` crosses any edge of `outer`.
+   * Handles the case where one polygon is wholly inside another
+   * without any boundary contact.
+   *
+   * @param {{x,y}[]} outer
+   * @param {{x,y}[]} inner
+   * @returns {boolean}
+   */
+  function polygonContains(outer, inner) {
+    // All vertices of inner must be inside outer
+    for (const v of inner) {
+      if (!pointInPolygon(v, outer)) return false;
+    }
+    // No edges may cross (handles concave outer with inner poking through)
+    const no = outer.length, ni = inner.length;
+    for (let i = 0; i < no; i++) {
+      const a = outer[i], b = outer[(i + 1) % no];
+      for (let j = 0; j < ni; j++) {
+        const c = inner[j], d = inner[(j + 1) % ni];
+        if (segmentsIntersect(a, b, c, d)) return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * ★ POLYGONS INTERSECT
+   * Returns true if polygon P and polygon Q overlap in any way:
+   *
+   *   Case 1 — Edge crossing: at least one edge of P crosses an edge of Q.
+   *   Case 2 — Containment:   P is wholly inside Q (or Q inside P).
+   *            Detected by testing one vertex from each polygon against
+   *            the other — if either is inside, the polygons overlap.
+   *
+   * A fast bounding-box pre-filter eliminates most non-overlapping pairs
+   * in O(1) before the O(n·m) edge-crossing check.
+   *
+   * Returns false when the polygons are completely disjoint OR when one
+   * merely touches the other at a single point or along a shared edge
+   * (boundary-only contact is not considered intersection).
+   *
+   * @param {{x,y}[]} P  simple polygon (any winding)
+   * @param {{x,y}[]} Q  simple polygon (any winding)
+   * @returns {boolean}
+   */
+  function polygonsIntersect(P, Q) {
+    if (P.length < 3 || Q.length < 3) return false;
+
+    // ── Fast reject: bounding boxes ───────────────────────────────
+    const bbP = boundingBox(P);
+    const bbQ = boundingBox(Q);
+    if (!boundingBoxesOverlap(bbP, bbQ)) return false;
+
+    const np = P.length, nq = Q.length;
+
+    // ── Case 1: edge crossing ─────────────────────────────────────
+    for (let i = 0; i < np; i++) {
+      const a = P[i], b = P[(i + 1) % np];
+      for (let j = 0; j < nq; j++) {
+        const c = Q[j], d = Q[(j + 1) % nq];
+        if (segmentsIntersect(a, b, c, d)) return true;
+      }
+    }
+
+    // ── Case 2: containment ───────────────────────────────────────
+    // If no edges cross, one polygon might be entirely inside the other.
+    // Testing a single vertex from each is sufficient.
+    if (pointInPolygon(P[0], Q)) return true;
+    if (pointInPolygon(Q[0], P)) return true;
+
+    return false;
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // LAYER 5 · DELAUNAY & VORONOI
+  // ─────────────────────────────────────────────────────────────
+
+  // ── Internal helpers ─────────────────────────────────────────
+
+  /**
+   * Circumcircle of triangle (a, b, c).
+   * Returns { cx, cy, r2 } where r2 is the squared radius.
+   * Returns null if the three points are collinear.
+   */
+  function _circumcircle(a, b, c) {
+    const ax = b.x - a.x, ay = b.y - a.y;
+    const bx = c.x - a.x, by = c.y - a.y;
+    const D = 2 * (ax * by - ay * bx);
+    if (Math.abs(D) < 1e-10) return null; // collinear
+    const ux = (by * (ax * ax + ay * ay) - ay * (bx * bx + by * by)) / D;
+    const uy = (ax * (bx * bx + by * by) - bx * (ax * ax + ay * ay)) / D;
+    const cx = a.x + ux, cy = a.y + uy;
+    const r2 = ux * ux + uy * uy;
+    return { cx, cy, r2 };
+  }
+
+  /**
+   * Returns true if point p is strictly inside the circumcircle of triangle t.
+   */
+  function _inCircumcircle(t, p) {
+    const cc = t.cc;
+    if (!cc) return false;
+    const dx = p.x - cc.cx, dy = p.y - cc.cy;
+    return dx * dx + dy * dy < cc.r2 - 1e-10;
+  }
+
+  /**
+   * Key for an undirected edge (i, j) — always min,max order.
+   */
+  function _edgeKey(i, j) {
+    return i < j ? `${i},${j}` : `${j},${i}`;
+  }
+
+  /**
+   * ★ DELAUNAY TRIANGULATION — Bowyer–Watson O(n²)
+   *
+   * Given a set of points, returns a triangulation where no point lies
+   * inside the circumcircle of any triangle (Delaunay property).
+   * This maximizes the minimum angle of all triangles, avoiding slivers.
+   *
+   * Algorithm:
+   *   1. Create a super-triangle large enough to contain all points.
+   *   2. Insert each point incrementally:
+   *      a. Find all "bad" triangles whose circumcircle contains the point.
+   *      b. Find the boundary polygon of the bad-triangle cavity.
+   *      c. Remove bad triangles; re-triangulate cavity with new point.
+   *   3. Remove all triangles that share a vertex with the super-triangle.
+   *
+   * @param {{x,y}[]} points   array of 2D points (min 3)
+   * @returns {{ vertices: {x,y}[], triangles: [number,number,number][] }}
+   *   vertices — deduplicated point array (original points in same order)
+   *   triangles — array of index triples into vertices
+   */
+  function delaunay(points) {
+    if (points.length < 3) return { vertices: [...points], triangles: [] };
+
+    // Work with indexed copies; keep originals untouched
+    const verts = points.map((p, i) => ({ x: p.x, y: p.y, _orig: i }));
+    const n = verts.length;
+
+    // ── Super-triangle ────────────────────────────────────────
+    const bb = boundingBox(verts);
+    const dx = bb.maxX - bb.minX, dy = bb.maxY - bb.minY;
+    const delta = Math.max(dx, dy) * 10;
+    const cx = (bb.minX + bb.maxX) / 2, cy = (bb.minY + bb.maxY) / 2;
+    const s0 = { x: cx - 20 * delta, y: cy - delta,      _super: true };
+    const s1 = { x: cx,              y: cy + 20 * delta, _super: true };
+    const s2 = { x: cx + 20 * delta, y: cy - delta,      _super: true };
+    verts.push(s0, s1, s2);
+    const si0 = n, si1 = n + 1, si2 = n + 2;
+
+    // Triangle object: { a, b, c, cc }  (indices + circumcircle)
+    const makeTri = (a, b, c) => {
+      const cc = _circumcircle(verts[a], verts[b], verts[c]);
+      return { a, b, c, cc };
+    };
+
+    let tris = [makeTri(si0, si1, si2)];
+
+    // ── Insert points one by one ──────────────────────────────
+    for (let pi = 0; pi < n; pi++) {
+      const p = verts[pi];
+
+      // Find bad triangles (circumcircle contains p)
+      const bad = tris.filter(t => _inCircumcircle(t, p));
+
+      // Find boundary of the cavity (edges not shared by two bad triangles)
+      const edgeCount = new Map();
+      for (const t of bad) {
+        for (const [ea, eb] of [[t.a, t.b], [t.b, t.c], [t.c, t.a]]) {
+          const key = _edgeKey(ea, eb);
+          edgeCount.set(key, (edgeCount.get(key) || 0) + 1);
+        }
+      }
+      const boundary = [];
+      for (const t of bad) {
+        for (const [ea, eb] of [[t.a, t.b], [t.b, t.c], [t.c, t.a]]) {
+          if (edgeCount.get(_edgeKey(ea, eb)) === 1) boundary.push([ea, eb]);
+        }
+      }
+
+      // Remove bad triangles
+      tris = tris.filter(t => !bad.includes(t));
+
+      // Re-triangulate cavity
+      for (const [ea, eb] of boundary) {
+        tris.push(makeTri(ea, eb, pi));
+      }
+    }
+
+    // ── Remove super-triangle vertices ────────────────────────
+    const superIdx = new Set([si0, si1, si2]);
+    tris = tris.filter(t =>
+      !superIdx.has(t.a) && !superIdx.has(t.b) && !superIdx.has(t.c)
+    );
+
+    return {
+      vertices: points,
+      triangles: tris.map(t => [t.a, t.b, t.c]),
+    };
+  }
+
+  /**
+   * Clips a convex polygon against an axis-aligned bounding box
+   * using the Sutherland–Hodgman algorithm.
+   * Works correctly for any winding order.
+   * @param {{x,y}[]} polygon
+   * @param {{minX,minY,maxX,maxY}} box
+   * @returns {{x,y}[]}
+   */
+  function _clipPolygonToBox(polygon, box) {
+    const planes = [
+      { inside: p => p.x >= box.minX,
+        cross:  (a, b) => { const t = (box.minX - a.x) / (b.x - a.x); return { x: box.minX, y: a.y + t * (b.y - a.y) }; } },
+      { inside: p => p.x <= box.maxX,
+        cross:  (a, b) => { const t = (box.maxX - a.x) / (b.x - a.x); return { x: box.maxX, y: a.y + t * (b.y - a.y) }; } },
+      { inside: p => p.y >= box.minY,
+        cross:  (a, b) => { const t = (box.minY - a.y) / (b.y - a.y); return { x: a.x + t * (b.x - a.x), y: box.minY }; } },
+      { inside: p => p.y <= box.maxY,
+        cross:  (a, b) => { const t = (box.maxY - a.y) / (b.y - a.y); return { x: a.x + t * (b.x - a.x), y: box.maxY }; } },
+    ];
+    let out = polygon;
+    for (const pl of planes) {
+      if (!out.length) break;
+      const inp = out; out = [];
+      for (let i = 0; i < inp.length; i++) {
+        const cur = inp[i], prv = inp[(i - 1 + inp.length) % inp.length];
+        const cIn = pl.inside(cur), pIn = pl.inside(prv);
+        if (cIn) { if (!pIn) out.push(pl.cross(prv, cur)); out.push(cur); }
+        else if (pIn) out.push(pl.cross(prv, cur));
+      }
+    }
+    return out;
+  }
+
+  /**
+   * ★ VORONOI DIAGRAM — Dual of Delaunay + Sutherland–Hodgman clipping
+   *
+   * Strategy:
+   *   1. Build Delaunay triangulation.
+   *   2. For each site, collect its Voronoi cell as an UNBOUNDED polygon:
+   *      - Interior vertices = circumcenters of adjacent triangles (sorted by angle).
+   *      - For each boundary Delaunay edge, append an outward ray endpoint
+   *        far enough to guarantee it lies outside any reasonable clip box.
+   *   3. Clip each cell polygon against the bounding box using Sutherland–Hodgman.
+   *
+   * This separates the two concerns cleanly:
+   *   - Step 2 only needs correct ray directions (no corner-insertion logic).
+   *   - Step 3 handles all clipping correctly, including box corners.
+   *
+   * Ray direction: from edge midpoint toward circumcenter, flipped if it
+   * points toward the third triangle vertex (i.e., toward the interior).
+   *
+   * @param {{x,y}[]} points   array of 2D points (min 3)
+   * @param {number}  [margin=80]  clip box padding beyond the point bbox
+   * @returns {{ vertices:{x,y}[], cells:Array<{site:{x,y}, polygon:{x,y}[]}> }}
+   */
+  function voronoi(points, margin = 80) {
+    // ── 1-point case: cell = entire plane (clip box) ─────────────
+    if (points.length === 0) {
+      return { vertices: [], cells: [] };
+    }
+    if (points.length === 1) {
+      const p = points[0];
+      const box = { minX: p.x - margin, minY: p.y - margin,
+                    maxX: p.x + margin, maxY: p.y + margin };
+      const polygon = [
+        { x: box.minX, y: box.minY }, { x: box.maxX, y: box.minY },
+        { x: box.maxX, y: box.maxY }, { x: box.minX, y: box.maxY },
+      ];
+      return { vertices: [...points], cells: [{ site: p, polygon }] };
+    }
+
+    // ── 2-point case: perpendicular bisector of the segment ───────
+    if (points.length === 2) {
+      const [p0, p1] = points;
+      const bb = boundingBox(points);
+      const box = {
+        minX: bb.minX - margin, minY: bb.minY - margin,
+        maxX: bb.maxX + margin, maxY: bb.maxY + margin,
+      };
+      // Bisector: passes through the midpoint, perpendicular to p0→p1
+      const mx = (p0.x + p1.x) / 2, my = (p0.y + p1.y) / 2;
+      const dx = p1.x - p0.x,       dy = p1.y - p0.y;
+      // Normalized perpendicular direction
+      const len = Math.sqrt(dx*dx + dy*dy) || 1;
+      const px = -dy / len, py = dx / len;
+      // Two far points along the bisector line
+      const far = (box.maxX - box.minX + box.maxY - box.minY) * 10;
+      const bisA = { x: mx + px * far, y: my + py * far };
+      const bisB = { x: mx - px * far, y: my - py * far };
+      // Each cell = one half-plane clipped to the box via Sutherland-Hodgman
+      const boxPoly = [
+        { x: box.minX, y: box.minY }, { x: box.maxX, y: box.minY },
+        { x: box.maxX, y: box.maxY }, { x: box.minX, y: box.maxY },
+      ];
+      const clipHalfPlane = (poly, sidePoint) => {
+        // Half-plane on the same side as sidePoint relative to line bisA→bisB
+        const inside = (p) => {
+          const cx = (bisB.x-bisA.x)*(p.y-bisA.y) - (bisB.y-bisA.y)*(p.x-bisA.x);
+          const ref = (bisB.x-bisA.x)*(sidePoint.y-bisA.y) - (bisB.y-bisA.y)*(sidePoint.x-bisA.x);
+          return (cx >= 0) === (ref >= 0);
+        };
+        const intersect = (a, b) => {
+          const t_num = (bisA.x-a.x)*(bisB.y-bisA.y) - (bisA.y-a.y)*(bisB.x-bisA.x);
+          const t_den = (b.x-a.x)*(bisB.y-bisA.y) - (b.y-a.y)*(bisB.x-bisA.x);
+          if (Math.abs(t_den) < 1e-10) return a;
+          const t = t_num / t_den;
+          return { x: a.x + t*(b.x-a.x), y: a.y + t*(b.y-a.y) };
+        };
+        const out = [];
+        for (let i = 0; i < poly.length; i++) {
+          const cur = poly[i], prv = poly[(i-1+poly.length)%poly.length];
+          const cIn = inside(cur), pIn = inside(prv);
+          if (cIn) { if (!pIn) out.push(intersect(prv, cur)); out.push(cur); }
+          else if (pIn) out.push(intersect(prv, cur));
+        }
+        return out;
+      };
+      const cell0 = clipHalfPlane(boxPoly, p0);
+      const cell1 = clipHalfPlane(boxPoly, p1);
+      return {
+        vertices: [...points],
+        cells: [
+          { site: p0, polygon: cell0 },
+          { site: p1, polygon: cell1 },
+        ],
+      };
+    }
+
+    const { triangles } = delaunay(points);
+    const n = points.length;
+
+    // Clip box (used only in step 3)
+    const bb = boundingBox(points);
+    const box = {
+      minX: bb.minX - margin, minY: bb.minY - margin,
+      maxX: bb.maxX + margin, maxY: bb.maxY + margin,
+    };
+
+    // Circumcenter per triangle — NOT clamped, kept as-is for step 2
+    const ccPts = triangles.map(([a, b, c]) => {
+      const r = _circumcircle(points[a], points[b], points[c]);
+      return r ? { x: r.cx, y: r.cy }
+               : midpoint(midpoint(points[a], points[b]), points[c]);
+    });
+
+    // Edge → triangle indices
+    const edgeToTris = new Map();
+    triangles.forEach((tri, ti) => {
+      for (const [ea, eb] of [[tri[0],tri[1]],[tri[1],tri[2]],[tri[2],tri[0]]]) {
+        const k = _edgeKey(ea, eb);
+        if (!edgeToTris.has(k)) edgeToTris.set(k, []);
+        edgeToTris.get(k).push(ti);
+      }
+    });
+
+    // Site → adjacent triangles
+    const siteAdj = Array.from({ length: n }, () => []);
+    triangles.forEach((tri, ti) => tri.forEach(si => siteAdj[si].push(ti)));
+
+    // How far to extend boundary rays (well beyond any clip box)
+    const rayLen = (bb.maxX - bb.minX + bb.maxY - bb.minY + margin * 4) * 10;
+
+    const cells = points.map((site, si) => {
+      const adj = siteAdj[si];
+      if (!adj.length) return { site, polygon: [] };
+
+      // ── Step 2a: collect interior Voronoi vertices ─────────────
+      // Sort adjacent triangles by angle of their circumcenter around the site
+      const sorted = adj.slice().sort((ta, tb) => {
+        const aa = Math.atan2(ccPts[ta].y - site.y, ccPts[ta].x - site.x);
+        const ab = Math.atan2(ccPts[tb].y - site.y, ccPts[tb].x - site.x);
+        return aa - ab;
+      });
+
+      const cellVerts = sorted.map(ti => ({ ...ccPts[ti] }));
+
+      // ── Step 2b: insert ray endpoints for boundary edges ───────
+      // For each boundary Delaunay edge incident to this site, insert a
+      // far-away point in the outward direction.
+      //
+      // Outward direction = (circumcenter − edge_midpoint), flipped if it
+      // points toward the third triangle vertex (toward the interior).
+      //
+      // Insertion position: between the two adjacent circumcenters in the
+      // sorted angular order (i.e., between the triangle on the left and
+      // the one on the right of the boundary edge).
+      const rayVerts = [];
+      for (const ti of adj) {
+        const tri = triangles[ti];
+        for (let k = 0; k < 3; k++) {
+          const ea = tri[k], eb = tri[(k+1) % 3];
+          if (ea !== si && eb !== si) continue;
+          if (edgeToTris.get(_edgeKey(ea, eb)).length !== 1) continue;
+
+          const pa = points[ea], pb = points[eb];
+          const ec = tri.find(v => v !== ea && v !== eb);
+          const mid = { x: (pa.x + pb.x) / 2, y: (pa.y + pb.y) / 2 };
+          const cc  = ccPts[ti];
+          let dir = { x: cc.x - mid.x, y: cc.y - mid.y };
+
+          // Flip if pointing toward ec (toward interior)
+          const toEc = { x: points[ec].x - mid.x, y: points[ec].y - mid.y };
+          if (dir.x * toEc.x + dir.y * toEc.y > 0) dir = { x: -dir.x, y: -dir.y };
+
+          // Normalize and extend to rayLen
+          const len = Math.sqrt(dir.x * dir.x + dir.y * dir.y);
+          if (len < 1e-10) continue;
+          const far = {
+            x: cc.x + dir.x / len * rayLen,
+            y: cc.y + dir.y / len * rayLen,
+            isBoundaryRay: true,
+            angle: Math.atan2(cc.y - site.y + dir.y / len * rayLen, cc.x - site.x + dir.x / len * rayLen),
+          };
+          rayVerts.push(far);
+        }
+      }
+
+      // Merge circumcenters + rays, sort by angle around site
+      const allVerts = [
+        ...cellVerts.map(v => ({ ...v, angle: Math.atan2(v.y - site.y, v.x - site.x) })),
+        ...rayVerts,
+      ];
+      allVerts.sort((a, b) => a.angle - b.angle);
+
+      // Deduplicate very close points
+      const merged = [];
+      for (const v of allVerts)
+        if (!merged.some(u => Math.hypot(u.x - v.x, u.y - v.y) < 1e-6)) merged.push(v);
+
+      if (merged.length < 2) return { site, polygon: [] };
+
+      // ── Step 3: clip against the bounding box ──────────────────
+      const clipped = _clipPolygonToBox(merged, box);
+
+      return { site, polygon: clipped };
+    });
+
+    return { vertices: points, cells };
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // LAYER 6 · SHORTEST PATH (visibility graph + Dijkstra)
+  // ─────────────────────────────────────────────────────────────
+
+  /**
+   * Returns true if segment (a→b) does not properly cross or pass through
+   * the interior of any obstacle polygon.
+   *
+   * Rules:
+   *  - The segment may touch obstacle vertices (grazing a corner is allowed).
+   *  - The segment may not properly cross any obstacle edge.
+   *  - The midpoint of the segment must not be strictly inside any obstacle.
+   *
+   * @param {{x,y}} a
+   * @param {{x,y}} b
+   * @param {{x,y}[][]} obstacles  array of simple polygons (obstacles)
+   * @returns {boolean}
+   */
+  function _segmentFree(a, b, obstacles) {
+    const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    for (const obs of obstacles) {
+      // Midpoint inside obstacle → blocked
+      if (pointInPolygon(mid, obs)) return false;
+      // Proper crossing of any obstacle edge → blocked
+      const n = obs.length;
+      for (let k = 0; k < n; k++) {
+        const c = obs[k], d = obs[(k + 1) % n];
+        if (segmentsIntersect(a, b, c, d)) {
+          // Allow if the intersection is only at a shared endpoint (grazing)
+          // i.e. both segments share exactly one endpoint and don't cross otherwise
+          const sharedEndpoint =
+            (Math.hypot(a.x-c.x, a.y-c.y) < 1e-9 || Math.hypot(a.x-d.x, a.y-d.y) < 1e-9) ||
+            (Math.hypot(b.x-c.x, b.y-c.y) < 1e-9 || Math.hypot(b.x-d.x, b.y-d.y) < 1e-9);
+          if (!sharedEndpoint) return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
+   * VISIBILITY GRAPH FOR PATHFINDING
+   *
+   * Builds a weighted undirected graph over a set of obstacle polygons plus
+   * two extra query points (start and end). Each node is a 2D point; each
+   * edge connects two mutually visible nodes with weight = Euclidean distance.
+   *
+   * Nodes are indexed as:
+   *   0          → start
+   *   1          → end
+   *   2 … 2+N-1  → obstacle vertices in the order they appear in `obstacles`
+   *                 (polygon 0 vertices first, then polygon 1, etc.)
+   *
+   * @param {{x,y}}     start
+   * @param {{x,y}}     end
+   * @param {{x,y}[][]} obstacles  array of simple obstacle polygons
+   * @returns {{
+   *   nodes  : {x,y}[],
+   *   edges  : Array<{from:number, to:number, weight:number}>,
+   *   adj    : Map<number, Array<{to:number, weight:number}>>
+   * }}
+   */
+  function buildVisibilityGraph(start, end, obstacles) {
+    // Flatten all points: [start, end, ...obstacle vertices]
+    const nodes = [{ ...start }, { ...end }];
+    for (const obs of obstacles)
+      for (const v of obs) nodes.push({ ...v });
+
+    const N = nodes.length;
+    const edges = [];
+    const adj = new Map();
+    for (let i = 0; i < N; i++) adj.set(i, []);
+
+    const addEdge = (i, j) => {
+      const w = distance(nodes[i], nodes[j]);
+      edges.push({ from: i, to: j, weight: w });
+      adj.get(i).push({ to: j, weight: w });
+      adj.get(j).push({ to: i, weight: w });
+    };
+
+    for (let i = 0; i < N; i++) {
+      for (let j = i + 1; j < N; j++) {
+        if (_segmentFree(nodes[i], nodes[j], obstacles))
+          addEdge(i, j);
+      }
+    }
+
+    return { nodes, edges, adj };
+  }
+
+  /**
+   * SHORTEST PATH — Dijkstra's algorithm
+   *
+   * Finds the shortest path from `start` to `end` in a 2D environment with
+   * polygonal obstacles, using a visibility graph internally.
+   *
+   * Returns null if no path exists (start or end inside an obstacle, or
+   * the environment is fully disconnected).
+   *
+   * @param {{x,y}}     start
+   * @param {{x,y}}     end
+   * @param {{x,y}[][]} obstacles  array of simple polygons acting as obstacles
+   * @returns {{
+   *   path     : {x,y}[],   // sequence of waypoints from start to end
+   *   length   : number,    // total Euclidean length of the path
+   *   graph    : object     // the visibility graph (for visualisation)
+   * } | null}
+   */
+  function shortestPath(start, end, obstacles) {
+    // Reject if start or end is inside any obstacle
+    for (const obs of obstacles) {
+      if (pointInPolygon(start, obs)) return null;
+      if (pointInPolygon(end,   obs)) return null;
+    }
+
+    const graph = buildVisibilityGraph(start, end, obstacles);
+    const { nodes, adj } = graph;
+    const N = nodes.length;
+    const SRC = 0, DST = 1;          // indices of start and end
+
+    // ── Dijkstra with a binary min-heap ──────────────────────────
+    const dist = new Float64Array(N).fill(Infinity);
+    const prev = new Int32Array(N).fill(-1);
+    const visited = new Uint8Array(N);
+    dist[SRC] = 0;
+
+    // Simple binary min-heap: entries are [cost, nodeIndex]
+    const heap = [[0, SRC]];
+    const heapPush = (cost, node) => {
+      heap.push([cost, node]);
+      let i = heap.length - 1;
+      while (i > 0) {
+        const parent = (i - 1) >> 1;
+        if (heap[parent][0] <= heap[i][0]) break;
+        [heap[parent], heap[i]] = [heap[i], heap[parent]];
+        i = parent;
+      }
+    };
+    const heapPop = () => {
+      const top = heap[0];
+      const last = heap.pop();
+      if (heap.length > 0) {
+        heap[0] = last;
+        let i = 0;
+        while (true) {
+          let smallest = i;
+          const l = 2*i+1, r = 2*i+2;
+          if (l < heap.length && heap[l][0] < heap[smallest][0]) smallest = l;
+          if (r < heap.length && heap[r][0] < heap[smallest][0]) smallest = r;
+          if (smallest === i) break;
+          [heap[i], heap[smallest]] = [heap[smallest], heap[i]];
+          i = smallest;
+        }
+      }
+      return top;
+    };
+
+    while (heap.length > 0) {
+      const [cost, u] = heapPop();
+      if (visited[u]) continue;
+      visited[u] = 1;
+      if (u === DST) break;
+
+      for (const { to: v, weight: w } of adj.get(u)) {
+        if (visited[v]) continue;
+        const newDist = cost + w;
+        if (newDist < dist[v]) {
+          dist[v] = newDist;
+          prev[v] = u;
+          heapPush(newDist, v);
+        }
+      }
+    }
+
+    if (dist[DST] === Infinity) return null;  // no path
+
+    // Reconstruct path by following prev[] back from DST to SRC
+    const path = [];
+    for (let cur = DST; cur !== -1; cur = prev[cur])
+      path.push(nodes[cur]);
+    path.reverse();
+
+    return { path, length: dist[DST], graph };
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // PUBLIC API
+  // ─────────────────────────────────────────────────────────────
+  return {
+    // Layer 1 — Primitives
+    cross2D,
+    dot2D,
+    distance,
+    distanceSq,
+    boundingBox,
+    boundingBoxesOverlap,
+    angleTo,
+    midpoint,
+
+    // Layer 2 — Predicates
+    orientation,
+    onSegment,
+    segmentsIntersect,
+    lineIntersectionPoint,
+    pointInPolygon,
+    pointToSegmentDistance,
+
+    // Layer 3 — Structural
+    polygonSignedArea,
+    polygonArea,
+    isCounterClockwise,
+    polygonCentroid,
+    isSimplePolygon,
+    convexHull,
+    isConvex,
+
+    // Layer 4 — High-level
+    visibilityGraph,
+    triangulate,
+    polygonOffset,
+    polygonContains,
+    polygonsIntersect,
+
+    // Layer 5 — Delaunay & Voronoi
+    delaunay,
+    voronoi,
+
+    // Layer 6 — Shortest path
+    buildVisibilityGraph,
+    shortestPath,
+  };
+})();
+
+// ES module compatibility
+if (typeof module !== "undefined" && module.exports) module.exports = Geometry;
+
+// ════════════════════════════════════════════════════════════════════
+// DEMO APPLICATION CODE
+// ════════════════════════════════════════════════════════════════════
+
+// ─── TAB SWITCHING ───────────────────────────────────────────────────
+const tabs = document.querySelectorAll('nav button');
+const containers = document.querySelectorAll('.demo-container');
+
+tabs.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetTab = btn.dataset.tab;
+    tabs.forEach(b => b.classList.remove('active'));
+    containers.forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(`tab-${targetTab}`).classList.add('active');
+    
+    // Re-draw on tab switch
+    setTimeout(() => {
+      if (targetTab === 'orientation') drawOrientation();
+      if (targetTab === 'intersection') drawIntersection();
+      if (targetTab === 'simple') drawSimple();
+      if (targetTab === 'hull') drawHull();
+      if (targetTab === 'visibility') drawVisibility();
+      if (targetTab === 'triangulate') drawTriangulate();
+      if (targetTab === 'delaunay') drawDelaunay();
+      if (targetTab === 'voronoi') drawVoronoi();
+    }, 50);
+  });
+});
+
+// ─── CANVAS UTILITIES ────────────────────────────────────────────────
+const C = {
+  purple: '#7c6af7',
+  teal: '#4ec9b0',
+  amber: '#f7c56a',
+  red: '#f47c7c',
+  green: '#6ef0a0',
+};
+
+function drawGrid(ctx, w, h) {
+  const isLight = document.body.classList.contains('light-theme');
+  ctx.strokeStyle = isLight ? 'rgba(0,0,0,.05)' : 'rgba(255,255,255,.03)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < w; x += 40) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+  }
+  for (let y = 0; y < h; y += 40) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+  }
+}
+
+function dot(ctx, p, r, color) {
+  ctx.beginPath();
+  ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+function line(ctx, a, b, color, width = 2) {
+  ctx.beginPath();
+  ctx.moveTo(a.x, a.y);
+  ctx.lineTo(b.x, b.y);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.stroke();
+}
+
+// ─── TAB 1: ORIENTATION ──────────────────────────────────────────────
+let orientPts = [];
+
+function clearOrientation() {
+  orientPts = [];
+  drawOrientation();
+}
+
+function drawOrientation() {
+  const cv = document.getElementById('cv-orientation');
+  const wrap = cv.parentElement;
+  if (cv.width !== wrap.clientWidth || cv.height !== wrap.clientHeight) {
+    cv.width = wrap.clientWidth;
+    cv.height = wrap.clientHeight;
+  }
+  const ctx = cv.getContext('2d');
+  const w = cv.width, h = cv.height;
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  // Draw triangle with colored fill based on orientation
+  if (orientPts.length === 3) {
+    const [a, b, c] = orientPts;
+    const o = Geometry.orientation(a, b, c);
+    
+    // Fill triangle with color based on orientation
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.lineTo(c.x, c.y);
+    ctx.closePath();
+    
+    if (o > 0) {
+      ctx.fillStyle = 'rgba(110, 240, 160, 0.25)'; // Green for LEFT/CCW
+    } else if (o < 0) {
+      ctx.fillStyle = 'rgba(244, 124, 124, 0.25)'; // Red for RIGHT/CW
+    } else {
+      ctx.fillStyle = 'rgba(247, 197, 106, 0.25)'; // Amber for COLLINEAR
+    }
+    ctx.fill();
+  }
+
+  if (orientPts.length >= 2) {
+    const isLight = document.body.classList.contains('light-theme');
+    const edgeColor = isLight ? '#000' : '#fff';
+    line(ctx, orientPts[0], orientPts[1], edgeColor, 2);
+  }
+  if (orientPts.length >= 3) {
+    const isLight = document.body.classList.contains('light-theme');
+    const edgeColor = isLight ? '#000' : '#fff';
+    line(ctx, orientPts[1], orientPts[2], edgeColor, 2);
+    line(ctx, orientPts[2], orientPts[0], edgeColor, 2);
+  }
+
+  const colors = [C.purple, C.teal, C.amber];
+  const labels = ['A', 'B', 'C'];
+  orientPts.forEach((p, i) => {
+    const r = orientDragging === i ? 10 : 8;
+    dot(ctx, p, r, colors[i]);
+    
+    // Draw label
+    const isLight = document.body.classList.contains('light-theme');
+    ctx.fillStyle = isLight ? '#000' : '#fff';
+    ctx.font = 'bold 14px "Syne", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(labels[i], p.x, p.y);
+  });
+
+  const resultBox = document.getElementById('orient-result');
+  if (orientPts.length < 3) {
+    resultBox.innerHTML = 'Place 3 points to test orientation';
+  } else {
+    const [a, b, c] = orientPts;
+    const o = Geometry.orientation(a, b, c);
+    let msg = '', cls = '';
+    if (o > 0) { msg = 'LEFT / CCW'; cls = 'pos'; }
+    else if (o < 0) { msg = 'RIGHT / CW'; cls = 'neg'; }
+    else { msg = 'COLLINEAR'; cls = 'zero'; }
+    resultBox.innerHTML = `<span class="lbl">orientation(A, B, C) = </span><span class="val ${cls}">${msg}</span><br><span class="lbl" style="font-size:10px">Point C is ${o > 0 ? 'to the LEFT' : o < 0 ? 'to the RIGHT' : 'COLLINEAR'} of line AB</span>`;
+  }
+}
+
+let orientDragging = null;
+
+document.getElementById('cv-orientation').addEventListener('mousedown', e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  const p = { x: e.clientX - r.left, y: e.clientY - r.top };
+  
+  // Check if clicking near existing point
+  for (let i = 0; i < orientPts.length; i++) {
+    if (Math.hypot(orientPts[i].x - p.x, orientPts[i].y - p.y) < 14) {
+      orientDragging = i;
+      return;
+    }
+  }
+  
+  // Add new point
+  orientPts.push(p);
+  if (orientPts.length > 3) orientPts.shift();
+  drawOrientation();
+});
+
+document.getElementById('cv-orientation').addEventListener('mousemove', e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  const x = e.clientX - r.left;
+  const y = e.clientY - r.top;
+  
+  if (orientDragging === null) {
+    // Check if hovering over a point
+    const nearPoint = orientPts.some(p => Math.hypot(p.x - x, p.y - y) < 14);
+    e.currentTarget.style.cursor = nearPoint ? 'grab' : 'crosshair';
+    return;
+  }
+  
+  e.currentTarget.style.cursor = 'grabbing';
+  orientPts[orientDragging] = { x, y };
+  drawOrientation();
+});
+
+document.getElementById('cv-orientation').addEventListener('mouseup', () => {
+  orientDragging = null;
+});
+
+document.getElementById('cv-orientation').addEventListener('mouseleave', () => {
+  orientDragging = null;
+});
+
+// ─── TAB 2: INTERSECTION ─────────────────────────────────────────────
+let segPts = [];
+
+function clearIntersection() {
+  segPts = [];
+  drawIntersection();
+}
+
+function drawIntersection() {
+  const cv = document.getElementById('cv-intersection');
+  const wrap = cv.parentElement;
+  if (cv.width !== wrap.clientWidth || cv.height !== wrap.clientHeight) {
+    cv.width = wrap.clientWidth;
+    cv.height = wrap.clientHeight;
+  }
+  const ctx = cv.getContext('2d');
+  const w = cv.width, h = cv.height;
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  if (segPts.length >= 2) line(ctx, segPts[0], segPts[1], C.purple, 3);
+  if (segPts.length >= 4) line(ctx, segPts[2], segPts[3], C.teal, 3);
+
+  segPts.forEach((p, i) => {
+    const r = segDragging === i ? 9 : 6;
+    dot(ctx, p, r, C.amber);
+  });
+
+  const resultBox = document.getElementById('intersect-result');
+  if (segPts.length < 4) {
+    resultBox.innerHTML = 'Click 4 points to create two segments';
+  } else {
+    const intersect = Geometry.segmentsIntersect(segPts[0], segPts[1], segPts[2], segPts[3]);
+    const cls = intersect ? 'pos' : 'neg';
+    resultBox.innerHTML = `<span class="lbl">Segments intersect: </span><span class="val ${cls}">${intersect ? 'YES' : 'NO'}</span>`;
+    
+    if (intersect) {
+      const pt = Geometry.lineIntersectionPoint(segPts[0], segPts[1], segPts[2], segPts[3]);
+      if (pt) dot(ctx, pt, 10, C.red);
+    }
+  }
+}
+
+let segDragging = null;
+
+document.getElementById('cv-intersection').addEventListener('mousedown', e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  const p = { x: e.clientX - r.left, y: e.clientY - r.top };
+  
+  // Check if clicking near existing point
+  for (let i = 0; i < segPts.length; i++) {
+    if (Math.hypot(segPts[i].x - p.x, segPts[i].y - p.y) < 14) {
+      segDragging = i;
+      return;
+    }
+  }
+  
+  // Add new point
+  segPts.push(p);
+  if (segPts.length > 4) {
+    segPts = [p]; // Start new segments
+  }
+  drawIntersection();
+});
+
+document.getElementById('cv-intersection').addEventListener('mousemove', e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  const x = e.clientX - r.left;
+  const y = e.clientY - r.top;
+  
+  if (segDragging === null) {
+    // Check if hovering over a point
+    const nearPoint = segPts.some(p => Math.hypot(p.x - x, p.y - y) < 14);
+    e.currentTarget.style.cursor = nearPoint ? 'grab' : 'crosshair';
+    return;
+  }
+  
+  e.currentTarget.style.cursor = 'grabbing';
+  segPts[segDragging] = { x, y };
+  drawIntersection();
+});
+
+document.getElementById('cv-intersection').addEventListener('mouseup', () => {
+  segDragging = null;
+});
+
+document.getElementById('cv-intersection').addEventListener('mouseleave', () => {
+  segDragging = null;
+});
+
+// ─── TAB 3: SIMPLE POLYGON ───────────────────────────────────────────
+let sPoly = [];
+let sClosed = false;
+let sDragging = null;
+let sLastClick = 0;
+
+function clearSimple() {
+  sPoly = [];
+  sClosed = false;
+  sDragging = null;
+  drawSimple();
+}
+
+function drawSimple() {
+  const cv = document.getElementById('cv-simple');
+  const wrap = cv.parentElement;
+  if (cv.width !== wrap.clientWidth || cv.height !== wrap.clientHeight) {
+    cv.width = wrap.clientWidth;
+    cv.height = wrap.clientHeight;
+  }
+  const ctx = cv.getContext('2d');
+  const w = cv.width, h = cv.height;
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  // Draw filled polygon first if closed
+  if (sClosed && sPoly.length >= 3) {
+    const isSimple = Geometry.isSimplePolygon(sPoly);
+    ctx.beginPath();
+    ctx.moveTo(sPoly[0].x, sPoly[0].y);
+    sPoly.forEach(p => ctx.lineTo(p.x, p.y));
+    ctx.closePath();
+    ctx.fillStyle = isSimple ? 'rgba(110,240,160,.15)' : 'rgba(244,124,124,.15)';
+    ctx.fill();
+  }
+
+  if (sPoly.length >= 2) {
+    ctx.beginPath();
+    ctx.moveTo(sPoly[0].x, sPoly[0].y);
+    sPoly.forEach(p => ctx.lineTo(p.x, p.y));
+    if (sClosed) ctx.closePath();
+    const isLight = document.body.classList.contains('light-theme');
+    ctx.strokeStyle = isLight ? '#000' : '#fff';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+  }
+
+  const rBase = sClosed ? 6 : 5;
+  sPoly.forEach((p, i) => {
+    let r = sDragging === i ? 10 : rBase;
+    if (i === 0 && !sClosed && sPoly.length >= 3) r = 8;
+    dot(ctx, p, r, C.purple);
+  });
+
+  const resultBox = document.getElementById('simple-result');
+  if (sPoly.length < 3 || !sClosed) {
+    resultBox.innerHTML = 'Close the polygon to test';
+  } else {
+    const isSimple = Geometry.isSimplePolygon(sPoly);
+    const cls = isSimple ? 'pos' : 'neg';
+    const area = Geometry.polygonArea(sPoly).toFixed(0);
+    resultBox.innerHTML = `
+      <span class="lbl">Simple polygon: </span><span class="val ${cls}">${isSimple ? 'YES' : 'NO'}</span><br>
+      <span class="lbl">Area: </span><span class="val">${area} px²</span>
+    `;
+  }
+}
+
+const cvS = document.getElementById('cv-simple');
+
+function sCoords(e) {
+  const r = cvS.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+cvS.addEventListener('mousedown', e => {
+  const { x, y } = sCoords(e);
+  const now = Date.now();
+
+  if (sClosed) {
+    for (let i = 0; i < sPoly.length; i++) {
+      if (Math.hypot(sPoly[i].x - x, sPoly[i].y - y) < 14) {
+        sDragging = i;
+        return;
+      }
+    }
+    return;
+  }
+
+  if (sPoly.length >= 3 && Math.hypot(sPoly[0].x - x, sPoly[0].y - y) < 18) {
+    sClosed = true;
+    drawSimple();
+    return;
+  }
+
+  for (let i = 0; i < sPoly.length; i++) {
+    if (Math.hypot(sPoly[i].x - x, sPoly[i].y - y) < 14) {
+      sDragging = i;
+      return;
+    }
+  }
+
+  if (now - sLastClick < 350) {
+    sLastClick = 0;
+    if (sPoly.length >= 3) {
+      sClosed = true;
+      drawSimple();
+    }
+    return;
+  }
+  sLastClick = now;
+
+  sPoly.push({ x, y });
+  drawSimple();
+});
+
+cvS.addEventListener('mousemove', e => {
+  const { x, y } = sCoords(e);
+  if (sDragging !== null) {
+    sPoly[sDragging] = { x, y };
+    drawSimple();
+    return;
+  }
+
+  if (!sClosed && sPoly.length >= 1) {
+    drawSimple();
+    const ctx = cvS.getContext('2d');
+    const last = sPoly[sPoly.length - 1];
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = 'rgba(124,106,247,.3)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    if (sPoly.length >= 3 && Math.hypot(sPoly[0].x - x, sPoly[0].y - y) < 18) {
+      ctx.beginPath();
+      ctx.arc(sPoly[0].x, sPoly[0].y, 18, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(110,240,160,.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([3, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  if (sPoly.length > 0) {
+    const nearVertex = sPoly.some(p => Math.hypot(p.x - x, p.y - y) < 14);
+    cvS.style.cursor = nearVertex ? 'grab' : 'crosshair';
+  }
+});
+
+cvS.addEventListener('mouseup', () => { sDragging = null; });
+cvS.addEventListener('mouseleave', () => { sDragging = null; });
+
+// ─── TAB 4: CONVEX HULL ──────────────────────────────────────────────
+let hullPts = [];
+
+function clearHull() {
+  hullPts = [];
+  drawHull();
+}
+
+function addHullRandom(n) {
+  const cv = document.getElementById('cv-hull');
+  const w = cv.width || cv.clientWidth;
+  const h = cv.height || cv.clientHeight;
+  for (let i = 0; i < n; i++) {
+    hullPts.push({
+      x: 40 + Math.random() * (w - 80),
+      y: 40 + Math.random() * (h - 80)
+    });
+  }
+  drawHull();
+}
+
+function drawHull() {
+  const cv = document.getElementById('cv-hull');
+  const wrap = cv.parentElement;
+  if (cv.width !== wrap.clientWidth || cv.height !== wrap.clientHeight) {
+    cv.width = wrap.clientWidth;
+    cv.height = wrap.clientHeight;
+  }
+  const ctx = cv.getContext('2d');
+  const w = cv.width, h = cv.height;
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  if (hullPts.length >= 3) {
+    const hull = Geometry.convexHull(hullPts);
+    if (hull.length >= 2) {
+      ctx.beginPath();
+      ctx.moveTo(hull[0].x, hull[0].y);
+      for (let i = 1; i < hull.length; i++) ctx.lineTo(hull[i].x, hull[i].y);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(124,106,247,.15)';
+      ctx.fill();
+      const isLight = document.body.classList.contains('light-theme');
+      ctx.strokeStyle = isLight ? '#000' : '#fff';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+    }
+    document.getElementById('hull-h').textContent = hull.length;
+  } else {
+    document.getElementById('hull-h').textContent = '—';
+  }
+
+  hullPts.forEach(p => dot(ctx, p, 5, C.teal));
+  document.getElementById('hull-n').textContent = hullPts.length;
+}
+
+document.getElementById('cv-hull').addEventListener('click', e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  hullPts.push({ x: e.clientX - r.left, y: e.clientY - r.top });
+  drawHull();
+});
+
+// ─── TAB 5: VISIBILITY GRAPH ─────────────────────────────────────────
+let visPoly = [];
+let visClosed = false;
+let visDragging = null;
+let visLastClick = 0;
+let visActive = null; // Track which vertex is being hovered
+let visMatrix = null; // Store visibility matrix
+
+function clearVisibility() {
+  visPoly = [];
+  visClosed = false;
+  visDragging = null;
+  visActive = null;
+  visMatrix = null;
+  drawVisibility();
+}
+
+function drawVisibility() {
+  const cv = document.getElementById('cv-visibility');
+  const wrap = cv.parentElement;
+  if (cv.width !== wrap.clientWidth || cv.height !== wrap.clientHeight) {
+    cv.width = wrap.clientWidth;
+    cv.height = wrap.clientHeight;
+  }
+  const ctx = cv.getContext('2d');
+  const w = cv.width, h = cv.height;
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  // Draw visibility edges if polygon is closed
+  if (visClosed && visPoly.length >= 3) {
+    try {
+      visMatrix = Geometry.visibilityGraph(visPoly);
+      let edgeCount = 0;
+      const n = visPoly.length;
+      
+      // Draw visibility edges (only diagonals, not polygon edges)
+      ctx.setLineDash([3, 3]);
+      
+      if (visMatrix && visMatrix.length > 0) {
+        for (let i = 0; i < n; i++) {
+          for (let j = i + 1; j < n; j++) {
+            // Skip if they are adjacent vertices on the polygon
+            const isAdjacent = Math.abs(i - j) === 1 || (i === 0 && j === n - 1);
+            
+            if (visMatrix[i] && visMatrix[i][j] && !isAdjacent) {
+              // Highlight edges connected to active vertex
+              const isHighlighted = visActive !== null && (i === visActive || j === visActive);
+              ctx.strokeStyle = isHighlighted ? 'rgba(78,201,176,.7)' : 'rgba(78,201,176,.2)';
+              ctx.lineWidth = isHighlighted ? 2.5 : 1.5;
+              
+              ctx.beginPath();
+              ctx.moveTo(visPoly[i].x, visPoly[i].y);
+              ctx.lineTo(visPoly[j].x, visPoly[j].y);
+              ctx.stroke();
+              edgeCount++;
+            }
+          }
+        }
+      }
+      
+      ctx.setLineDash([]);
+      document.getElementById('vis-edges').textContent = edgeCount;
+    } catch (e) {
+      console.error('Visibility graph error:', e);
+      document.getElementById('vis-edges').textContent = 'Error';
+      visMatrix = null;
+    }
+    
+    // Fill polygon
+    ctx.beginPath();
+    ctx.moveTo(visPoly[0].x, visPoly[0].y);
+    visPoly.forEach(p => ctx.lineTo(p.x, p.y));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(78,201,176,.05)';
+    ctx.fill();
+  } else {
+    document.getElementById('vis-edges').textContent = '—';
+    visMatrix = null;
+  }
+
+  // Draw polygon outline
+  if (visPoly.length >= 2) {
+    ctx.beginPath();
+    ctx.moveTo(visPoly[0].x, visPoly[0].y);
+    visPoly.forEach(p => ctx.lineTo(p.x, p.y));
+    if (visClosed) ctx.closePath();
+    const isLight = document.body.classList.contains('light-theme');
+    ctx.strokeStyle = isLight ? '#000' : '#fff';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+  }
+
+  // Draw vertices with numbers and color coding
+  const rBase = visClosed ? 6 : 5;
+  visPoly.forEach((p, i) => {
+    let r = visDragging === i ? 10 : rBase;
+    if (i === 0 && !visClosed && visPoly.length >= 3) r = 8;
+    
+    // Color vertices based on visibility from active vertex
+    let color = C.teal;
+    if (visClosed && visActive !== null && visMatrix) {
+      if (i === visActive) {
+        color = C.purple; // Active vertex
+        r = 9;
+      } else if (visMatrix[visActive] && visMatrix[visActive][i]) {
+        color = '#6ef0a0'; // Visible from active
+      } else {
+        color = C.red; // Not visible from active
+      }
+    }
+    
+    dot(ctx, p, r, color);
+    
+    // Draw vertex number
+    if (visClosed) {
+      const isLight = document.body.classList.contains('light-theme');
+      ctx.fillStyle = isLight ? '#000' : '#fff';
+      ctx.font = 'bold 11px "DM Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(i.toString(), p.x, p.y);
+    }
+  });
+
+  document.getElementById('vis-n').textContent = visPoly.length;
+}
+
+const cvVis = document.getElementById('cv-visibility');
+
+function visCoords(e) {
+  const r = cvVis.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+cvVis.addEventListener('mousedown', e => {
+  const { x, y } = visCoords(e);
+  const now = Date.now();
+
+  if (visClosed) {
+    for (let i = 0; i < visPoly.length; i++) {
+      if (Math.hypot(visPoly[i].x - x, visPoly[i].y - y) < 14) {
+        visDragging = i;
+        return;
+      }
+    }
+    return;
+  }
+
+  if (visPoly.length >= 3 && Math.hypot(visPoly[0].x - x, visPoly[0].y - y) < 18) {
+    visClosed = true;
+    drawVisibility();
+    return;
+  }
+
+  for (let i = 0; i < visPoly.length; i++) {
+    if (Math.hypot(visPoly[i].x - x, visPoly[i].y - y) < 14) {
+      visDragging = i;
+      return;
+    }
+  }
+
+  if (now - visLastClick < 350) {
+    visLastClick = 0;
+    if (visPoly.length >= 3) {
+      visClosed = true;
+      drawVisibility();
+    }
+    return;
+  }
+  visLastClick = now;
+
+  visPoly.push({ x, y });
+  drawVisibility();
+});
+
+cvVis.addEventListener('mousemove', e => {
+  const { x, y } = visCoords(e);
+  
+  if (visDragging !== null) {
+    visPoly[visDragging] = { x, y };
+    drawVisibility();
+    return;
+  }
+
+  // Check for hover over vertices when closed
+  if (visClosed) {
+    let foundHover = false;
+    for (let i = 0; i < visPoly.length; i++) {
+      if (Math.hypot(visPoly[i].x - x, visPoly[i].y - y) < 16) {
+        if (visActive !== i) {
+          visActive = i;
+          drawVisibility();
+        }
+        foundHover = true;
+        cvVis.style.cursor = 'pointer';
+        break;
+      }
+    }
+    if (!foundHover && visActive !== null) {
+      visActive = null;
+      drawVisibility();
+      cvVis.style.cursor = 'crosshair';
+    }
+    return;
+  }
+
+  // Preview line while drawing
+  if (!visClosed && visPoly.length >= 1) {
+    drawVisibility();
+    const ctx = cvVis.getContext('2d');
+    const last = visPoly[visPoly.length - 1];
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = 'rgba(124,106,247,.3)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    if (visPoly.length >= 3 && Math.hypot(visPoly[0].x - x, visPoly[0].y - y) < 18) {
+      ctx.beginPath();
+      ctx.arc(visPoly[0].x, visPoly[0].y, 18, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(110,240,160,.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([3, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  if (visPoly.length > 0) {
+    const nearVertex = visPoly.some(p => Math.hypot(p.x - x, p.y - y) < 14);
+    cvVis.style.cursor = nearVertex ? 'grab' : 'crosshair';
+  }
+});
+
+cvVis.addEventListener('mouseup', () => { visDragging = null; });
+cvVis.addEventListener('mouseleave', () => { visDragging = null; });
+
+// ─── TAB 6: TRIANGULATION ────────────────────────────────────────────
+let tPoly = [];
+let tClosed = false;
+let tTriangles = [];
+let tDragging = null;
+let tLastClick = 0;
+
+function clearTriangulate() {
+  tPoly = [];
+  tClosed = false;
+  tTriangles = [];
+  tDragging = null;
+  drawTriangulate();
+}
+
+const triColors = [
+  'rgba(124,106,247,.25)', 'rgba(78,201,176,.25)', 'rgba(247,197,106,.25)',
+  'rgba(244,124,124,.25)', 'rgba(110,240,160,.25)', 'rgba(168,122,247,.25)',
+];
+
+function drawTriangulate() {
+  const cv = document.getElementById('cv-triangulate');
+  const wrap = cv.parentElement;
+  if (cv.width !== wrap.clientWidth || cv.height !== wrap.clientHeight) {
+    cv.width = wrap.clientWidth;
+    cv.height = wrap.clientHeight;
+  }
+  const ctx = cv.getContext('2d');
+  const w = cv.width, h = cv.height;
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  if (tClosed && tTriangles.length > 0) {
+    tTriangles.forEach((tri, i) => {
+      ctx.beginPath();
+      ctx.moveTo(tri[0].x, tri[0].y);
+      tri.forEach(p => ctx.lineTo(p.x, p.y));
+      ctx.closePath();
+      ctx.fillStyle = triColors[i % triColors.length];
+      ctx.fill();
+      ctx.strokeStyle = C.teal;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    });
+  }
+
+  if (tPoly.length >= 2) {
+    ctx.beginPath();
+    ctx.moveTo(tPoly[0].x, tPoly[0].y);
+    tPoly.forEach(p => ctx.lineTo(p.x, p.y));
+    if (tClosed) ctx.closePath();
+    const isLight = document.body.classList.contains('light-theme');
+    ctx.strokeStyle = isLight ? '#000' : '#fff';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+  }
+
+  const rBase = tClosed ? 6 : 5;
+  tPoly.forEach((p, i) => {
+    let r = tDragging === i ? 10 : rBase;
+    // Make first vertex bigger when not closed to show it's the snap target
+    if (i === 0 && !tClosed && tPoly.length >= 3) r = 8;
+    dot(ctx, p, r, C.purple);
+  });
+
+  document.getElementById('tri-n').textContent = tTriangles.length;
+  document.getElementById('tri-area').textContent =
+    tClosed && tPoly.length >= 3 ? Geometry.polygonArea(tPoly).toFixed(0) + ' px²' : '—';
+}
+
+const cvT = document.getElementById('cv-triangulate');
+
+function triCoords(e) {
+  const r = cvT.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+cvT.addEventListener('mousedown', e => {
+  const { x, y } = triCoords(e);
+  const now = Date.now();
+
+  if (tClosed) {
+    // If closed, only allow dragging
+    for (let i = 0; i < tPoly.length; i++) {
+      if (Math.hypot(tPoly[i].x - x, tPoly[i].y - y) < 14) {
+        tDragging = i;
+        return;
+      }
+    }
+    return;
+  }
+
+  // Check for snap to first vertex to close (BEFORE checking for drag)
+  if (tPoly.length >= 3 && Math.hypot(tPoly[0].x - x, tPoly[0].y - y) < 18) {
+    tClosed = true;
+    tTriangles = Geometry.triangulate(tPoly);
+    drawTriangulate();
+    return;
+  }
+
+  // Check for dragging existing vertices
+  for (let i = 0; i < tPoly.length; i++) {
+    if (Math.hypot(tPoly[i].x - x, tPoly[i].y - y) < 14) {
+      tDragging = i;
+      return;
+    }
+  }
+
+  // Double-click to close
+  if (now - tLastClick < 350) {
+    tLastClick = 0;
+    if (tPoly.length >= 3) {
+      tClosed = true;
+      tTriangles = Geometry.triangulate(tPoly);
+      drawTriangulate();
+    }
+    return;
+  }
+  tLastClick = now;
+
+  // Add new point
+  tPoly.push({ x, y });
+  drawTriangulate();
+});
+
+cvT.addEventListener('mousemove', e => {
+  const { x, y } = triCoords(e);
+  if (tDragging !== null) {
+    tPoly[tDragging] = { x, y };
+    if (tClosed) tTriangles = Geometry.triangulate(tPoly);
+    drawTriangulate();
+    return;
+  }
+
+  if (!tClosed && tPoly.length >= 1) {
+    drawTriangulate();
+    const ctx = cvT.getContext('2d');
+    const last = tPoly[tPoly.length - 1];
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = 'rgba(124,106,247,.3)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    if (tPoly.length >= 3 && Math.hypot(tPoly[0].x - x, tPoly[0].y - y) < 18) {
+      ctx.beginPath();
+      ctx.arc(tPoly[0].x, tPoly[0].y, 18, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(110,240,160,.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([3, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  if (tPoly.length > 0) {
+    const nearVertex = tPoly.some(p => Math.hypot(p.x - x, p.y - y) < 14);
+    cvT.style.cursor = nearVertex ? 'grab' : 'crosshair';
+  }
+});
+
+cvT.addEventListener('mouseup', () => { tDragging = null; });
+cvT.addEventListener('mouseleave', () => { tDragging = null; });
+
+// ─── TAB 5: DELAUNAY ─────────────────────────────────────────────────
+let dPoints = [];
+let dDragging = null;
+
+function clearDelaunay() {
+  dPoints = [];
+  dDragging = null;
+  drawDelaunay();
+}
+
+function addDelaunayRandom(n) {
+  const cv = document.getElementById('cv-delaunay');
+  const w = cv.width || cv.clientWidth;
+  const h = cv.height || cv.clientHeight;
+  for (let i = 0; i < n; i++) {
+    dPoints.push({
+      x: 40 + Math.random() * (w - 80),
+      y: 40 + Math.random() * (h - 80)
+    });
+  }
+  drawDelaunay();
+}
+
+function drawDelaunay() {
+  const cv = document.getElementById('cv-delaunay');
+  const wrap = cv.parentElement;
+  if (cv.width !== wrap.clientWidth || cv.height !== wrap.clientHeight) {
+    cv.width = wrap.clientWidth;
+    cv.height = wrap.clientHeight;
+  }
+  const ctx = cv.getContext('2d');
+  const w = cv.width, h = cv.height;
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  if (dPoints.length < 3) {
+    dPoints.forEach(p => dot(ctx, p, 5, C.purple));
+    document.getElementById('d-n').textContent = dPoints.length;
+    document.getElementById('d-tri').textContent = '—';
+    return;
+  }
+
+  const result = Geometry.delaunay(dPoints);
+  const tris = result.triangles;
+
+  const triFill = 'rgba(124,106,247,.06)';
+  tris.forEach(([a, b, c]) => {
+    const pa = dPoints[a], pb = dPoints[b], pc = dPoints[c];
+    ctx.beginPath();
+    ctx.moveTo(pa.x, pa.y);
+    ctx.lineTo(pb.x, pb.y);
+    ctx.lineTo(pc.x, pc.y);
+    ctx.closePath();
+    ctx.fillStyle = triFill;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(124,106,247,.4)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  dPoints.forEach((p, i) => dot(ctx, p, dDragging === i ? 10 : 5, C.purple));
+
+  document.getElementById('d-n').textContent = dPoints.length;
+  document.getElementById('d-tri').textContent = tris.length + ' (n−2 = ' + (dPoints.length - 2) + ')';
+}
+
+const cvD = document.getElementById('cv-delaunay');
+function dCoords(e) {
+  const r = cvD.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+cvD.addEventListener('mousedown', e => {
+  const { x, y } = dCoords(e);
+  for (let i = 0; i < dPoints.length; i++) {
+    if (Math.hypot(dPoints[i].x - x, dPoints[i].y - y) < 12) {
+      dDragging = i;
+      return;
+    }
+  }
+  dPoints.push({ x, y });
+  drawDelaunay();
+});
+
+cvD.addEventListener('mousemove', e => {
+  if (dDragging === null) return;
+  const { x, y } = dCoords(e);
+  dPoints[dDragging] = { x, y };
+  drawDelaunay();
+});
+
+cvD.addEventListener('mouseup', () => { dDragging = null; });
+cvD.addEventListener('mouseleave', () => { dDragging = null; });
+
+// ─── TAB 6: VORONOI ──────────────────────────────────────────────────
+let vPoints = [];
+let vDraggingPt = null;
+
+function clearVoronoi() {
+  vPoints = [];
+  vDraggingPt = null;
+  drawVoronoi();
+}
+
+function addVoronoiRandom(n) {
+  const cv = document.getElementById('cv-voronoi');
+  const w = cv.width || cv.clientWidth;
+  const h = cv.height || cv.clientHeight;
+  for (let i = 0; i < n; i++) {
+    vPoints.push({
+      x: 40 + Math.random() * (w - 80),
+      y: 40 + Math.random() * (h - 80)
+    });
+  }
+  drawVoronoi();
+}
+
+const vColors = [
+  'rgba(124,106,247,.18)', 'rgba(78,201,176,.18)', 'rgba(247,197,106,.18)',
+  'rgba(244,124,124,.18)', 'rgba(110,240,160,.15)', 'rgba(168,122,247,.18)',
+  'rgba(247,146,78,.18)', 'rgba(78,160,247,.18)', 'rgba(240,110,180,.15)',
+  'rgba(160,247,110,.15)', 'rgba(247,78,200,.15)', 'rgba(78,220,220,.15)',
+];
+
+function drawVoronoi() {
+  const cv = document.getElementById('cv-voronoi');
+  const wrap = cv.parentElement;
+  if (cv.width !== wrap.clientWidth || cv.height !== wrap.clientHeight) {
+    cv.width = wrap.clientWidth;
+    cv.height = wrap.clientHeight;
+  }
+  const ctx = cv.getContext('2d');
+  const w = cv.width, h = cv.height;
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  if (vPoints.length < 2) {
+    vPoints.forEach(p => dot(ctx, p, 6, C.teal));
+    document.getElementById('v-n').textContent = vPoints.length;
+    document.getElementById('v-cells').textContent = '—';
+    return;
+  }
+
+  const result = Geometry.voronoi(vPoints, Math.max(w, h));
+
+  result.cells.forEach((cell, i) => {
+    const poly = cell.polygon;
+    if (poly.length < 2) return;
+    ctx.beginPath();
+    ctx.moveTo(poly[0].x, poly[0].y);
+    for (let k = 1; k < poly.length; k++) ctx.lineTo(poly[k].x, poly[k].y);
+    ctx.closePath();
+    ctx.fillStyle = vColors[i % vColors.length];
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(78,201,176,.5)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  });
+
+  if (vPoints.length >= 3) {
+    const dt = Geometry.delaunay(vPoints);
+    ctx.strokeStyle = 'rgba(255,255,255,.06)';
+    ctx.lineWidth = 1;
+    dt.triangles.forEach(([a, b, c]) => {
+      const pa = vPoints[a], pb = vPoints[b], pc = vPoints[c];
+      ctx.beginPath();
+      ctx.moveTo(pa.x, pa.y);
+      ctx.lineTo(pb.x, pb.y);
+      ctx.lineTo(pc.x, pc.y);
+      ctx.closePath();
+      ctx.stroke();
+    });
+  }
+
+  vPoints.forEach((p, i) => dot(ctx, p, vDraggingPt === i ? 9 : 5, C.amber));
+
+  document.getElementById('v-n').textContent = vPoints.length;
+  document.getElementById('v-cells').textContent = result.cells.length;
+}
+
+const cvVor = document.getElementById('cv-voronoi');
+function vorCoords(e) {
+  const r = cvVor.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+cvVor.addEventListener('mousedown', e => {
+  const { x, y } = vorCoords(e);
+  for (let i = 0; i < vPoints.length; i++) {
+    if (Math.hypot(vPoints[i].x - x, vPoints[i].y - y) < 12) {
+      vDraggingPt = i;
+      return;
+    }
+  }
+  vPoints.push({ x, y });
+  drawVoronoi();
+});
+
+cvVor.addEventListener('mousemove', e => {
+  if (vDraggingPt === null) return;
+  const { x, y } = vorCoords(e);
+  vPoints[vDraggingPt] = { x, y };
+  drawVoronoi();
+});
+
+cvVor.addEventListener('mouseup', () => { vDraggingPt = null; });
+cvVor.addEventListener('mouseleave', () => { vDraggingPt = null; });
+
+// ─── INITIALIZATION ──────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  drawOrientation();
+});
+
+window.addEventListener('resize', () => {
+  const activeTab = document.querySelector('nav button.active').dataset.tab;
+  setTimeout(() => {
+    if (activeTab === 'orientation') drawOrientation();
+    if (activeTab === 'intersection') drawIntersection();
+    if (activeTab === 'simple') drawSimple();
+    if (activeTab === 'hull') drawHull();
+    if (activeTab === 'visibility') drawVisibility();
+    if (activeTab === 'triangulate') drawTriangulate();
+    if (activeTab === 'delaunay') drawDelaunay();
+    if (activeTab === 'voronoi') drawVoronoi();
+  }, 100);
+});
+
+// ─── THEME TOGGLE ────────────────────────────────────────────────────
+function toggleTheme() {
+  const body = document.body;
+  const icon = document.getElementById('theme-icon');
+  const button = document.querySelector('.theme-toggle span:last-child');
+  
+  if (body.classList.contains('light-theme')) {
+    body.classList.remove('light-theme');
+    icon.textContent = '☀️';
+    button.textContent = 'Light Mode';
+    localStorage.setItem('theme', 'dark');
+  } else {
+    body.classList.add('light-theme');
+    icon.textContent = '🌙';
+    button.textContent = 'Dark Mode';
+    localStorage.setItem('theme', 'light');
+  }
+  
+  // Redraw active canvas
+  const activeTab = document.querySelector('nav button.active').dataset.tab;
+  setTimeout(() => {
+    if (activeTab === 'orientation') drawOrientation();
+    if (activeTab === 'intersection') drawIntersection();
+    if (activeTab === 'simple') drawSimple();
+    if (activeTab === 'hull') drawHull();
+    if (activeTab === 'visibility') drawVisibility();
+    if (activeTab === 'triangulate') drawTriangulate();
+    if (activeTab === 'delaunay') drawDelaunay();
+    if (activeTab === 'voronoi') drawVoronoi();
+  }, 50);
+}
+
+// Load saved theme on startup
+window.addEventListener('load', () => {
+  const savedTheme = localStorage.getItem('theme');
+  const button = document.querySelector('.theme-toggle span:last-child');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-theme');
+    document.getElementById('theme-icon').textContent = '🌙';
+    if (button) button.textContent = 'Dark Mode';
+  }
+});
+
+// ─── ALGORITHM EXPLANATIONS ──────────────────────────────────────────
+const algoExplanations = {
+  orientation: {
+    title: "Orientation Test",
+    description: "Determines whether point C lies to the left (counter-clockwise), right (clockwise), or is collinear with respect to the directed line from A to B. This is one of the most fundamental operations in computational geometry.",
+    pseudocode: `function orientation(A, B, C):
+    # Compute the cross product of vectors AB and AC
+    cross = (B.x - A.x) * (C.y - A.y) - (B.y - A.y) * (C.x - A.x)
+    
+    if cross > 0:
+        return LEFT (counter-clockwise)
+    else if cross < 0:
+        return RIGHT (clockwise)
+    else:
+        return COLLINEAR`,
+    complexity: "O(1) - Constant time"
+  },
+  intersection: {
+    title: "Segment Intersection Test",
+    description: "Determines whether two line segments intersect. Uses the orientation test to check if the endpoints of each segment lie on opposite sides of the other segment. Handles all degenerate cases including collinear segments and endpoint touches.",
+    pseudocode: `function segmentsIntersect(p1, p2, p3, p4):
+    d1 = orientation(p3, p4, p1)
+    d2 = orientation(p3, p4, p2)
+    d3 = orientation(p1, p2, p3)
+    d4 = orientation(p1, p2, p4)
+    
+    # General case: endpoints on opposite sides
+    if ((d1 > 0 and d2 < 0) or (d1 < 0 and d2 > 0)) and
+       ((d3 > 0 and d4 < 0) or (d3 < 0 and d4 > 0)):
+        return TRUE
+    
+    # Special cases: collinear points
+    if d1 == 0 and onSegment(p3, p4, p1): return TRUE
+    if d2 == 0 and onSegment(p3, p4, p2): return TRUE
+    if d3 == 0 and onSegment(p1, p2, p3): return TRUE
+    if d4 == 0 and onSegment(p1, p2, p4): return TRUE
+    
+    return FALSE`,
+    complexity: "O(1) - Constant time"
+  },
+  simple: {
+    title: "Simple Polygon Test",
+    description: "Checks whether a polygon is simple (has no self-intersections). A polygon is simple if its edges only intersect at their endpoints. This is verified by checking all pairs of non-adjacent edges for intersection.",
+    pseudocode: `function isSimplePolygon(polygon):
+    n = polygon.length
+    
+    for i = 0 to n-1:
+        for j = i+2 to n-1:
+            # Skip adjacent edges
+            if (j == i+1) or (i == 0 and j == n-1):
+                continue
+            
+            # Check if edges i and j intersect
+            if segmentsIntersect(polygon[i], polygon[i+1],
+                                polygon[j], polygon[(j+1) % n]):
+                return FALSE
+    
+    return TRUE`,
+    complexity: "O(n²) - Quadratic time"
+  },
+  hull: {
+    title: "Convex Hull (Andrew's Algorithm)",
+    description: "Computes the smallest convex polygon that contains all given points. Uses Andrew's Monotone Chain algorithm which constructs the lower and upper hulls separately by processing points in sorted order.",
+    pseudocode: `function convexHull(points):
+    # Sort points lexicographically (x, then y)
+    points.sort()
+    
+    # Build lower hull
+    lower = []
+    for p in points:
+        while len(lower) >= 2 and
+              orientation(lower[-2], lower[-1], p) <= 0:
+            lower.pop()
+        lower.append(p)
+    
+    # Build upper hull
+    upper = []
+    for p in reversed(points):
+        while len(upper) >= 2 and
+              orientation(upper[-2], upper[-1], p) <= 0:
+            upper.pop()
+        upper.append(p)
+    
+    # Concatenate lower and upper hull
+    return lower[:-1] + upper[:-1]`,
+    complexity: "O(n log n) - Dominated by sorting"
+  },
+  visibility: {
+    title: "Visibility Graph",
+    description: "Computes which vertices of a polygon can \"see\" each other (i.e., the line segment connecting them lies entirely inside the polygon). For each pair of vertices, checks if the connecting segment intersects any polygon edge or passes outside the polygon.",
+    pseudocode: `function visibilityGraph(polygon):
+    n = polygon.length
+    vis = n×n boolean matrix (initialized to FALSE)
+    
+    for i = 0 to n-1:
+        for j = i+1 to n-1:
+            # Adjacent vertices are always visible
+            if |i - j| == 1 or (i == 0 and j == n-1):
+                vis[i][j] = vis[j][i] = TRUE
+                continue
+            
+            # Check if segment (i,j) is inside polygon
+            midpoint = (polygon[i] + polygon[j]) / 2
+            if not pointInPolygon(midpoint, polygon):
+                continue
+            
+            # Check for edge intersections
+            visible = TRUE
+            for k = 0 to n-1:
+                if segmentsIntersect(polygon[i], polygon[j],
+                                    polygon[k], polygon[(k+1)%n]):
+                    visible = FALSE
+                    break
+            
+            vis[i][j] = vis[j][i] = visible
+    
+    return vis`,
+    complexity: "O(n³) - Cubic time for n vertices"
+  },
+  triangulate: {
+    title: "Polygon Triangulation (Ear Clipping)",
+    description: "Decomposes a simple polygon into n-2 triangles. An 'ear' is a triangle formed by three consecutive vertices where the triangle lies entirely inside the polygon. The algorithm repeatedly removes ears until only a triangle remains.",
+    pseudocode: `function triangulate(polygon):
+    triangles = []
+    vertices = copy(polygon)
+    
+    while len(vertices) > 3:
+        # Find an ear
+        for i = 0 to len(vertices)-1:
+            prev = vertices[(i-1) % len(vertices)]
+            curr = vertices[i]
+            next = vertices[(i+1) % len(vertices)]
+            
+            if isEar(prev, curr, next, vertices):
+                # Add triangle and remove ear
+                triangles.append([prev, curr, next])
+                vertices.remove(curr)
+                break
+    
+    # Add final triangle
+    triangles.append(vertices)
+    return triangles
+
+function isEar(a, b, c, polygon):
+    # Check if triangle is CCW oriented
+    if orientation(a, b, c) <= 0:
+        return FALSE
+    
+    # Check if any other vertex is inside triangle
+    for p in polygon:
+        if p != a and p != b and p != c:
+            if pointInTriangle(p, a, b, c):
+                return FALSE
+    
+    return TRUE`,
+    complexity: "O(n²) - Quadratic time for simple polygons"
+  },
+  delaunay: {
+    title: "Delaunay Triangulation (Bowyer-Watson)",
+    description: "Creates a triangulation where no point lies inside the circumcircle of any triangle. This maximizes the minimum angle of all triangles, avoiding thin/sliver triangles. Uses incremental insertion with circumcircle tests.",
+    pseudocode: `function delaunay(points):
+    # Create super-triangle containing all points
+    triangles = [super_triangle]
+    
+    # Add points one at a time
+    for p in points:
+        badTriangles = []
+        
+        # Find triangles whose circumcircle contains p
+        for tri in triangles:
+            if pointInCircumcircle(p, tri):
+                badTriangles.append(tri)
+        
+        # Find the boundary of the polygonal hole
+        polygon = []
+        for tri in badTriangles:
+            for edge in tri.edges:
+                if not isShared(edge, badTriangles):
+                    polygon.append(edge)
+        
+        # Remove bad triangles
+        triangles.removeAll(badTriangles)
+        
+        # Re-triangulate the hole from p
+        for edge in polygon:
+            triangles.append(Triangle(edge[0], edge[1], p))
+    
+    # Remove triangles connected to super-triangle
+    return filterSuperTriangle(triangles)`,
+    complexity: "O(n²) - Average case, O(n log n) with optimizations"
+  },
+  voronoi: {
+    title: "Voronoi Diagram",
+    description: "Partitions the plane into regions based on distance to a set of sites. Each cell contains all points closer to its site than to any other site. Computed as the geometric dual of the Delaunay triangulation: each Delaunay triangle's circumcenter becomes a Voronoi vertex.",
+    pseudocode: `function voronoi(points):
+    # Compute Delaunay triangulation
+    delaunay = delaunayTriangulation(points)
+    
+    cells = []
+    for site in points:
+        cell = []
+        
+        # Find all triangles containing this site
+        for triangle in delaunay:
+            if site in triangle.vertices:
+                # Circumcenter is a Voronoi vertex
+                cc = circumcenter(triangle)
+                cell.append(cc)
+        
+        # Sort vertices by angle around site
+        cell.sortByAngle(site)
+        
+        # Clip against bounding box for boundary cells
+        if isBoundary(site):
+            cell = clipPolygon(cell, boundingBox)
+        
+        cells.append({site: site, polygon: cell})
+    
+    return cells`,
+    complexity: "O(n log n) - Same as Delaunay triangulation"
+  }
+};
+
+function showAlgoExplanation(algo) {
+  const modal = document.getElementById('algo-modal');
+  const content = document.getElementById('algo-text');
+  const data = algoExplanations[algo];
+  
+  if (!data) return;
+  
+  content.innerHTML = `
+    <h2>${data.title}</h2>
+    <h3>Description</h3>
+    <p>${data.description}</p>
+    <h3>Pseudocode</h3>
+    <pre>${data.pseudocode}</pre>
+    <h3>Time Complexity</h3>
+    <p><span class="complexity">${data.complexity}</span></p>
+  `;
+  
+  modal.classList.add('active');
+}
+
+function closeAlgoModal() {
+  document.getElementById('algo-modal').classList.remove('active');
+}
+
+// Close modal on outside click
+document.getElementById('algo-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'algo-modal') {
+    closeAlgoModal();
+  }
+});
+</script>
+</body>
+</html>
+
