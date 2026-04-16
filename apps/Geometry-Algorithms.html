@@ -380,6 +380,7 @@
 <nav>
   <button class="active" data-tab="orientation">Orientation</button>
   <button data-tab="intersection">Intersection</button>
+  <button data-tab="pointinpoly">Point in Polygon</button>
   <button data-tab="simple">Simple Polygon</button>
   <button data-tab="hull">Convex Hull</button>
   <button data-tab="visibility">Visibility</button>
@@ -398,6 +399,12 @@
     <div class="panel-section">
       <h3>Result</h3>
       <div class="result-box" id="orient-result">Place 3 points to test orientation</div>
+    </div>
+    <div class="panel-section">
+      <h3>How to Use</h3>
+      <div class="result-box" style="font-size:11px">
+        <span class="lbl">Click to place points A, B, C. Drag to move them. Watch the triangle color change based on C's position relative to line AB.</span>
+      </div>
     </div>
     <div class="panel-section">
       <h3>Controls</h3>
@@ -437,6 +444,12 @@
       <div class="result-box" id="intersect-result">Draw two segments</div>
     </div>
     <div class="panel-section">
+      <h3>How to Use</h3>
+      <div class="result-box" style="font-size:11px">
+        <span class="lbl">Click 4 points to create two segments. Drag points to move them. The test checks if the segments intersect.</span>
+      </div>
+    </div>
+    <div class="panel-section">
       <h3>Controls</h3>
       <div class="ctrl-row">
         <button class="pill danger" onclick="clearIntersection()">Clear</button>
@@ -448,7 +461,36 @@
   </div>
 </div>
 
-<!-- TAB 3: SIMPLE POLYGON -->
+<!-- TAB 3: POINT IN POLYGON -->
+<div class="demo-container" id="tab-pointinpoly">
+  <div class="canvas-wrap">
+    <canvas id="cv-pointinpoly"></canvas>
+    <div class="canvas-hint">Click to draw polygon · Click to place test point · Drag to move</div>
+  </div>
+  <div class="side-panel">
+    <div class="panel-section">
+      <h3>Result</h3>
+      <div class="result-box" id="pip-result">Draw a polygon and move your mouse</div>
+    </div>
+    <div class="panel-section">
+      <h3>How to Use</h3>
+      <div class="result-box" style="font-size:11px">
+        <span class="lbl">Click to draw a polygon. Close it by double-clicking or snapping to first point. Then click anywhere to place a test point. Drag the point to move it. Green = inside, Red = outside.</span>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>Controls</h3>
+      <div class="ctrl-row">
+        <button class="pill danger" onclick="clearPointInPoly()">Clear</button>
+      </div>
+      <div class="ctrl-row" style="margin-top:8px">
+        <button class="pill accent" onclick="showAlgoExplanation('pointinpoly')">Algorithm Explanation</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: SIMPLE POLYGON -->
 <div class="demo-container" id="tab-simple">
   <div class="canvas-wrap">
     <canvas id="cv-simple"></canvas>
@@ -458,6 +500,12 @@
     <div class="panel-section">
       <h3>Result</h3>
       <div class="result-box" id="simple-result">Draw a polygon to test</div>
+    </div>
+    <div class="panel-section">
+      <h3>How to Use</h3>
+      <div class="result-box" style="font-size:11px">
+        <span class="lbl">Click to add vertices. Double-click or snap to first point to close. Drag vertices to test different shapes. Green = simple, Red = self-intersecting.</span>
+      </div>
     </div>
     <div class="panel-section">
       <h3>Controls</h3>
@@ -477,7 +525,7 @@
   </div>
 </div>
 
-<!-- TAB 4: CONVEX HULL -->
+<!-- TAB 5: CONVEX HULL -->
 <div class="demo-container" id="tab-hull">
   <div class="canvas-wrap">
     <canvas id="cv-hull"></canvas>
@@ -489,6 +537,12 @@
       <div class="result-box">
         <div class="lbl">Points: <span class="val" id="hull-n">0</span></div>
         <div class="lbl">Hull vertices: <span class="val" id="hull-h">0</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>How to Use</h3>
+      <div class="result-box" style="font-size:11px">
+        <span class="lbl">Click to add points or use +10 random. The purple polygon shows the convex hull (smallest convex shape containing all points).</span>
       </div>
     </div>
     <div class="panel-section">
@@ -504,7 +558,7 @@
   </div>
 </div>
 
-<!-- TAB 5: VISIBILITY GRAPH -->
+<!-- TAB 6: VISIBILITY GRAPH -->
 <div class="demo-container" id="tab-visibility">
   <div class="canvas-wrap">
     <canvas id="cv-visibility"></canvas>
@@ -516,6 +570,12 @@
       <div class="result-box">
         <div class="lbl">Vertices: <span class="val" id="vis-n">0</span></div>
         <div class="lbl">Edges: <span class="val" id="vis-edges">0</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>How to Use</h3>
+      <div class="result-box" style="font-size:11px">
+        <span class="lbl">Draw a polygon. Dotted green lines show internal visibility. Hover over vertices to see which other vertices are visible from it.</span>
       </div>
     </div>
     <div class="panel-section">
@@ -546,7 +606,7 @@
   </div>
 </div>
 
-<!-- TAB 6: TRIANGULATION -->
+<!-- TAB 7: TRIANGULATION -->
 <div class="demo-container" id="tab-triangulate">
   <div class="canvas-wrap">
     <canvas id="cv-triangulate"></canvas>
@@ -561,6 +621,12 @@
       </div>
     </div>
     <div class="panel-section">
+      <h3>How to Use</h3>
+      <div class="result-box" style="font-size:11px">
+        <span class="lbl">Click to draw a polygon. Close it by double-clicking or snapping to the first point. The polygon will be decomposed into triangles.</span>
+      </div>
+    </div>
+    <div class="panel-section">
       <h3>Controls</h3>
       <div class="ctrl-row">
         <button class="pill danger" onclick="clearTriangulate()">Clear</button>
@@ -572,7 +638,7 @@
   </div>
 </div>
 
-<!-- TAB 7: DELAUNAY -->
+<!-- TAB 8: DELAUNAY -->
 <div class="demo-container" id="tab-delaunay">
   <div class="canvas-wrap">
     <canvas id="cv-delaunay"></canvas>
@@ -584,6 +650,12 @@
       <div class="result-box">
         <div class="lbl">Points: <span class="val" id="d-n">0</span></div>
         <div class="lbl">Triangles: <span class="val" id="d-tri">—</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>How to Use</h3>
+      <div class="result-box" style="font-size:11px">
+        <span class="lbl">Click to add points. Drag to move them. The triangulation maximizes minimum angles, avoiding thin triangles.</span>
       </div>
     </div>
     <div class="panel-section">
@@ -599,7 +671,7 @@
   </div>
 </div>
 
-<!-- TAB 8: VORONOI -->
+<!-- TAB 9: VORONOI -->
 <div class="demo-container" id="tab-voronoi">
   <div class="canvas-wrap">
     <canvas id="cv-voronoi"></canvas>
@@ -611,6 +683,12 @@
       <div class="result-box">
         <div class="lbl">Sites: <span class="val" id="v-n">0</span></div>
         <div class="lbl">Cells: <span class="val" id="v-cells">—</span></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <h3>How to Use</h3>
+      <div class="result-box" style="font-size:11px">
+        <span class="lbl">Click to add sites. Each colored cell contains all points closest to that site. Drag sites to see cells update dynamically.</span>
       </div>
     </div>
     <div class="panel-section">
@@ -621,140 +699,6 @@
       </div>
       <div class="ctrl-row" style="margin-top:8px">
         <button class="pill accent" onclick="showAlgoExplanation('voronoi')">Algorithm Explanation</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- TAB 4: CONVEX HULL -->
-<div class="demo-container" id="tab-hull">
-  <div class="canvas-wrap">
-    <canvas id="cv-hull"></canvas>
-    <div class="canvas-hint">Click to add points</div>
-  </div>
-  <div class="side-panel">
-    <div class="panel-section">
-      <h3>Stats</h3>
-      <div class="result-box">
-        <div class="lbl">Points: <span class="val" id="hull-n">0</span></div>
-        <div class="lbl">Hull vertices: <span class="val" id="hull-h">0</span></div>
-      </div>
-    </div>
-    <div class="panel-section">
-      <h3>Controls</h3>
-      <div class="ctrl-row">
-        <button class="pill" onclick="addHullRandom(10)">+10 random</button>
-        <button class="pill danger" onclick="clearHull()">Clear</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- TAB 5: VISIBILITY GRAPH -->
-<div class="demo-container" id="tab-visibility">
-  <div class="canvas-wrap">
-    <canvas id="cv-visibility"></canvas>
-    <div class="canvas-hint">Click to draw polygon vertices</div>
-  </div>
-  <div class="side-panel">
-    <div class="panel-section">
-      <h3>Stats</h3>
-      <div class="result-box">
-        <div class="lbl">Vertices: <span class="val" id="vis-n">0</span></div>
-        <div class="lbl">Edges: <span class="val" id="vis-edges">0</span></div>
-      </div>
-    </div>
-    <div class="panel-section">
-      <h3>Controls</h3>
-      <div class="ctrl-row">
-        <button class="pill danger" onclick="clearVisibility()">Clear</button>
-      </div>
-    </div>
-    <div class="panel-section">
-      <h3>Info</h3>
-      <div class="result-box" style="font-size:11px">
-        <span class="lbl">Shows which vertices can "see" each other inside the polygon</span>
-        <br><br>
-        <span class="lbl" style="color:var(--accent2)">💡 Hover over a vertex to highlight its visibility</span>
-      </div>
-    </div>
-    <div class="panel-section">
-      <h3>Vertex Colors</h3>
-      <div class="legend">
-        <div class="legend-item"><div class="dot" style="background:#7c6af7"></div> Active (hover)</div>
-        <div class="legend-item"><div class="dot" style="background:#6ef0a0"></div> Visible</div>
-        <div class="legend-item"><div class="dot" style="background:#f47c7c"></div> Not visible</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- TAB 6: TRIANGULATION -->
-<div class="demo-container" id="tab-triangulate">
-  <div class="canvas-wrap">
-    <canvas id="cv-triangulate"></canvas>
-    <div class="canvas-hint">Click to draw polygon · Double-click or snap to first point to close</div>
-  </div>
-  <div class="side-panel">
-    <div class="panel-section">
-      <h3>Stats</h3>
-      <div class="result-box">
-        <div class="lbl">Triangles: <span class="val" id="tri-n">0</span></div>
-        <div class="lbl">Area: <span class="val" id="tri-area">—</span></div>
-      </div>
-    </div>
-    <div class="panel-section">
-      <h3>Controls</h3>
-      <div class="ctrl-row">
-        <button class="pill danger" onclick="clearTriangulate()">Clear</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- TAB 5: DELAUNAY -->
-<div class="demo-container" id="tab-delaunay">
-  <div class="canvas-wrap">
-    <canvas id="cv-delaunay"></canvas>
-    <div class="canvas-hint">Click to add points · Drag to move</div>
-  </div>
-  <div class="side-panel">
-    <div class="panel-section">
-      <h3>Stats</h3>
-      <div class="result-box">
-        <div class="lbl">Points: <span class="val" id="d-n">0</span></div>
-        <div class="lbl">Triangles: <span class="val" id="d-tri">—</span></div>
-      </div>
-    </div>
-    <div class="panel-section">
-      <h3>Controls</h3>
-      <div class="ctrl-row">
-        <button class="pill" onclick="addDelaunayRandom(5)">+5 random</button>
-        <button class="pill danger" onclick="clearDelaunay()">Clear</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- TAB 6: VORONOI -->
-<div class="demo-container" id="tab-voronoi">
-  <div class="canvas-wrap">
-    <canvas id="cv-voronoi"></canvas>
-    <div class="canvas-hint">Click to add sites · Drag to move</div>
-  </div>
-  <div class="side-panel">
-    <div class="panel-section">
-      <h3>Stats</h3>
-      <div class="result-box">
-        <div class="lbl">Sites: <span class="val" id="v-n">0</span></div>
-        <div class="lbl">Cells: <span class="val" id="v-cells">—</span></div>
-      </div>
-    </div>
-    <div class="panel-section">
-      <h3>Controls</h3>
-      <div class="ctrl-row">
-        <button class="pill" onclick="addVoronoiRandom(5)">+5 random</button>
-        <button class="pill danger" onclick="clearVoronoi()">Clear</button>
       </div>
     </div>
   </div>
@@ -2077,6 +2021,14 @@ if (typeof module !== "undefined" && module.exports) module.exports = Geometry;
 // DEMO APPLICATION CODE
 // ════════════════════════════════════════════════════════════════════
 
+// ─── HELPER FUNCTIONS ────────────────────────────────────────────────
+// Get adaptive opacity: darker (less transparent) in light mode for visibility
+function getOpacity(darkModeOpacity) {
+  const isLight = document.body.classList.contains('light-theme');
+  // In light mode, make fills 50% more opaque
+  return isLight ? Math.min(darkModeOpacity * 1.5, 0.7) : darkModeOpacity;
+}
+
 // ─── TAB SWITCHING ───────────────────────────────────────────────────
 const tabs = document.querySelectorAll('nav button');
 const containers = document.querySelectorAll('.demo-container');
@@ -2093,6 +2045,7 @@ tabs.forEach(btn => {
     setTimeout(() => {
       if (targetTab === 'orientation') drawOrientation();
       if (targetTab === 'intersection') drawIntersection();
+      if (targetTab === 'pointinpoly') drawPointInPoly();
       if (targetTab === 'simple') drawSimple();
       if (targetTab === 'hull') drawHull();
       if (targetTab === 'visibility') drawVisibility();
@@ -2173,11 +2126,11 @@ function drawOrientation() {
     ctx.closePath();
     
     if (o > 0) {
-      ctx.fillStyle = 'rgba(110, 240, 160, 0.25)'; // Green for LEFT/CCW
+      ctx.fillStyle = `rgba(110, 240, 160, ${getOpacity(0.4)})`; // Green for LEFT/CCW
     } else if (o < 0) {
-      ctx.fillStyle = 'rgba(244, 124, 124, 0.25)'; // Red for RIGHT/CW
+      ctx.fillStyle = `rgba(244, 124, 124, ${getOpacity(0.4)})`; // Red for RIGHT/CW
     } else {
-      ctx.fillStyle = 'rgba(247, 197, 106, 0.25)'; // Amber for COLLINEAR
+      ctx.fillStyle = `rgba(247, 197, 106, ${getOpacity(0.4)})`; // Amber for COLLINEAR
     }
     ctx.fill();
   }
@@ -2358,7 +2311,209 @@ document.getElementById('cv-intersection').addEventListener('mouseleave', () => 
   segDragging = null;
 });
 
-// ─── TAB 3: SIMPLE POLYGON ───────────────────────────────────────────
+// ─── TAB 3: POINT IN POLYGON ─────────────────────────────────────────
+let pipPoly = [];
+let pipClosed = false;
+let pipDragging = null;
+let pipLastClick = 0;
+let pipTestPoint = null;
+let pipDraggingTest = false;
+
+function clearPointInPoly() {
+  pipPoly = [];
+  pipClosed = false;
+  pipDragging = null;
+  pipTestPoint = null;
+  pipDraggingTest = false;
+  drawPointInPoly();
+}
+
+function drawPointInPoly() {
+  const cv = document.getElementById('cv-pointinpoly');
+  const wrap = cv.parentElement;
+  if (cv.width !== wrap.clientWidth || cv.height !== wrap.clientHeight) {
+    cv.width = wrap.clientWidth;
+    cv.height = wrap.clientHeight;
+  }
+  const ctx = cv.getContext('2d');
+  const w = cv.width, h = cv.height;
+  ctx.clearRect(0, 0, w, h);
+  drawGrid(ctx, w, h);
+
+  // Draw filled polygon if closed
+  if (pipClosed && pipPoly.length >= 3) {
+    ctx.beginPath();
+    ctx.moveTo(pipPoly[0].x, pipPoly[0].y);
+    pipPoly.forEach(p => ctx.lineTo(p.x, p.y));
+    ctx.closePath();
+    ctx.fillStyle = `rgba(124,106,247,${getOpacity(0.25)})`;
+    ctx.fill();
+  }
+
+  // Draw polygon outline
+  if (pipPoly.length >= 2) {
+    ctx.beginPath();
+    ctx.moveTo(pipPoly[0].x, pipPoly[0].y);
+    pipPoly.forEach(p => ctx.lineTo(p.x, p.y));
+    if (pipClosed) ctx.closePath();
+    const isLight = document.body.classList.contains('light-theme');
+    ctx.strokeStyle = isLight ? '#000' : '#fff';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+  }
+
+  // Draw vertices
+  const rBase = pipClosed ? 6 : 5;
+  pipPoly.forEach((p, i) => {
+    let r = pipDragging === i ? 10 : rBase;
+    if (i === 0 && !pipClosed && pipPoly.length >= 3) r = 8;
+    dot(ctx, p, r, C.purple);
+  });
+
+  // Draw test point if polygon is closed
+  if (pipClosed && pipTestPoint && pipPoly.length >= 3) {
+    const inside = Geometry.pointInPolygon(pipTestPoint, pipPoly);
+    const color = inside ? C.green : C.red;
+    const radius = pipDraggingTest ? 10 : 8;
+    dot(ctx, pipTestPoint, radius, color);
+    
+    // Draw ray to show algorithm
+    ctx.beginPath();
+    ctx.moveTo(pipTestPoint.x, pipTestPoint.y);
+    ctx.lineTo(w, pipTestPoint.y);
+    ctx.strokeStyle = inside ? 'rgba(110,240,160,.3)' : 'rgba(244,124,124,.3)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    document.getElementById('pip-result').innerHTML = 
+      `<span class="lbl">Point is </span><span class="val ${inside ? 'pos' : 'neg'}">${inside ? 'INSIDE' : 'OUTSIDE'}</span>`;
+  } else if (pipClosed) {
+    document.getElementById('pip-result').innerHTML = 'Click to place a test point';
+  } else {
+    document.getElementById('pip-result').innerHTML = 'Draw a polygon to test';
+  }
+}
+
+const cvPip = document.getElementById('cv-pointinpoly');
+
+function pipCoords(e) {
+  const r = cvPip.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+cvPip.addEventListener('mousedown', e => {
+  const { x, y } = pipCoords(e);
+  const now = Date.now();
+
+  if (pipClosed) {
+    // Check if clicking on existing test point
+    if (pipTestPoint && Math.hypot(pipTestPoint.x - x, pipTestPoint.y - y) < 14) {
+      pipDraggingTest = true;
+      return;
+    }
+    
+    // Check if clicking on polygon vertices
+    for (let i = 0; i < pipPoly.length; i++) {
+      if (Math.hypot(pipPoly[i].x - x, pipPoly[i].y - y) < 14) {
+        pipDragging = i;
+        return;
+      }
+    }
+    
+    // Place new test point
+    pipTestPoint = { x, y };
+    drawPointInPoly();
+    return;
+  }
+
+  if (pipPoly.length >= 3 && Math.hypot(pipPoly[0].x - x, pipPoly[0].y - y) < 18) {
+    pipClosed = true;
+    drawPointInPoly();
+    return;
+  }
+
+  for (let i = 0; i < pipPoly.length; i++) {
+    if (Math.hypot(pipPoly[i].x - x, pipPoly[i].y - y) < 14) {
+      pipDragging = i;
+      return;
+    }
+  }
+
+  if (now - pipLastClick < 350) {
+    pipLastClick = 0;
+    if (pipPoly.length >= 3) {
+      pipClosed = true;
+      drawPointInPoly();
+    }
+    return;
+  }
+  pipLastClick = now;
+
+  pipPoly.push({ x, y });
+  drawPointInPoly();
+});
+
+cvPip.addEventListener('mousemove', e => {
+  const { x, y } = pipCoords(e);
+  
+  if (pipDragging !== null) {
+    pipPoly[pipDragging] = { x, y };
+    drawPointInPoly();
+    return;
+  }
+
+  if (pipDraggingTest) {
+    pipTestPoint = { x, y };
+    drawPointInPoly();
+    return;
+  }
+
+  if (!pipClosed && pipPoly.length >= 1) {
+    drawPointInPoly();
+    const ctx = cvPip.getContext('2d');
+    const last = pipPoly[pipPoly.length - 1];
+    ctx.beginPath();
+    ctx.moveTo(last.x, last.y);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = 'rgba(124,106,247,.3)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    if (pipPoly.length >= 3 && Math.hypot(pipPoly[0].x - x, pipPoly[0].y - y) < 18) {
+      ctx.beginPath();
+      ctx.arc(pipPoly[0].x, pipPoly[0].y, 18, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(110,240,160,.6)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([3, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  // Update cursor
+  if (pipClosed) {
+    const nearTest = pipTestPoint && Math.hypot(pipTestPoint.x - x, pipTestPoint.y - y) < 14;
+    const nearVertex = pipPoly.some(p => Math.hypot(p.x - x, p.y - y) < 14);
+    cvPip.style.cursor = (nearTest || nearVertex) ? 'grab' : 'crosshair';
+  } else if (pipPoly.length > 0) {
+    const nearVertex = pipPoly.some(p => Math.hypot(p.x - x, p.y - y) < 14);
+    cvPip.style.cursor = nearVertex ? 'grab' : 'crosshair';
+  }
+});
+
+cvPip.addEventListener('mouseup', () => { 
+  pipDragging = null; 
+  pipDraggingTest = false;
+});
+cvPip.addEventListener('mouseleave', () => { 
+  pipDragging = null;
+  pipDraggingTest = false;
+});
+
+// ─── TAB 4: SIMPLE POLYGON ───────────────────────────────────────────
 let sPoly = [];
 let sClosed = false;
 let sDragging = null;
@@ -2390,7 +2545,7 @@ function drawSimple() {
     ctx.moveTo(sPoly[0].x, sPoly[0].y);
     sPoly.forEach(p => ctx.lineTo(p.x, p.y));
     ctx.closePath();
-    ctx.fillStyle = isSimple ? 'rgba(110,240,160,.15)' : 'rgba(244,124,124,.15)';
+    ctx.fillStyle = isSimple ? `rgba(110,240,160,${getOpacity(.3)})` : `rgba(244,124,124,${getOpacity(.3)})`;
     ctx.fill();
   }
 
@@ -2554,7 +2709,7 @@ function drawHull() {
       ctx.moveTo(hull[0].x, hull[0].y);
       for (let i = 1; i < hull.length; i++) ctx.lineTo(hull[i].x, hull[i].y);
       ctx.closePath();
-      ctx.fillStyle = 'rgba(124,106,247,.15)';
+      ctx.fillStyle = `rgba(124,106,247,${getOpacity(.3)})`;
       ctx.fill();
       const isLight = document.body.classList.contains('light-theme');
       ctx.strokeStyle = isLight ? '#000' : '#fff';
@@ -2650,7 +2805,7 @@ function drawVisibility() {
     ctx.moveTo(visPoly[0].x, visPoly[0].y);
     visPoly.forEach(p => ctx.lineTo(p.x, p.y));
     ctx.closePath();
-    ctx.fillStyle = 'rgba(78,201,176,.05)';
+    ctx.fillStyle = `rgba(78,201,176,${getOpacity(.2)})`;
     ctx.fill();
   } else {
     document.getElementById('vis-edges').textContent = '—';
@@ -2831,10 +2986,13 @@ function clearTriangulate() {
   drawTriangulate();
 }
 
-const triColors = [
-  'rgba(124,106,247,.25)', 'rgba(78,201,176,.25)', 'rgba(247,197,106,.25)',
-  'rgba(244,124,124,.25)', 'rgba(110,240,160,.25)', 'rgba(168,122,247,.25)',
-];
+function getTriColors() {
+  const op = getOpacity(0.4);
+  return [
+    `rgba(124,106,247,${op})`, `rgba(78,201,176,${op})`, `rgba(247,197,106,${op})`,
+    `rgba(244,124,124,${op})`, `rgba(110,240,160,${op})`, `rgba(168,122,247,${op})`,
+  ];
+}
 
 function drawTriangulate() {
   const cv = document.getElementById('cv-triangulate');
@@ -2854,6 +3012,7 @@ function drawTriangulate() {
       ctx.moveTo(tri[0].x, tri[0].y);
       tri.forEach(p => ctx.lineTo(p.x, p.y));
       ctx.closePath();
+      const triColors = getTriColors();
       ctx.fillStyle = triColors[i % triColors.length];
       ctx.fill();
       ctx.strokeStyle = C.teal;
@@ -3099,12 +3258,15 @@ function addVoronoiRandom(n) {
   drawVoronoi();
 }
 
-const vColors = [
-  'rgba(124,106,247,.18)', 'rgba(78,201,176,.18)', 'rgba(247,197,106,.18)',
-  'rgba(244,124,124,.18)', 'rgba(110,240,160,.15)', 'rgba(168,122,247,.18)',
-  'rgba(247,146,78,.18)', 'rgba(78,160,247,.18)', 'rgba(240,110,180,.15)',
-  'rgba(160,247,110,.15)', 'rgba(247,78,200,.15)', 'rgba(78,220,220,.15)',
-];
+function getVColors() {
+  const op = getOpacity(0.35);
+  return [
+    `rgba(124,106,247,${op})`, `rgba(78,201,176,${op})`, `rgba(247,197,106,${op})`,
+    `rgba(244,124,124,${op})`, `rgba(110,240,160,${op})`, `rgba(168,122,247,${op})`,
+    `rgba(247,146,78,${op})`, `rgba(78,160,247,${op})`, `rgba(240,110,180,${op})`,
+    `rgba(160,247,110,${op})`, `rgba(247,78,200,${op})`, `rgba(78,220,220,${op})`,
+  ];
+}
 
 function drawVoronoi() {
   const cv = document.getElementById('cv-voronoi');
@@ -3134,6 +3296,7 @@ function drawVoronoi() {
     ctx.moveTo(poly[0].x, poly[0].y);
     for (let k = 1; k < poly.length; k++) ctx.lineTo(poly[k].x, poly[k].y);
     ctx.closePath();
+    const vColors = getVColors();
     ctx.fillStyle = vColors[i % vColors.length];
     ctx.fill();
     ctx.strokeStyle = 'rgba(78,201,176,.5)';
@@ -3200,6 +3363,7 @@ window.addEventListener('resize', () => {
   setTimeout(() => {
     if (activeTab === 'orientation') drawOrientation();
     if (activeTab === 'intersection') drawIntersection();
+    if (activeTab === 'pointinpoly') drawPointInPoly();
     if (activeTab === 'simple') drawSimple();
     if (activeTab === 'hull') drawHull();
     if (activeTab === 'visibility') drawVisibility();
@@ -3232,6 +3396,7 @@ function toggleTheme() {
   setTimeout(() => {
     if (activeTab === 'orientation') drawOrientation();
     if (activeTab === 'intersection') drawIntersection();
+    if (activeTab === 'pointinpoly') drawPointInPoly();
     if (activeTab === 'simple') drawSimple();
     if (activeTab === 'hull') drawHull();
     if (activeTab === 'visibility') drawVisibility();
@@ -3291,6 +3456,26 @@ const algoExplanations = {
     
     return FALSE`,
     complexity: "O(1) - Constant time"
+  },
+  pointinpoly: {
+    title: "Point in Polygon Test (Ray Casting)",
+    description: "Determines whether a point lies inside a polygon using the ray casting algorithm. Casts a horizontal ray from the point to infinity and counts how many times it crosses the polygon boundary. If the count is odd, the point is inside; if even, it's outside.",
+    pseudocode: `function pointInPolygon(p, polygon):
+    n = polygon.length
+    inside = FALSE
+    
+    for i = 0 to n-1:
+        j = (i + 1) % n
+        vi = polygon[i]
+        vj = polygon[j]
+        
+        # Check if horizontal ray from p crosses edge (vi, vj)
+        if ((vi.y > p.y) != (vj.y > p.y)) and
+           (p.x < (vj.x - vi.x) * (p.y - vi.y) / (vj.y - vi.y) + vi.x):
+            inside = not inside
+    
+    return inside`,
+    complexity: "O(n) - Linear time in number of vertices"
   },
   simple: {
     title: "Simple Polygon Test",
